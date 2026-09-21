@@ -8,9 +8,6 @@ __pycache__/
 # Local config and secrets
 .env
 
-# Generated artifacts (regenerate: python -m tools.extract_cli extracted_text.txt)
-service_output.json
-
 # Editor / tooling state
 .omc/
 .codegraph/

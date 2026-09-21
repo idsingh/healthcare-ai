@@ -1,0 +1,834 @@
+{
+  "schema_version": "1.0.0",
+  "run": {
+    "run_id": "cli",
+    "content_sha256": "9952847281c66a65d73250e2019a4505087db4949ed2f7e0f2200fe5f53cd9a9",
+    "idempotency_key": "cli",
+    "started_at": "2026-09-21T16:53:29.297777Z",
+    "completed_at": "2026-09-21T16:53:29.311094Z",
+    "model_id": "stub/deterministic-offline",
+    "model_params": {
+      "temperature": 0.0,
+      "seed": 7
+    },
+    "prompt_version": "eoc-supplemental-v3",
+    "pipeline_version": "1.0.0",
+    "degraded": false,
+    "partial_reason": null,
+    "blocks_total": 2,
+    "blocks_degraded": 0,
+    "llm_calls": 2,
+    "llm_retries": 0
+  },
+  "document": {
+    "plan_name": {
+      "value": "Anthem Select (HMO)",
+      "status": "found",
+      "confidence": 0.95,
+      "source": "deterministic",
+      "evidence": {
+        "quote": "2024 Evidence of Coverage for Anthem Select (HMO) Chapter 4 Medical Benefits Chart (what is covered and what y",
+        "start": 4,
+        "end": 114,
+        "page": 115
+      },
+      "notes": null
+    },
+    "plan_year": {
+      "value": 2024,
+      "status": "found",
+      "confidence": 0.99,
+      "source": "deterministic",
+      "evidence": {
+        "quote": "2024 Evidence of Coverage for Anthem Select (HMO) Chapter 4 Medical Benefits Chart (what is covered and what y",
+        "start": 4,
+        "end": 114,
+        "page": 115
+      },
+      "notes": null
+    },
+    "issuer": {
+      "value": null,
+      "status": "not_stated",
+      "confidence": null,
+      "source": null,
+      "evidence": null,
+      "notes": null
+    },
+    "document_type": {
+      "value": "evidence_of_coverage",
+      "status": "found",
+      "confidence": 0.97,
+      "source": "deterministic",
+      "evidence": {
+        "quote": "2024 Evidence of Coverage for Anthem Select (HMO) Chapter 4 Medical Benefits Chart (what is covered and what y",
+        "start": 4,
+        "end": 114,
+        "page": 115
+      },
+      "notes": null
+    },
+    "form_id": {
+      "value": "HMO-MAPD 1054638MUSENMUB_0102_R",
+      "status": "found",
+      "confidence": 0.9,
+      "source": "deterministic",
+      "evidence": {
+        "quote": "HMO-MAPD 1054638MUSENMUB_0102_R Revised",
+        "start": 122,
+        "end": 161,
+        "page": 115
+      },
+      "notes": null
+    },
+    "source_pages": [
+      115,
+      116
+    ],
+    "truncated": true,
+    "char_count_normalized": 4413
+  },
+  "packages": [
+    {
+      "package_id": "pkg_1",
+      "ordinal": 1,
+      "name": {
+        "value": "Optional supplemental package 1 - Preventive dental package",
+        "status": "found",
+        "confidence": 0.99,
+        "source": "deterministic",
+        "evidence": {
+          "quote": "Optional supplemental package 1 - Preventive dental package",
+          "start": 691,
+          "end": 750,
+          "page": 115
+        },
+        "notes": null
+      },
+      "benefit_domains": [
+        "dental"
+      ],
+      "premium": {
+        "value": {
+          "amount_usd": 13.0,
+          "cadence": "monthly",
+          "currency": "USD"
+        },
+        "status": "found",
+        "confidence": 0.99,
+        "source": "deterministic",
+        "evidence": {
+          "quote": "Premium $13.00 monthly premium",
+          "start": 961,
+          "end": 991,
+          "page": 115
+        },
+        "notes": null
+      },
+      "benefit_maximum": {
+        "value": {
+          "amount_usd": 500.0,
+          "period": "per_year",
+          "applies_to": "preventive dental benefits",
+          "currency": "USD"
+        },
+        "status": "found",
+        "confidence": 0.97,
+        "source": "deterministic",
+        "evidence": {
+          "quote": "plan will pay up to $500 for preventive dental benefits each year",
+          "start": 1853,
+          "end": 1918,
+          "page": 115
+        },
+        "notes": null
+      },
+      "network_restriction": {
+        "value": "LIBERTY Dental providers only",
+        "status": "found",
+        "confidence": 0.97,
+        "source": "merged",
+        "evidence": {
+          "quote": "Coverage is available from LIBERTY Dental providers only",
+          "start": 1938,
+          "end": 1994,
+          "page": 115
+        },
+        "notes": null
+      },
+      "services": [
+        {
+          "service_id": "pkg_1.svc_oral_exams",
+          "name": "Oral exams",
+          "category": "diagnostic",
+          "limit": {
+            "count": 2.0,
+            "unit": "oral exams",
+            "period": "per_year",
+            "raw": "Two oral exams each year"
+          },
+          "codes": [
+            "D0120",
+            "D0140",
+            "D0150",
+            "D0160",
+            "D0170",
+            "D0180"
+          ],
+          "status": "found",
+          "confidence": 0.9,
+          "source": "merged",
+          "evidence": {
+            "quote": "Two oral exams each year",
+            "start": 1105,
+            "end": 1129,
+            "page": 115
+          },
+          "notes": null
+        },
+        {
+          "service_id": "pkg_1.svc_dental_x_rays",
+          "name": "Dental X-rays",
+          "category": "diagnostic",
+          "limit": {
+            "count": 7.0,
+            "unit": "periapical images",
+            "period": "per_calendar_year",
+            "raw": "seven periapical images per calendar year"
+          },
+          "codes": [
+            "D0210",
+            "D0220",
+            "D0230",
+            "D0270",
+            "D0272",
+            "D0274",
+            "D0277",
+            "D0330"
+          ],
+          "status": "found",
+          "confidence": 0.9,
+          "source": "merged",
+          "evidence": {
+            "quote": "Dental X-rays include one full-mouth or panoramic X-ray and one set/series of bitewing X-rays each year and up to seven periapical images per calendar year.",
+            "start": 1506,
+            "end": 1662,
+            "page": 115
+          },
+          "notes": null
+        },
+        {
+          "service_id": "pkg_1.svc_cleanings",
+          "name": "Cleanings",
+          "category": "preventive",
+          "limit": {
+            "count": 2.0,
+            "unit": "cleanings",
+            "period": "per_year",
+            "raw": "Two cleanings per year"
+          },
+          "codes": [
+            "D1110"
+          ],
+          "status": "found",
+          "confidence": 0.9,
+          "source": "merged",
+          "evidence": {
+            "quote": "Two cleanings per year",
+            "start": 2780,
+            "end": 2802,
+            "page": 116
+          },
+          "notes": null
+        },
+        {
+          "service_id": "pkg_1.svc_fluoride_treatments",
+          "name": "Fluoride treatments",
+          "category": "preventive",
+          "limit": {
+            "count": 2.0,
+            "unit": "fluoride treatments",
+            "period": "per_year",
+            "raw": "Two fluoride treatments per year"
+          },
+          "codes": [
+            "D1208"
+          ],
+          "status": "found",
+          "confidence": 0.9,
+          "source": "merged",
+          "evidence": {
+            "quote": "Two fluoride treatments per year",
+            "start": 2833,
+            "end": 2865,
+            "page": 116
+          },
+          "notes": null
+        }
+      ],
+      "codes": [
+        {
+          "code": "D0120",
+          "code_system": "CDT",
+          "description": "Periodic oral evaluation - established patient",
+          "evidence": {
+            "quote": "D0120 - Periodic oral evaluation - established patient",
+            "start": 1160,
+            "end": 1214,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0140",
+          "code_system": "CDT",
+          "description": "Limited oral evaluation - problem focused",
+          "evidence": {
+            "quote": "D0140 - Limited oral evaluation - problem focused",
+            "start": 1217,
+            "end": 1266,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0150",
+          "code_system": "CDT",
+          "description": "Comprehensive oral evaluation - new or established patient",
+          "evidence": {
+            "quote": "D0150 - Comprehensive oral evaluation - new or established patient",
+            "start": 1269,
+            "end": 1335,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0160",
+          "code_system": "CDT",
+          "description": "Extensive oral exam problem focused",
+          "evidence": {
+            "quote": "D0160 - Extensive oral exam problem focused",
+            "start": 1338,
+            "end": 1381,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0170",
+          "code_system": "CDT",
+          "description": "Re-evaluation-limited problem focused",
+          "evidence": {
+            "quote": "D0170 - Re-evaluation-limited problem focused",
+            "start": 1384,
+            "end": 1429,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0180",
+          "code_system": "CDT",
+          "description": "Comprehensive periodontal evaluation - new or established patient",
+          "evidence": {
+            "quote": "D0180 - Comprehensive periodontal evaluation - new or established patient",
+            "start": 1432,
+            "end": 1505,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0210",
+          "code_system": "CDT",
+          "description": "Intraoral - complete series (including bitewings)",
+          "evidence": {
+            "quote": "D0210 - Intraoral - complete series (including bitewings)",
+            "start": 1665,
+            "end": 1722,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0220",
+          "code_system": "CDT",
+          "description": "Intraoral - periapical first radiographic image",
+          "evidence": {
+            "quote": "D0220 - Intraoral - periapical first radiographic image",
+            "start": 1725,
+            "end": 1780,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0230",
+          "code_system": "CDT",
+          "description": "Intraoral - periapical each additional radiographic image",
+          "evidence": {
+            "quote": "D0230 - Intraoral - periapical each additional radiographic image",
+            "start": 1783,
+            "end": 1848,
+            "page": 115
+          }
+        },
+        {
+          "code": "D0270",
+          "code_system": "CDT",
+          "description": "Bitewings - single film",
+          "evidence": {
+            "quote": "D0270 - Bitewings - single film",
+            "start": 2600,
+            "end": 2631,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0272",
+          "code_system": "CDT",
+          "description": "Bitewings - two films",
+          "evidence": {
+            "quote": "D0272 - Bitewings - two films",
+            "start": 2634,
+            "end": 2663,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0274",
+          "code_system": "CDT",
+          "description": "Bitewings - four films",
+          "evidence": {
+            "quote": "D0274 - Bitewings - four films",
+            "start": 2666,
+            "end": 2696,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0277",
+          "code_system": "CDT",
+          "description": "Vertical bitewings - 7 to 8 radiographic images",
+          "evidence": {
+            "quote": "D0277 - Vertical bitewings - 7 to 8 radiographic images",
+            "start": 2699,
+            "end": 2754,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0330",
+          "code_system": "CDT",
+          "description": "Panoramic film",
+          "evidence": {
+            "quote": "D0330 - Panoramic film",
+            "start": 2757,
+            "end": 2779,
+            "page": 116
+          }
+        },
+        {
+          "code": "D1110",
+          "code_system": "CDT",
+          "description": "Prophylaxis - adult",
+          "evidence": {
+            "quote": "D1110 - Prophylaxis - adult",
+            "start": 2805,
+            "end": 2832,
+            "page": 116
+          }
+        },
+        {
+          "code": "D1208",
+          "code_system": "CDT",
+          "description": "Topical application of fluoride",
+          "evidence": {
+            "quote": "D1208 - Topical application of fluoride",
+            "start": 2868,
+            "end": 2907,
+            "page": 116
+          }
+        }
+      ],
+      "cost_share": [
+        {
+          "cost_share_id": "pkg_1.cs_1",
+          "type": "copay",
+          "amount_usd": 0.0,
+          "percent": null,
+          "applies_to": {
+            "description": "the preventive dental benefits listed",
+            "service_ids": [
+              "pkg_1.svc_cleanings",
+              "pkg_1.svc_dental_x_rays",
+              "pkg_1.svc_fluoride_treatments",
+              "pkg_1.svc_oral_exams"
+            ],
+            "codes": []
+          },
+          "status": "found",
+          "confidence": 0.94,
+          "source": "merged",
+          "evidence": {
+            "quote": "You pay no copay for the preventive dental benefits listed.",
+            "start": 2094,
+            "end": 2153,
+            "page": 115
+          },
+          "notes": null
+        }
+      ],
+      "exclusions": [
+        {
+          "exclusion_id": "pkg_1.ex_1",
+          "text": "Services must be rendered by a contracted provider.",
+          "kind": "network_restriction",
+          "status": "found",
+          "confidence": 0.9,
+          "source": "llm",
+          "evidence": {
+            "quote": "Services must be rendered by a contracted provider.",
+            "start": 2182,
+            "end": 2233,
+            "page": 115
+          }
+        },
+        {
+          "exclusion_id": "pkg_1.ex_2",
+          "text": "You must pay any extra costs or services outside of the dental codes and coverage outlined in this section directly to the provider.",
+          "kind": "member_liability",
+          "status": "found",
+          "confidence": 0.9,
+          "source": "llm",
+          "evidence": {
+            "quote": "You must pay any extra costs or services outside of the dental codes and coverage outlined in this section directly to the provider.",
+            "start": 2236,
+            "end": 2368,
+            "page": 115
+          }
+        },
+        {
+          "exclusion_id": "pkg_1.ex_3",
+          "text": "Restorative dental (fillings) & endodontic, periodontic and oral surgery services are excluded. 116 2024 Evidence of Coverage for Anthem Select (HMO) Optional supplemental benefits What you must pay when you get these services",
+          "kind": "service_excluded",
+          "status": "found",
+          "confidence": 0.9,
+          "source": "llm",
+          "evidence": {
+            "quote": "Restorative dental (fillings) & endodontic, periodontic and oral surgery services are excluded. 116 2024 Evidence of Coverage for Anthem Select (HMO) Optional supplemental benefits What you must pay when you get these services",
+            "start": 2371,
+            "end": 2597,
+            "page": 115
+          }
+        },
+        {
+          "exclusion_id": "pkg_1.ex_4",
+          "text": "Claims for covered benefits must be filed directly with the contracted provider and not the plan.",
+          "kind": "claims_process",
+          "status": "found",
+          "confidence": 0.9,
+          "source": "llm",
+          "evidence": {
+            "quote": "Claims for covered benefits must be filed directly with the contracted provider and not the plan.",
+            "start": 2910,
+            "end": 3007,
+            "page": 116
+          }
+        },
+        {
+          "exclusion_id": "pkg_1.ex_5",
+          "text": "Your costs for these services will not count toward your maximum out-of-pocket amount.",
+          "kind": "accumulator",
+          "status": "found",
+          "confidence": 0.9,
+          "source": "llm",
+          "evidence": {
+            "quote": "Your costs for these services will not count toward your maximum out-of-pocket amount.",
+            "start": 3010,
+            "end": 3096,
+            "page": 116
+          }
+        }
+      ],
+      "source_span": {
+        "start": 691,
+        "end": 3097,
+        "pages": [
+          115,
+          116
+        ]
+      },
+      "needs_review": false,
+      "degraded": false
+    },
+    {
+      "package_id": "pkg_2",
+      "ordinal": 2,
+      "name": {
+        "value": "Optional supplemental package 2 - Dental and vision package",
+        "status": "found",
+        "confidence": 0.99,
+        "source": "deterministic",
+        "evidence": {
+          "quote": "Optional supplemental package 2 - Dental and vision package",
+          "start": 3097,
+          "end": 3156,
+          "page": 116
+        },
+        "notes": null
+      },
+      "benefit_domains": [
+        "dental",
+        "vision"
+      ],
+      "premium": {
+        "value": {
+          "amount_usd": 32.0,
+          "cadence": "monthly",
+          "currency": "USD"
+        },
+        "status": "found",
+        "confidence": 0.99,
+        "source": "deterministic",
+        "evidence": {
+          "quote": "Premium $32.00 monthly premium",
+          "start": 3367,
+          "end": 3397,
+          "page": 116
+        },
+        "notes": null
+      },
+      "benefit_maximum": {
+        "value": {
+          "amount_usd": 1000.0,
+          "period": "per_year",
+          "applies_to": "dental benefits",
+          "currency": "USD"
+        },
+        "status": "found",
+        "confidence": 0.97,
+        "source": "deterministic",
+        "evidence": {
+          "quote": "plan will pay up to $1,000 for dental benefits each year",
+          "start": 3916,
+          "end": 3972,
+          "page": 116
+        },
+        "notes": null
+      },
+      "network_restriction": {
+        "value": "LIBERTY Dental providers only",
+        "status": "found",
+        "confidence": 0.97,
+        "source": "merged",
+        "evidence": {
+          "quote": "Coverage is available from LIBERTY Dental providers only",
+          "start": 3992,
+          "end": 4048,
+          "page": 116
+        },
+        "notes": null
+      },
+      "services": [
+        {
+          "service_id": "pkg_2.svc_oral_exams",
+          "name": "Oral exams",
+          "category": "diagnostic",
+          "limit": {
+            "count": 2.0,
+            "unit": "oral exams",
+            "period": "per_year",
+            "raw": "Two oral exams each year"
+          },
+          "codes": [
+            "D0120",
+            "D0140",
+            "D0150",
+            "D0160",
+            "D0170",
+            "D0180"
+          ],
+          "status": "found",
+          "confidence": 0.9,
+          "source": "merged",
+          "evidence": {
+            "quote": "Two oral exams each year",
+            "start": 3511,
+            "end": 3535,
+            "page": 116
+          },
+          "notes": null
+        }
+      ],
+      "codes": [
+        {
+          "code": "D0120",
+          "code_system": "CDT",
+          "description": "Periodic oral evaluation - established patient",
+          "evidence": {
+            "quote": "D0120 - Periodic oral evaluation - established patient",
+            "start": 3566,
+            "end": 3620,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0140",
+          "code_system": "CDT",
+          "description": "Limited oral evaluation - problem focused",
+          "evidence": {
+            "quote": "D0140 - Limited oral evaluation - problem focused",
+            "start": 3623,
+            "end": 3672,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0150",
+          "code_system": "CDT",
+          "description": "Comprehensive oral evaluation - new or established patient",
+          "evidence": {
+            "quote": "D0150 - Comprehensive oral evaluation - new or established patient",
+            "start": 3675,
+            "end": 3741,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0160",
+          "code_system": "CDT",
+          "description": "Extensive oral exam problem focused",
+          "evidence": {
+            "quote": "D0160 - Extensive oral exam problem focused",
+            "start": 3744,
+            "end": 3787,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0170",
+          "code_system": "CDT",
+          "description": "Re-evaluation-limited problem focused",
+          "evidence": {
+            "quote": "D0170 - Re-evaluation-limited problem focused",
+            "start": 3790,
+            "end": 3835,
+            "page": 116
+          }
+        },
+        {
+          "code": "D0180",
+          "code_system": "CDT",
+          "description": "Comprehensive periodontal evaluation - new or established patient",
+          "evidence": {
+            "quote": "D0180 - Comprehensive periodontal evaluation - new or established patient",
+            "start": 3838,
+            "end": 3911,
+            "page": 116
+          }
+        }
+      ],
+      "cost_share": [
+        {
+          "cost_share_id": "pkg_2.cs_1",
+          "type": "copay",
+          "amount_usd": 0.0,
+          "percent": null,
+          "applies_to": {
+            "description": "the preventive dental services listed",
+            "service_ids": [
+              "pkg_2.svc_oral_exams"
+            ],
+            "codes": []
+          },
+          "status": "found",
+          "confidence": 0.94,
+          "source": "merged",
+          "evidence": {
+            "quote": "You pay no copay for the preventive dental services listed.",
+            "start": 4148,
+            "end": 4207,
+            "page": 116
+          },
+          "notes": null
+        },
+        {
+          "cost_share_id": "pkg_2.cs_2",
+          "type": "coinsurance",
+          "amount_usd": null,
+          "percent": 20.0,
+          "applies_to": {
+            "description": "restorative dental services (fillings) listed",
+            "service_ids": [],
+            "codes": []
+          },
+          "status": "found",
+          "confidence": 0.94,
+          "source": "merged",
+          "evidence": {
+            "quote": "You pay 20% as your portion of the covered charges for restorative dental services (fillings) listed.",
+            "start": 4208,
+            "end": 4309,
+            "page": 116
+          },
+          "notes": null
+        },
+        {
+          "cost_share_id": "pkg_2.cs_3",
+          "type": "coinsurance",
+          "amount_usd": null,
+          "percent": 50.0,
+          "applies_to": {
+            "description": "endodontic, periodontic, and oral surgery dental",
+            "service_ids": [],
+            "codes": []
+          },
+          "status": "truncated",
+          "confidence": 0.94,
+          "source": "merged",
+          "evidence": {
+            "quote": "You pay 50% as your portion of the covered charges for endodontic, periodontic, and oral surgery dental",
+            "start": 4310,
+            "end": 4413,
+            "page": 116
+          },
+          "notes": null
+        }
+      ],
+      "exclusions": [],
+      "source_span": {
+        "start": 3097,
+        "end": 4413,
+        "pages": [
+          116
+        ]
+      },
+      "needs_review": true,
+      "degraded": false
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "needs_review": true,
+    "flags": [
+      {
+        "rule": "invariants.exclusions_not_stated",
+        "severity": "warn",
+        "message": "no exclusions observed for pkg_2; an empty list is not an assertion that none apply",
+        "path": "/packages/1/exclusions"
+      },
+      {
+        "rule": "review.low_certainty",
+        "severity": "warn",
+        "message": "status=FieldStatus.truncated confidence=0.94",
+        "path": "/packages/1/cost_share/2"
+      },
+      {
+        "rule": "document.truncated",
+        "severity": "warn",
+        "message": "source ends mid-statement; trailing content may be missing",
+        "path": "/document/truncated"
+      }
+    ],
+    "metrics": {
+      "fields_total": 49,
+      "fields_grounded": 48,
+      "fields_null": 1,
+      "groundedness_rate": 1.0
+    }
+  }
+}
