@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# Local config and secrets
+.env
+
+# Generated artifacts (regenerate: python -m tools.extract_cli extracted_text.txt)
+service_output.json
+
+# Editor / tooling state
+.omc/
+.codegraph/
+.DS_Store
+~$*.docx

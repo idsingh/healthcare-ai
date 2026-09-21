@@ -1,0 +1,854 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/benefit-extraction/1.0.0",
+  "title": "Supplemental Benefit Extraction",
+  "description": "Domain-agnostic envelope for supplemental benefit packages extracted from plan documents. Dental is one domain; vision/hearing/OTC reuse the same shape.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run",
+    "document",
+    "packages",
+    "validation"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "description": "Verbatim supporting text plus its location in the NORMALIZED source. Offsets are verified, not asserted.",
+      "required": [
+        "quote"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "end": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "page": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "found",
+        "not_stated",
+        "ambiguous",
+        "unverified",
+        "truncated"
+      ],
+      "description": "found=grounded value; not_stated=absent from source; ambiguous=conflicting candidates; unverified=evidence failed groundedness; truncated=cut off by document boundary"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "deterministic",
+        "llm",
+        "merged"
+      ]
+    },
+    "field": {
+      "type": "object",
+      "description": "Generic Field<T> wrapper. Every extracted value in this schema uses it, so evidence/confidence/provenance are uniform.",
+      "required": [
+        "value",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "value": {},
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "money": {
+      "type": "object",
+      "required": [
+        "amount_usd"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "amount_usd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "const": "USD",
+          "default": "USD"
+        }
+      }
+    },
+    "cadence": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "monthly",
+        "quarterly",
+        "annual",
+        "per_visit",
+        "per_service",
+        "one_time",
+        null
+      ]
+    },
+    "period": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "per_year",
+        "per_calendar_year",
+        "per_benefit_period",
+        "per_month",
+        "per_lifetime",
+        null
+      ]
+    },
+    "limit": {
+      "type": "object",
+      "description": "Normalized frequency/quantity limit, e.g. 'Two cleanings per year' -> {count:2, unit:'visit', period:'per_year'}.",
+      "additionalProperties": false,
+      "properties": {
+        "count": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "period": {
+          "$ref": "#/$defs/period"
+        },
+        "raw": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "code": {
+      "type": "object",
+      "required": [
+        "code",
+        "description"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string",
+          "pattern": "^D[0-9]{4}$"
+        },
+        "code_system": {
+          "type": "string",
+          "enum": [
+            "CDT",
+            "CPT",
+            "HCPCS",
+            "UNKNOWN"
+          ],
+          "default": "CDT"
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Extractor commentary: why a value was shaped this way, or why it was withheld."
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "required": [
+        "name",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "service_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "category": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "e.g. preventive | diagnostic | restorative | endodontic | periodontic | oral_surgery"
+        },
+        "limit": {
+          "$ref": "#/$defs/limit"
+        },
+        "codes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^D[0-9]{4}$"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Extractor commentary: why a value was shaped this way, or why it was withheld."
+        }
+      }
+    },
+    "cost_share": {
+      "type": "object",
+      "required": [
+        "type",
+        "applies_to",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cost_share_id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "copay",
+            "coinsurance",
+            "deductible",
+            "not_covered",
+            "unknown"
+          ]
+        },
+        "amount_usd": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "percent": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "applies_to": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "service_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "codes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^D[0-9]{4}$"
+              }
+            }
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Extractor commentary: why a value was shaped this way, or why it was withheld."
+        }
+      }
+    },
+    "exclusion": {
+      "type": "object",
+      "required": [
+        "text",
+        "status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "exclusion_id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "description": "Normalized one-line statement of the exclusion or limitation."
+        },
+        "kind": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "service_excluded",
+            "network_restriction",
+            "member_liability",
+            "claims_process",
+            "accumulator",
+            "other",
+            null
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "confidence": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Extractor commentary: why a value was shaped this way, or why it was withheld."
+        }
+      }
+    },
+    "flag": {
+      "type": "object",
+      "required": [
+        "rule",
+        "severity",
+        "message"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "rule": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warn",
+            "info"
+          ]
+        },
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "JSON Pointer to the offending node"
+        }
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "run": {
+      "type": "object",
+      "description": "Provenance. Together these form the idempotency key.",
+      "required": [
+        "run_id",
+        "content_sha256",
+        "idempotency_key"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "idempotency_key": {
+          "type": "string"
+        },
+        "started_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "completed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "model_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "model_params": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "prompt_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "domain_packs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "pipeline_version": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "degraded": {
+          "type": "boolean",
+          "default": false
+        },
+        "partial_reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "cost_usd": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "tokens": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "document": {
+      "type": "object",
+      "required": [
+        "plan_name",
+        "plan_year"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "plan_name": {
+          "$ref": "#/$defs/field"
+        },
+        "plan_year": {
+          "$ref": "#/$defs/field"
+        },
+        "issuer": {
+          "$ref": "#/$defs/field"
+        },
+        "document_type": {
+          "$ref": "#/$defs/field"
+        },
+        "form_id": {
+          "$ref": "#/$defs/field"
+        },
+        "source_pages": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "truncated": {
+          "type": "boolean",
+          "default": false
+        },
+        "char_count_normalized": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "package_id",
+          "name",
+          "premium",
+          "benefit_maximum"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "package_id": {
+            "type": "string"
+          },
+          "ordinal": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "name": {
+            "$ref": "#/$defs/field"
+          },
+          "benefit_domains": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "dental",
+                "vision",
+                "hearing",
+                "otc",
+                "transportation",
+                "fitness",
+                "other"
+              ]
+            }
+          },
+          "premium": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/field"
+              }
+            ],
+            "description": "value: {amount_usd, cadence} or null",
+            "properties": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "amount_usd",
+                      "cadence"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "amount_usd": {
+                        "type": [
+                          "number",
+                          "null"
+                        ],
+                        "minimum": 0
+                      },
+                      "cadence": {
+                        "$ref": "#/$defs/cadence"
+                      },
+                      "currency": {
+                        "type": "string",
+                        "default": "USD"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "benefit_maximum": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/field"
+              }
+            ],
+            "description": "value: {amount_usd, period} or null",
+            "properties": {
+              "value": {
+                "anyOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "required": [
+                      "amount_usd",
+                      "period"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "amount_usd": {
+                        "type": [
+                          "number",
+                          "null"
+                        ],
+                        "minimum": 0
+                      },
+                      "period": {
+                        "$ref": "#/$defs/period"
+                      },
+                      "applies_to": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "currency": {
+                        "type": "string",
+                        "default": "USD"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "network_restriction": {
+            "$ref": "#/$defs/field"
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/service"
+            }
+          },
+          "codes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/code"
+            }
+          },
+          "cost_share": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/cost_share"
+            }
+          },
+          "exclusions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/exclusion"
+            }
+          },
+          "source_span": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "start": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "end": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "pages": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "needs_review": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "passed",
+        "needs_review",
+        "flags"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "needs_review": {
+          "type": "boolean"
+        },
+        "flags": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/flag"
+          }
+        },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "fields_total": {
+              "type": "integer"
+            },
+            "fields_grounded": {
+              "type": "integer"
+            },
+            "fields_null": {
+              "type": "integer"
+            },
+            "groundedness_rate": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

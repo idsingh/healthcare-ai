@@ -1,0 +1,408 @@
+# EOC Benefit Extraction Service — Design
+
+Converts unstructured / semi-structured plan text (`extracted_text.txt`) into
+schema-conformant JSON with per-field evidence anchoring.
+
+Deliverables in this repo:
+
+| File | What it is |
+|---|---|
+| `DESIGN.md` | This document: assumptions, architecture, components, failure modes |
+| `schema/extraction.schema.json` | Output contract (JSON Schema 2020-12) |
+| `sample_output.json` | Filled output for the provided excerpt |
+| `pseudocode.py` | Core extraction logic (deterministic pass + LLM pass + merge) |
+| `tools/validate.py` | Runnable validator: groundedness + business rules |
+
+---
+
+## 1. Assumptions
+
+Stated explicitly because most of them are load-bearing.
+
+**About the input**
+
+1. Input is UTF-8 plain text extracted from a PDF. Layout is *lossy*: the source is a
+   two-column benefits table (`benefit description` | `what you must pay`) that has been
+   flattened into reading order. Column content is therefore **interleaved** — in the
+   excerpt, `The plan will pay up to $500 ... each year` appears in the middle of the
+   X-ray code list. Any design that assumes linear reading order will mis-attribute fields.
+2. Line breaks are arbitrary (mid-phrase, mid-word), whitespace is irregular, bullets are
+   `•`, dashes are en-dashes (`–`), and the same logical item can span a page boundary
+   (package 1's exclusion list continues onto page 116).
+3. Every page repeats a header/footer block (`115 2024 Evidence of Coverage for ...`,
+   `HMO-MAPD 1054638MUSENMUB_0102_R ...`). This is boilerplate noise, detectable by
+   cross-page repetition rather than by hardcoded regex.
+4. The excerpt is a **fragment**: it starts mid-sentence and ends mid-sentence
+   (`... oral surgery dental`). The service must produce partial output plus an explicit
+   truncation flag, never a guess at the missing tail.
+5. Text is the primary input; the PDF is reference only. No OCR step in scope, but the
+   ingest port is written so a `PdfTextSource` can be swapped in later.
+
+**About the domain**
+
+6. A document contains 0..N *packages*; each package has at most one premium, at most one
+   benefit maximum, and 0..N services / cost-share rules / exclusions.
+7. `Dxxxx` tokens are CDT procedure codes. We validate their *shape* only — we do not
+   assert that a code exists in the CDT catalog unless a licensed code list is mounted
+   (see §6, "code registry"). The excerpt's code→description mapping is taken from the
+   document, not from external knowledge.
+8. Amounts are USD. Cadence vocabulary is closed (`monthly`, `annual`, `per_visit`, ...).
+9. Absence is represented as `status: "not_stated"` with `value: null`. The service never
+   infers an unstated value, and never fills from prior plan knowledge.
+
+**About operations**
+
+10. Documents range from a 2-page excerpt to a 300+ page EOC; throughput target is batch
+    (thousands of documents), not interactive. p95 per document is a budget, not an SLA.
+11. LLM is `gpt-5.6-luna` via OpenRouter, configured as an opaque model id behind an
+    `LLMClient` port. I have not independently verified that this router model supports
+    structured outputs / seeding, so the client declares a **capability contract** and
+    degrades gracefully (§4.5) rather than assuming them.
+12. EOC text is a public plan document, not PHI. But the same pipeline will inevitably be
+    pointed at member correspondence, so it is built PHI-ready: BAA-covered inference
+    endpoints, no-train flags, prompt/response redaction before logging, and a kill switch
+    that routes to a self-hosted model. This is a deployment posture, not extra code paths.
+
+---
+
+## 2. Architecture
+
+```
+                    ┌──────────────── Control plane ────────────────┐
+                    │  idempotency store · run ledger · eval gate   │
+                    └───────────────────────────────────────────────┘
+                                        │
+ ingest        normalize        segment        extract           reconcile      validate     emit
+┌───────┐     ┌─────────┐     ┌─────────┐   ┌──────────────┐   ┌──────────┐   ┌────────┐  ┌──────┐
+│ blob  │ ──▶ │ NFKC    │ ──▶ │ page    │──▶│ A. determin. │──▶│ merge by │──▶│ schema │─▶│ JSON │
+│ +sha  │     │ dash    │     │ deboiler│   │    scanners  │   │ field w/ │   │ rules  │  │ +env │
+│       │     │ dehyph  │     │ column  │   │ B. LLM pass  │   │ priority │   │ ground │  │ elope│
+│       │     │ offsets │     │ de-int. │   │  (per block) │   │          │   │ -edness│  │      │
+└───────┘     └─────────┘     └─────────┘   └──────────────┘   └──────────┘   └────────┘  └──────┘
+                    │              │                │                              │
+                    └──────────────┴────────────────┴──────────────────────────────┘
+                                   emits spans into the *original* char offset space
+```
+
+Two properties hold end to end:
+
+- **Offset preservation.** Normalization produces `(normalized_text, offset_map)`. Every
+  candidate carries a span in normalized space that maps back to original-file offsets, so
+  evidence is verifiable against the file the customer gave us, not a cleaned derivative.
+- **Everything is a candidate until validated.** Deterministic scanners and the LLM both
+  emit `Candidate(field_path, value, span, source, confidence)`. Nothing writes directly
+  into the output object. Merge and validation are the only writers.
+
+### Processing model
+
+- A document becomes a **DAG of block-scoped tasks** (one per package section). Blocks are
+  independent → embarrassingly parallel, bounded by a worker pool and a token-bucket rate
+  limiter on the LLM provider.
+- Document-level fields (plan name, year) come from a single cheap header task.
+- Large documents never enter a single prompt. Map (per block) → reduce (assemble
+  packages) → document-level cross-checks. Context is bounded by construction, so a 300-page
+  EOC costs linearly, not quadratically.
+- Each block task is independently cached and retried (§5).
+
+---
+
+## 3. Components and responsibilities
+
+| # | Component | Responsibility | Never does |
+|---|---|---|---|
+| 1 | `DocumentSource` | Fetch bytes, compute `content_sha256`, decode | Interpret content |
+| 2 | `TextNormalizer` | NFKC, dash/ligature folding, de-hyphenation, whitespace collapse, **offset map** | Delete content |
+| 3 | `Segmenter` | Page split, boilerplate detection (cross-page repetition), column de-interleaving, section detection, bullet re-joining | Extract values |
+| 4 | `CandidateExtractor` (strategy) | Emit typed candidates with spans. Impls: `MoneyScanner`, `CadenceScanner`, `CdtCodeScanner`, `FrequencyScanner`, `CostShareScanner`, `NetworkScanner`, `LlmExtractor` | Decide the winner |
+| 5 | `Reconciler` | Merge candidates per field by source priority + agreement; mark `ambiguous` on unresolved conflict | Invent values |
+| 6 | `ValidationPipeline` | Composite of `ValidationRule`s: schema, groundedness, business invariants, cross-field | Mutate values (only nulls + flags) |
+| 7 | `LLMClient` (port) | Provider-agnostic call: structured output, retries, timeouts, cost accounting. Adapter: `OpenRouterClient(model="gpt-5.6-luna")` | Know about dental |
+| 8 | `PromptRegistry` | Versioned, hashed prompt templates; the hash is part of the cache key | Hold business rules |
+| 9 | `ExtractionRepository` | Idempotent persistence of run + result + flags | Retry logic |
+| 10 | `DomainPack` (registry) | The only dental-specific unit: schema fragment, lexicon, scanners, prompt fragment, validators | Touch the pipeline |
+| 11 | `Telemetry` | OTel traces/metrics/logs, redaction | Business decisions |
+| 12 | `EvalHarness` | Golden-set scoring, CI gate, drift alarms | Run in the request path |
+
+**Generalizability.** Dental is a `DomainPack`. Vision, hearing, OTC, transportation are new
+packs registered at startup. The pipeline, schema envelope, evidence model, validators and
+observability are domain-agnostic. Adding a benefit domain = add a pack + goldens, touch no
+pipeline code.
+
+---
+
+## 4. Deterministic vs LLM-powered
+
+Rule of thumb: **regex finds tokens, the LLM decides what they mean.** Anything with a
+closed vocabulary or a stable surface form is deterministic; anything requiring scope,
+attachment or paraphrase is LLM. Numbers are *always* deterministic — the LLM may select a
+number's meaning but never re-type the digits.
+
+| Concern | Mechanism | Why |
+|---|---|---|
+| Hashing, idempotency, caching | Deterministic | Pure functions |
+| Unicode/whitespace/de-hyphenation, offset map | Deterministic | Reversible, testable |
+| Page split, boilerplate removal | Deterministic (frequency ≥ k across pages) | No semantics needed |
+| Package boundary detection | Deterministic anchor `^Optional supplemental package\s+(\d+)` + LLM fallback when 0 anchors hit | Anchored headings are reliable; fallback handles reworded plans |
+| Money amounts, percentages | Deterministic (`\$\s?[\d,]+(?:\.\d{2})?`, `\d{1,3}\s?%`) | LLM must never re-type digits |
+| CDT codes | Deterministic (`\bD\d{4}\b`) | Fixed shape |
+| Code → description pairing | Deterministic (bullet split on dash) + LLM repair for wrapped/split bullets | 95% is pure string work |
+| **Column de-interleaving** | Heuristic first, LLM adjudication on low confidence | Genuinely ambiguous once layout is gone |
+| **Which package a cost-share belongs to** | LLM, constrained to the block | Attachment is semantic |
+| Service + limit normalization ("Two oral exams each year" → `{service, limit:{count:2, period:"year"}}`) | LLM, validated against deterministic numeral scan | Paraphrase with numeric checks |
+| Exclusion normalization | LLM | Free prose |
+| Network restriction | Deterministic lexicon (`LIBERTY Dental`, `contracted provider`) + LLM for novel phrasings | Hybrid |
+| Evidence spans | Deterministic verification (substring + offset) of LLM-quoted text | The anti-hallucination backstop |
+| Validation & contradiction checks | Deterministic | Must be auditable |
+
+### 4.5 Prompt strategy and determinism
+
+- **One block, one job.** Each call sees a single package block (plus its column-split
+  neighbours), never the whole document. Smaller context = fewer attachment errors.
+- **Structured output.** Response is constrained by the JSON Schema fragment for that block.
+  If the provider/model can't enforce a schema, fall back to: JSON-only instruction →
+  `json.loads` → schema validate → one repair round-trip with the validator error → fail.
+  The pipeline tolerates a model without native structured output; it never trusts free text.
+- **Quote-only fields.** Every extracted field must carry `evidence_quote` copied
+  *verbatim* from the input. Post-hoc we assert the quote is a substring of the normalized
+  block. Ungrounded → the field is dropped to `null` with `status:"unverified"`. This single
+  rule converts most hallucinations into recorded nulls.
+- **Explicit abstention.** The prompt enumerates target fields and instructs
+  `"not_stated"` for anything absent, with examples of correct abstention. Nulls are a
+  success mode, not a failure.
+- **Determinism controls.** `temperature=0`, `top_p=1`, fixed `seed` when supported, pinned
+  model id (never a floating alias), pinned prompt version. These make results *reproducible
+  in practice*; they do not make a sampled model mathematically deterministic, so the cache
+  (§5) is what guarantees byte-identical repeat output.
+- **Self-consistency, only where it pays.** For fields the reconciler marks ambiguous,
+  re-run k=3 at temperature 0.3 and take the majority with the agreeing evidence span;
+  no majority → `ambiguous`. Applied to <5% of fields, so cost stays flat.
+- **No chain-of-thought in the payload.** Reasoning, if requested, goes in a separate
+  discarded field so it can't leak into values.
+
+---
+
+## 5. Reliability: idempotency, retries, concurrency
+
+**Idempotency key** (per block):
+
+```
+key = sha256(content_sha256 | block_id | domain_pack_v | schema_v | prompt_v | model_id | params)
+```
+
+Any input change busts the cache; no input change replays the cached JSON byte-for-byte.
+Document-level key is the same tuple minus `block_id`, so re-submitting a document is a
+no-op returning the prior `run_id`. Result emission uses a transactional **outbox**, so a
+crash between "persisted" and "published" cannot double-publish.
+
+**Retries** — layered, each with a distinct trigger:
+
+| Layer | Trigger | Action | Budget |
+|---|---|---|---|
+| Transport | 429/5xx/timeout | Exponential backoff + full jitter | 5 attempts |
+| Parse | Non-JSON / schema-invalid | One repair prompt carrying the validator error | 1 |
+| Semantic | Groundedness failure on a field | Re-ask for that field alone with a narrowed window | 1 |
+| Provider | Circuit open / model unavailable | Fail over to secondary model id, tag `degraded:true` | 1 |
+| Document | Any block permanently failed | Emit partial result + `blocked_blocks[]`, route to review queue | — |
+
+Retries are safe because every attempt is a pure function of (block, prompt, params) and
+writes go through the idempotency key.
+
+**Concurrency** — bounded worker pool over block tasks; token-bucket rate limiter and a
+concurrent-token budget in front of the provider; per-document semaphore so one huge
+document can't starve the queue; circuit breaker per provider; backpressure to the queue
+rather than unbounded in-memory fan-out. Cost ceiling per document — exceeding it stops
+the LLM pass and emits deterministic-only output flagged `partial_reason:"cost_cap"`.
+
+---
+
+## 6. Failure modes and mitigations
+
+**Input / layout**
+
+| Failure | Detection | Mitigation |
+|---|---|---|
+| Column interleaving mis-attributes a value (e.g. `$500` lands in package 2) | Cross-field check: benefit max must appear within its package's span | De-interleave before extraction; block-scoped prompts; conflict → `ambiguous` + review |
+| Item split across a page boundary | Boilerplate strip leaves a bullet continuing after a page break | Join across page boundaries when the next line starts lowercase or the bullet has no terminator |
+| Truncated document (this excerpt) | Last block has no terminator / trailing sentence incomplete | `document.truncated=true`, affected fields `status:"truncated"`, never extrapolate |
+| Garbage/empty/wrong-language text | Heuristics: printable ratio, dictionary hit rate, anchor count = 0 | Reject before spending tokens; `rejected_reason` |
+| Reworded headings in another plan | Zero anchors but plausible text | LLM segmentation fallback, lower confidence, sample into review |
+
+**Model**
+
+| Failure | Detection | Mitigation |
+|---|---|---|
+| Hallucinated value (a `$1,200` max that isn't in the text) | Groundedness: evidence quote not a substring | Drop to null + `unverified`; count into `hallucination_rate` metric |
+| Plausible-but-wrong attachment (cost share on the wrong package) | Span must fall inside the owning block | Reject candidate; re-ask narrowed |
+| Number drift (`$13.00` → `$13`) | Deterministic money scan disagrees | Deterministic value wins; log disagreement |
+| Invalid/absent JSON | Schema validate | Repair round-trip, then fail the block |
+| Provider outage, rate limit, latency spike | Error rate / p95 monitors, circuit breaker | Backoff, failover model, degrade to deterministic-only |
+| Silent model change behind an alias | Pinned id + prompt hash + nightly golden-set run | Version gate: eval must pass before a new model id is promoted |
+| Prompt injection from document text ("ignore previous instructions") | Input is data, never instructions; injection-probe goldens | Delimited input block, output constrained by schema, quotes verified against source |
+
+**System**
+
+| Failure | Detection | Mitigation |
+|---|---|---|
+| Duplicate processing / double emit | Idempotency key + outbox | Replay cached result |
+| Cost blowout on a huge document | Per-document token/cost budget | Cap → partial output, flagged |
+| Schema evolution breaks consumers | `schema_version` in every envelope | Additive-only changes; versioned contract tests |
+| Silent quality regression | Golden set in CI + production null-rate/groundedness drift alarms | Block release; alert on drift |
+
+---
+
+## 7. Validation checks (Part C — at least 3; here are the ones that earn their place)
+
+Implemented in `tools/validate.py`, run against `sample_output.json`.
+
+1. **Evidence groundedness (anti-hallucination).** Every non-null field's `evidence.quote`
+   must be an exact substring of the normalized source, and its `[start,end)` offsets must
+   resolve to that quote. Fails → field nulled, `status:"unverified"`. *This is the single
+   highest-value check; it makes fabrication structurally detectable.*
+2. **Numeric fidelity.** Every `amount_usd` / `percent` in the output must appear as a
+   literal in its own evidence quote (after normalization). Catches digit drift and
+   unit/cadence swaps.
+3. **Completeness & contradiction invariants.** Per package: exactly ≤1 premium and ≤1
+   benefit maximum; a missing premium on a package whose heading says "additional premium"
+   is an error, not a null; two different premium values inside one package span is a
+   contradiction; coinsurance percentages must be 0–100; a `copay: $0` co-existing with a
+   coinsurance statement for the *same* service set is a contradiction (different service
+   sets, as in package 2, is legal).
+4. **Referential integrity.** Every `code` matches `^D\d{4}$`; every code referenced by a
+   service exists in that package's `codes` list; when a licensed CDT registry is mounted,
+   unknown codes are flagged `code_not_in_registry` (warn, never auto-correct).
+5. **Ambiguity surfacing.** Any field with `status` in `{ambiguous, unverified, truncated}`
+   or `confidence < 0.7` sets `needs_review=true` on the document. Downstream analytics
+   filters on this; humans review only the flagged minority.
+
+Severity model: `error` → field nulled and document flagged; `warn` → document flagged;
+`info` → metric only. Validation output is part of the envelope, not a side log.
+
+---
+
+## 8. Observability and evaluation
+
+**Traces.** One span per stage per block: `normalize → segment → extract.deterministic →
+extract.llm → reconcile → validate`. Span attributes: `doc_id`, `run_id`, `block_id`,
+`model_id`, `prompt_v`, `tokens_in/out`, `cost_usd`, `cache_hit`, `attempt`.
+
+**Metrics** (the five that actually drive action):
+
+1. `groundedness_failure_rate` — proxy for hallucination. Alarm on any sustained rise.
+2. `field_null_rate` by field path — a spike means upstream format drift, not model decay.
+3. `needs_review_rate` — the human cost of the system.
+4. `llm_cost_per_document` + `tokens_per_document` — budget guardrail.
+5. `block_failure_rate` / retry counts by cause — provider health.
+
+**Logs.** Structured, correlated by `run_id`; prompts and completions stored in a separate
+short-retention, access-controlled store with redaction, so a bad extraction can be
+replayed exactly.
+
+**Evaluation.**
+
+- *Golden set*: ~50 hand-labelled excerpts across plans/carriers/benefit domains, including
+  the nasty ones — interleaved columns, page-split items, truncation, missing premium,
+  injection probes.
+- *Metrics*: field-level precision / recall / exact-match, evidence-span IoU, hallucination
+  rate (values with no support), abstention accuracy (did it correctly say "not stated"?).
+  Abstention is scored explicitly — a model that never says null looks great on recall and
+  is useless in production.
+- *Gate*: CI fails on any regression beyond tolerance; model or prompt version bumps are
+  promoted only through the gate.
+- *Production*: shadow-run the candidate version on 1% of live traffic, diff against
+  incumbent, review disagreements. Sample 2% of unflagged outputs for human audit to
+  estimate the false-confidence rate.
+
+---
+
+## 9. SOLID / DRY in this design
+
+- **SRP** — each component in §3 has one reason to change: `TextNormalizer` changes when
+  encoding quirks change, `DomainPack` when benefits change, `LLMClient` when providers change.
+- **OCP** — new benefit domains and new scanners are registered, not wired in.
+  `CandidateExtractor` and `ValidationRule` are the two extension points; the pipeline is closed.
+- **LSP** — every extractor, deterministic or LLM, returns `list[Candidate]` with the same
+  span contract, so the reconciler cannot tell them apart except by `source` priority.
+- **ISP** — narrow ports (`DocumentSource`, `LLMClient`, `ExtractionRepository`); nothing
+  depends on a fat "service" interface.
+- **DIP** — the pipeline depends on ports; OpenRouter/S3/Postgres are adapters chosen at
+  composition root. Swapping `gpt-5.6-luna` for a self-hosted model is a config change.
+- **DRY** — one normalizer (evidence verification reuses the exact same function as
+  ingestion, so "grounded" means the same thing everywhere), one `Field<T>` envelope used by
+  every field, one validation pipeline shared by runtime and the eval harness. The golden-set
+  scorer calls the same validators production does.
+
+Deliberate non-DRY: scanners stay small and duplicated rather than merged into one clever
+mega-regex. Regex generality is where extraction quality quietly dies.
+
+---
+
+## 10. Running what's here
+
+```bash
+python3 tools/validate.py                 # validate sample_output.json against the source
+python3 tools/validate.py --fix-offsets   # re-resolve every evidence span, then validate
+pip install jsonschema && python3 -c "import json,jsonschema; \
+  jsonschema.Draft202012Validator(json.load(open('schema/extraction.schema.json'))) \
+  .validate(json.load(open('sample_output.json')))"
+```
+
+Actual output on the provided excerpt:
+
+```
+fields checked : 50  grounded: 49  null: 1
+groundedness   : 100.00%
+errors         : 0
+warnings       : 4
+  [warn] package.exclusions_not_stated: no exclusions section observed for pkg_2 ...
+  [warn] review.low_certainty: status=truncated confidence=0.3 (/packages/1/services/1)
+  [warn] review.low_certainty: status=truncated confidence=0.6 (/packages/1/cost_share/2)
+  [warn] document.truncated: source ends mid-sentence (/document/truncated)
+RESULT: PASS | needs_review: True
+```
+
+All 49 evidence quotes resolve to verified character offsets in the normalized source; the
+one null (`document.issuer`) is a correct abstention — the carrier is not named separately
+from the plan name.
+
+**Negative test** — inject a fabricated `$1,200` benefit maximum with a matching fake quote,
+and a `D9999` code that isn't in the document:
+
+```
+[error] groundedness.not_in_source: evidence not found in source: 'The plan will pay up to $1,200 ...'
+[error] service.unknown_code: D9999 referenced by pkg_1.svc_oral_exams is not in the package code list
+[error] review.flag_missing: pkg_1 has low-certainty fields but needs_review is false
+RESULT: FAIL   (exit code 1)
+```
+
+The fabricated value is nulled, the field is marked `unverified`, and the document is blocked
+from the clean path. That is the whole anti-hallucination thesis in one test: *a value without
+verifiable evidence is not a value.*
+
+`pseudocode.py` is illustrative — helpers like `offset()`, `group_by()` and the `Deps`
+container are declared, not implemented; the segmenter bodies are elided to `...`. It is the
+logic and the seams, not a runnable service.
+
+**What I'd build first if this were real** (2-week slice): normalizer + segmenter with the
+column de-interleaver, deterministic scanners, single-block LLM pass with structured output,
+the five validators, and a 20-document golden set wired into CI. Everything else in this
+document — self-consistency, model failover, shadow evaluation — is the second increment.
+
+---
+
+## 11. The implemented service
+
+`README.md` covers running it. The mapping from this document to code:
+
+| Design section | Code |
+|---|---|
+| §2 pipeline | `app/application/pipeline.py` |
+| §3 components | `app/domain/ports.py` + `app/application/*` + `app/adapters/*` |
+| §4 deterministic vs LLM | `application/scanners.py` vs `application/llm_extractor.py`, reconciled in `merge.py` |
+| §4.5 prompt strategy | `llm_extractor.SYSTEM_PROMPT`, `domain/contracts.py` (structured output) |
+| §5 idempotency / retries / concurrency | `application/service.py`, `application/retry.py`, `pipeline._process_blocks` |
+| §6 failure modes | `tests/test_llm_reliability.py` |
+| §7 validation checks | `application/validation.py` (five rules) |
+| §8 observability | `app/logging_setup.py`, run counters in `RunInfo` |
+
+Built as specified; §8's metrics exporter and §5's outbox are the two pieces left as design
+only, because this service keeps jobs in process.
