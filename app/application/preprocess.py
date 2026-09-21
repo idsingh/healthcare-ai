@@ -25,6 +25,14 @@ BOILERPLATE_MIN_LEN = 15
 BOILERPLATE_MIN_PAGES = 2
 HEAD_ZONE_LINES = 5     # running headers live at the top of a page
 FOOT_ZONE_LINES = 3     # ... and footers at the bottom
+DIGITS = re.compile(r"\d+")
+
+
+def _boiler_key(line: str) -> str:
+    """Page headers carry the page number, so '115 2024 Evidence of Coverage'
+    and '116 2024 Evidence of Coverage' are the same header. Mask digits when
+    deciding what repeats."""
+    return DIGITS.sub("#", collapse(line))
 
 
 def fold(text: str) -> str:
@@ -96,10 +104,10 @@ class Preprocessor:
             kept: list[str] = []
             lines = body.splitlines()
             for idx, line in enumerate(lines):
-                key = collapse(line)
+                key = _boiler_key(line)
                 in_zone = idx < HEAD_ZONE_LINES or idx >= len(lines) - FOOT_ZONE_LINES
-                if in_zone and key in boilerplate:
-                    if key in seen:
+                if key in boilerplate:
+                    if key in seen and in_zone:
                         dropped += 1
                         continue
                     seen.add(key)   # keep the first copy: it carries plan name and year
@@ -171,13 +179,20 @@ class Preprocessor:
         document, and dropping the second copy silently empties package 2.
         """
         counts: dict[str, int] = {}
+        in_zone_somewhere: set[str] = set()
         for _, body in pages:
             lines = body.splitlines()
-            zone = lines[:HEAD_ZONE_LINES] + lines[-FOOT_ZONE_LINES:]
-            for key in {collapse(ln) for ln in zone}:
-                if len(key) >= BOILERPLATE_MIN_LEN:
-                    counts[key] = counts.get(key, 0) + 1
-        return {k for k, n in counts.items() if n >= BOILERPLATE_MIN_PAGES}
+            zone = {_boiler_key(ln) for ln in lines[:HEAD_ZONE_LINES] + lines[-FOOT_ZONE_LINES:]}
+            for key in {_boiler_key(ln) for ln in lines}:
+                if len(key) < BOILERPLATE_MIN_LEN:
+                    continue
+                counts[key] = counts.get(key, 0) + 1
+                if key in zone:
+                    in_zone_somewhere.add(key)
+        # Repeats across pages AND sits in a header/footer position on at least one of
+        # them. Requiring the zone on every page missed headers whose first copy lands
+        # mid-page, which happens whenever an excerpt starts partway through a page.
+        return {k for k, n in counts.items() if n >= BOILERPLATE_MIN_PAGES and k in in_zone_somewhere}
 
     @staticmethod
     def _flatten(text: str) -> tuple[str, list[int]]:

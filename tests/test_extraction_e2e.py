@@ -148,3 +148,14 @@ async def test_a_complete_sentence_at_a_block_boundary_is_not_truncated(result):
     last = result.packages[0].exclusions[-1]
     assert last.text.endswith("out-of-pocket amount.")
     assert last.status == FieldStatus.found
+
+
+async def test_exclusion_evidence_does_not_bleed_into_the_next_page(result):
+    """Regression: the third exclusion's quote used to run past the page break
+    and swallow '116 2024 Evidence of Coverage for Anthem Select (HMO) ...'."""
+    texts = [e.text for e in result.packages[0].exclusions]
+    assert texts[2] == ("Restorative dental (fillings) & endodontic, periodontic and "
+                        "oral surgery services are excluded.")
+    for exclusion in result.packages[0].exclusions:
+        assert "Evidence of Coverage" not in exclusion.evidence.quote
+        assert exclusion.evidence.quote.endswith(".")

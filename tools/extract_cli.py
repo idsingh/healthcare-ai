@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run the pipeline over a text file without starting the API.
 
-    python -m tools.extract_cli extracted_text.txt -o service_output.json
+    python -m tools.extract_cli extracted_text.txt -o output/service_output.json
 """
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from app.logging_setup import configure_logging          # noqa: E402
 async def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("path")
-    ap.add_argument("-o", "--output", default="service_output.json")
+    ap.add_argument("-o", "--output", default="output/service_output.json")
     args = ap.parse_args()
 
     settings = get_settings()
@@ -30,6 +30,7 @@ async def main() -> int:
     pipeline = ExtractionPipeline(settings, build_llm(settings))
     result = await pipeline.run(Path(args.path).read_text(), run_id="cli", idempotency_key="cli")
 
+    Path(args.output).parent.mkdir(parents=True, exist_ok=True)
     Path(args.output).write_text(json.dumps(result.model_dump(mode="json"), indent=2) + "\n")
     metrics = result.validation.metrics
     print(f"\nwrote {args.output}: {len(result.packages)} packages, "

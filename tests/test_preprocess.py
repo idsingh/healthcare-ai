@@ -95,3 +95,12 @@ def test_money_phrase_is_not_mistaken_for_a_frequency_limit(settings, sample_tex
 def test_collapse_is_idempotent():
     messy = "Two  oral\n exams   each\tyear"
     assert collapse(collapse(messy)) == collapse(messy) == "Two oral exams each year"
+
+
+def test_running_header_is_stripped_even_when_its_first_copy_is_mid_page(settings, sample_text):
+    """Page 116 repeats the table header that sits mid-page on 115 (the excerpt
+    starts partway through that page). If it survives, it leaks into the
+    evidence quote of the exclusion that precedes it."""
+    doc = Preprocessor(settings).run(sample_text)
+    assert doc.flat.count("Optional supplemental benefits What you must pay") == 1
+    assert doc.flat.count("116 2024 Evidence of Coverage") == 0

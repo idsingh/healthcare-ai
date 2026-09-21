@@ -4,8 +4,8 @@
     "run_id": "cli",
     "content_sha256": "9952847281c66a65d73250e2019a4505087db4949ed2f7e0f2200fe5f53cd9a9",
     "idempotency_key": "cli",
-    "started_at": "2026-09-21T16:53:29.297777Z",
-    "completed_at": "2026-09-21T16:53:29.311094Z",
+    "started_at": "2026-09-21T16:59:37.149711Z",
+    "completed_at": "2026-09-21T16:59:37.157889Z",
     "model_id": "stub/deterministic-offline",
     "model_params": {
       "temperature": 0.0,
@@ -86,7 +86,7 @@
       116
     ],
     "truncated": true,
-    "char_count_normalized": 4413
+    "char_count_normalized": 4282
   },
   "packages": [
     {
@@ -235,8 +235,8 @@
           "source": "merged",
           "evidence": {
             "quote": "Two cleanings per year",
-            "start": 2780,
-            "end": 2802,
+            "start": 2649,
+            "end": 2671,
             "page": 116
           },
           "notes": null
@@ -259,8 +259,8 @@
           "source": "merged",
           "evidence": {
             "quote": "Two fluoride treatments per year",
-            "start": 2833,
-            "end": 2865,
+            "start": 2702,
+            "end": 2734,
             "page": 116
           },
           "notes": null
@@ -372,8 +372,8 @@
           "description": "Bitewings - single film",
           "evidence": {
             "quote": "D0270 - Bitewings - single film",
-            "start": 2600,
-            "end": 2631,
+            "start": 2469,
+            "end": 2500,
             "page": 116
           }
         },
@@ -383,8 +383,8 @@
           "description": "Bitewings - two films",
           "evidence": {
             "quote": "D0272 - Bitewings - two films",
-            "start": 2634,
-            "end": 2663,
+            "start": 2503,
+            "end": 2532,
             "page": 116
           }
         },
@@ -394,8 +394,8 @@
           "description": "Bitewings - four films",
           "evidence": {
             "quote": "D0274 - Bitewings - four films",
-            "start": 2666,
-            "end": 2696,
+            "start": 2535,
+            "end": 2565,
             "page": 116
           }
         },
@@ -405,8 +405,8 @@
           "description": "Vertical bitewings - 7 to 8 radiographic images",
           "evidence": {
             "quote": "D0277 - Vertical bitewings - 7 to 8 radiographic images",
-            "start": 2699,
-            "end": 2754,
+            "start": 2568,
+            "end": 2623,
             "page": 116
           }
         },
@@ -416,8 +416,8 @@
           "description": "Panoramic film",
           "evidence": {
             "quote": "D0330 - Panoramic film",
-            "start": 2757,
-            "end": 2779,
+            "start": 2626,
+            "end": 2648,
             "page": 116
           }
         },
@@ -427,8 +427,8 @@
           "description": "Prophylaxis - adult",
           "evidence": {
             "quote": "D1110 - Prophylaxis - adult",
-            "start": 2805,
-            "end": 2832,
+            "start": 2674,
+            "end": 2701,
             "page": 116
           }
         },
@@ -438,8 +438,8 @@
           "description": "Topical application of fluoride",
           "evidence": {
             "quote": "D1208 - Topical application of fluoride",
-            "start": 2868,
-            "end": 2907,
+            "start": 2737,
+            "end": 2776,
             "page": 116
           }
         }
@@ -503,15 +503,15 @@
         },
         {
           "exclusion_id": "pkg_1.ex_3",
-          "text": "Restorative dental (fillings) & endodontic, periodontic and oral surgery services are excluded. 116 2024 Evidence of Coverage for Anthem Select (HMO) Optional supplemental benefits What you must pay when you get these services",
+          "text": "Restorative dental (fillings) & endodontic, periodontic and oral surgery services are excluded.",
           "kind": "service_excluded",
           "status": "found",
           "confidence": 0.9,
           "source": "llm",
           "evidence": {
-            "quote": "Restorative dental (fillings) & endodontic, periodontic and oral surgery services are excluded. 116 2024 Evidence of Coverage for Anthem Select (HMO) Optional supplemental benefits What you must pay when you get these services",
+            "quote": "Restorative dental (fillings) & endodontic, periodontic and oral surgery services are excluded.",
             "start": 2371,
-            "end": 2597,
+            "end": 2466,
             "page": 115
           }
         },
@@ -524,8 +524,8 @@
           "source": "llm",
           "evidence": {
             "quote": "Claims for covered benefits must be filed directly with the contracted provider and not the plan.",
-            "start": 2910,
-            "end": 3007,
+            "start": 2779,
+            "end": 2876,
             "page": 116
           }
         },
@@ -538,15 +538,15 @@
           "source": "llm",
           "evidence": {
             "quote": "Your costs for these services will not count toward your maximum out-of-pocket amount.",
-            "start": 3010,
-            "end": 3096,
+            "start": 2879,
+            "end": 2965,
             "page": 116
           }
         }
       ],
       "source_span": {
         "start": 691,
-        "end": 3097,
+        "end": 2966,
         "pages": [
           115,
           116
@@ -565,8 +565,8 @@
         "source": "deterministic",
         "evidence": {
           "quote": "Optional supplemental package 2 - Dental and vision package",
-          "start": 3097,
-          "end": 3156,
+          "start": 2966,
+          "end": 3025,
           "page": 116
         },
         "notes": null
@@ -586,8 +586,8 @@
         "source": "deterministic",
         "evidence": {
           "quote": "Premium $32.00 monthly premium",
-          "start": 3367,
-          "end": 3397,
+          "start": 3236,
+          "end": 3266,
           "page": 116
         },
         "notes": null
@@ -604,8 +604,8 @@
         "source": "deterministic",
         "evidence": {
           "quote": "plan will pay up to $1,000 for dental benefits each year",
-          "start": 3916,
-          "end": 3972,
+          "start": 3785,
+          "end": 3841,
           "page": 116
         },
         "notes": null
@@ -617,8 +617,8 @@
         "source": "merged",
         "evidence": {
           "quote": "Coverage is available from LIBERTY Dental providers only",
-          "start": 3992,
-          "end": 4048,
+          "start": 3861,
+          "end": 3917,
           "page": 116
         },
         "notes": null
@@ -647,8 +647,8 @@
           "source": "merged",
           "evidence": {
             "quote": "Two oral exams each year",
-            "start": 3511,
-            "end": 3535,
+            "start": 3380,
+            "end": 3404,
             "page": 116
           },
           "notes": null
@@ -661,8 +661,8 @@
           "description": "Periodic oral evaluation - established patient",
           "evidence": {
             "quote": "D0120 - Periodic oral evaluation - established patient",
-            "start": 3566,
-            "end": 3620,
+            "start": 3435,
+            "end": 3489,
             "page": 116
           }
         },
@@ -672,8 +672,8 @@
           "description": "Limited oral evaluation - problem focused",
           "evidence": {
             "quote": "D0140 - Limited oral evaluation - problem focused",
-            "start": 3623,
-            "end": 3672,
+            "start": 3492,
+            "end": 3541,
             "page": 116
           }
         },
@@ -683,8 +683,8 @@
           "description": "Comprehensive oral evaluation - new or established patient",
           "evidence": {
             "quote": "D0150 - Comprehensive oral evaluation - new or established patient",
-            "start": 3675,
-            "end": 3741,
+            "start": 3544,
+            "end": 3610,
             "page": 116
           }
         },
@@ -694,8 +694,8 @@
           "description": "Extensive oral exam problem focused",
           "evidence": {
             "quote": "D0160 - Extensive oral exam problem focused",
-            "start": 3744,
-            "end": 3787,
+            "start": 3613,
+            "end": 3656,
             "page": 116
           }
         },
@@ -705,8 +705,8 @@
           "description": "Re-evaluation-limited problem focused",
           "evidence": {
             "quote": "D0170 - Re-evaluation-limited problem focused",
-            "start": 3790,
-            "end": 3835,
+            "start": 3659,
+            "end": 3704,
             "page": 116
           }
         },
@@ -716,8 +716,8 @@
           "description": "Comprehensive periodontal evaluation - new or established patient",
           "evidence": {
             "quote": "D0180 - Comprehensive periodontal evaluation - new or established patient",
-            "start": 3838,
-            "end": 3911,
+            "start": 3707,
+            "end": 3780,
             "page": 116
           }
         }
@@ -740,8 +740,8 @@
           "source": "merged",
           "evidence": {
             "quote": "You pay no copay for the preventive dental services listed.",
-            "start": 4148,
-            "end": 4207,
+            "start": 4017,
+            "end": 4076,
             "page": 116
           },
           "notes": null
@@ -761,8 +761,8 @@
           "source": "merged",
           "evidence": {
             "quote": "You pay 20% as your portion of the covered charges for restorative dental services (fillings) listed.",
-            "start": 4208,
-            "end": 4309,
+            "start": 4077,
+            "end": 4178,
             "page": 116
           },
           "notes": null
@@ -782,8 +782,8 @@
           "source": "merged",
           "evidence": {
             "quote": "You pay 50% as your portion of the covered charges for endodontic, periodontic, and oral surgery dental",
-            "start": 4310,
-            "end": 4413,
+            "start": 4179,
+            "end": 4282,
             "page": 116
           },
           "notes": null
@@ -791,8 +791,8 @@
       ],
       "exclusions": [],
       "source_span": {
-        "start": 3097,
-        "end": 4413,
+        "start": 2966,
+        "end": 4282,
         "pages": [
           116
         ]

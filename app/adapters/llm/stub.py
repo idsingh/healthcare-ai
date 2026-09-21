@@ -118,7 +118,7 @@ class StubLLMClient:
         out: list[dict] = []
         for chunk in flat.split("•")[1:]:
             text = chunk.strip().split("Optional supplemental package")[0].strip()
-            text = re.split(r"(?<=\.)\s+(?=[A-Z])", text)[0].strip()
+            text = re.split(r"(?<=[.;])\s", text)[0].strip()
             if not text or CODE_RE.match(text) or len(text) < 25:
                 continue
             low = text.lower()

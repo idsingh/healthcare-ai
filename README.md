@@ -4,7 +4,8 @@ Text in, schema-conformant evidence-anchored JSON out. FastAPI + Pydantic, hexag
 layering, no value in the output without a quote that resolves in the source.
 
 `DESIGN.md` is the design deliverable (assumptions, architecture, failure modes). This file
-is how to run and read the implementation.
+is how to run and read the implementation. [`output/README.md`](output/README.md) explains the
+committed output; [`PROMPTS.md`](PROMPTS.md) records how the repo was produced.
 
 ## Run it
 
@@ -12,12 +13,12 @@ is how to run and read the implementation.
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/uvicorn app.api.main:app --reload            # http://127.0.0.1:8000/docs
 .venv/bin/python -m pytest                             # 64 tests, ~0.6s
-.venv/bin/python -m tools.extract_cli extracted_text.txt -o service_output.json
+.venv/bin/python -m tools.extract_cli extracted_text.txt      # -> output/service_output.json
 ```
 
-`service_output.json` is committed: it is this service's actual output for
-`extracted_text.txt`, regenerate it with the command above. `sample_output.json` is the
-hand-written design deliverable from `DESIGN.md`; the two are independent and agree.
+**Start here if you are reviewing this:** [`output/README.md`](output/README.md) — the
+service's real output for `extracted_text.txt`, how each field was produced, and exactly what
+would change if it ran against an external model instead of the offline stub.
 
 No API key is needed: the default LLM adapter is an offline stub that implements the same
 port. For real extraction:
