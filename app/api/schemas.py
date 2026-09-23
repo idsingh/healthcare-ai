@@ -6,7 +6,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.domain.models import ExtractionResult, Job, JobError, JobStatus
+from app.domain.models import DentalGuideResult, ExtractionResult, Job, JobError, JobKind, JobStatus
 
 
 class ExtractRequest(BaseModel):
@@ -27,10 +27,12 @@ class ExtractRequest(BaseModel):
 
 class Links(BaseModel):
     self: str
+    csv: str | None = None
 
 
 class JobResponse(BaseModel):
     job_id: str
+    kind: JobKind
     status: JobStatus
     created_at: datetime
     updated_at: datetime
@@ -38,18 +40,23 @@ class JobResponse(BaseModel):
     idempotent_replay: bool = False
     needs_review: bool | None = None
     error: JobError | None = None
-    result: ExtractionResult | None = None
+    result: ExtractionResult | DentalGuideResult | None = None
+    row_count: int | None = None
     links: Links
 
     @classmethod
     def from_job(cls, job: Job, *, replay: bool = False) -> "JobResponse":
+        payload = job.payload
+        csv_link = (f"/extract/{job.job_id}?format=csv"
+                    if job.kind is JobKind.dental_guide and payload else None)
         return cls(
-            job_id=job.job_id, status=job.status, created_at=job.created_at,
+            job_id=job.job_id, kind=job.kind, status=job.status, created_at=job.created_at,
             updated_at=job.updated_at, content_sha256=job.content_sha256,
             idempotent_replay=replay,
-            needs_review=job.result.validation.needs_review if job.result else None,
-            error=job.error, result=job.result,
-            links=Links(self=f"/extract/{job.job_id}"))
+            needs_review=payload.validation.needs_review if payload else None,
+            error=job.error, result=payload,
+            row_count=len(payload.rows) if isinstance(payload, DentalGuideResult) else None,
+            links=Links(self=f"/extract/{job.job_id}", csv=csv_link))
 
 
 class ErrorBody(BaseModel):

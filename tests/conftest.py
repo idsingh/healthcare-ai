@@ -11,6 +11,7 @@ from app.adapters.llm.stub import StubLLMClient
 from app.api.deps import get_service
 from app.api.main import create_app
 from app.application.service import ExtractionService
+from app.application.dental_guide import DentalGuidePipeline
 from app.application.pipeline import ExtractionPipeline
 from app.adapters.repository.memory import InMemoryJobRepository
 from app.config import Settings
@@ -74,7 +75,8 @@ def sample_text() -> str:
 
 
 def make_service(settings: Settings, llm) -> ExtractionService:
-    return ExtractionService(InMemoryJobRepository(), ExtractionPipeline(settings, llm), settings)
+    return ExtractionService(InMemoryJobRepository(), ExtractionPipeline(settings, llm), settings,
+                             dental_guide=DentalGuidePipeline(settings, llm))
 
 
 @pytest.fixture

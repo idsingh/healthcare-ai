@@ -1,0 +1,109 @@
+[
+  {
+    "file": "17_DG.pdf",
+    "rows": 287,
+    "pages": 18,
+    "pages_with_rows": 14,
+    "columns_detected": [
+      "ADA code",
+      "Description of benefits",
+      "Frequency/limitations",
+      "In-network coverage",
+      "Out-of-network coverage"
+    ],
+    "columns_mapped": [
+      "code",
+      "description",
+      "frequency",
+      "in_network",
+      "out_network"
+    ],
+    "columns_unmapped": [],
+    "strategies": {
+      "geometric": 14
+    },
+    "flags": [],
+    "csv": "output/dental_guides/17_DG.csv"
+  },
+  {
+    "file": "DBD_Copper_Y0020_WCM_4952801E_C_R.pdf",
+    "rows": 153,
+    "pages": 16,
+    "pages_with_rows": 11,
+    "columns_detected": [
+      "Code",
+      "Code Description",
+      "Periodicity"
+    ],
+    "columns_mapped": [
+      "code",
+      "description",
+      "frequency"
+    ],
+    "columns_unmapped": [],
+    "strategies": {
+      "ruled": 11
+    },
+    "flags": [
+      {
+        "rule": "dental_guide.column_not_present",
+        "severity": "warn",
+        "message": "this guide states no In-Network Coverage; the column is filled with '-'",
+        "path": "/rows"
+      },
+      {
+        "rule": "dental_guide.column_not_present",
+        "severity": "warn",
+        "message": "this guide states no Out-of-Network Coverage; the column is filled with '-'",
+        "path": "/rows"
+      }
+    ],
+    "csv": "output/dental_guides/DBD_Copper_Y0020_WCM_4952801E_C_R.csv"
+  },
+  {
+    "file": "H0544-056-000_dental_filtered__type1_pages.pdf",
+    "rows": 342,
+    "pages": 41,
+    "pages_with_rows": 41,
+    "columns_detected": [
+      "Codes",
+      "Description",
+      "Prior Authorization Required?",
+      "Frequency Limitation",
+      "Service Category"
+    ],
+    "columns_mapped": [
+      "code",
+      "description",
+      "frequency",
+      "group"
+    ],
+    "columns_unmapped": [
+      "Prior Authorization Required?"
+    ],
+    "strategies": {
+      "ruled": 41
+    },
+    "flags": [
+      {
+        "rule": "dental_guide.unmapped_columns",
+        "severity": "warn",
+        "message": "columns not mapped to an output field: ['Prior Authorization Required?']",
+        "path": "/document/column_labels"
+      },
+      {
+        "rule": "dental_guide.column_not_present",
+        "severity": "warn",
+        "message": "this guide states no In-Network Coverage; the column is filled with '-'",
+        "path": "/rows"
+      },
+      {
+        "rule": "dental_guide.column_not_present",
+        "severity": "warn",
+        "message": "this guide states no Out-of-Network Coverage; the column is filled with '-'",
+        "path": "/rows"
+      }
+    ],
+    "csv": "output/dental_guides/H0544-056-000_dental_filtered__type1_pages.csv"
+  }
+]

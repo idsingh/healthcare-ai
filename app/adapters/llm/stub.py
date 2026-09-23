@@ -40,6 +40,8 @@ class StubLLMClient:
     async def complete_json(self, *, system: str, user: str, json_schema: dict,
                             schema_name: str, seed: int | None = None,
                             temperature: float = 0.0) -> dict:
+        if schema_name == "LlmBenefitGrouping":
+            return {"groups": self._benefit_groups(user)}
         m = DOC_RE.search(user)
         flat = collapse(m.group(1) if m else user)
         return {
@@ -53,6 +55,41 @@ class StubLLMClient:
             "exclusions": self._exclusions(flat),
             "truncated": not flat.rstrip().endswith((".", ":", ";")),
         }
+
+    # Offline stand-in for benefit-group naming. Generic dental vocabulary, in the
+    # order a benefits document would apply it; a real model generalises further.
+    GROUP_RULES = [
+        ("bitewing", "Bitewing X-rays"),
+        ("panoramic", "X-rays"), ("cone beam", "X-rays"), ("cephalometric", "X-rays"),
+        ("periapical", "Intraoral X-rays (inside the mouth)"),
+        ("intraoral", "Intraoral X-rays (inside the mouth)"),
+        ("radiographic", "X-rays"), ("photographic image", "X-rays"),
+        ("periodontal evaluation", "Additional exam"),
+        ("oral evaluation", "Exams"), ("oral exam", "Exams"), ("re-evaluation", "Exams"),
+        ("prophylaxis", "Prophylaxis adult"), ("fluoride", "Fluoride treatment"),
+        ("sealant", "Sealants"), ("space maintainer", "Space maintainers"),
+        ("amalgam", "Amalgam"), ("resin-based composite", "Resin-based composite"),
+        ("inlay", "Inlay/Onlay restorations"), ("onlay", "Inlay/Onlay restorations"),
+        ("crown", "Crowns"), ("pontic", "Bridges"), ("retainer", "Bridges"),
+        ("root canal", "Endodontics"), ("pulp", "Endodontics"), ("apicoectomy", "Endodontics"),
+        ("scaling", "Periodontics"), ("gingiv", "Periodontics"), ("osseous", "Periodontics"),
+        ("denture", "Dentures"), ("implant", "Implants"),
+        ("extraction", "Extractions"), ("removal of tooth", "Extractions"),
+        ("anesthesia", "Anesthesia"), ("sedation", "Anesthesia"),
+        ("consultation", "Adjunctive general services"),
+    ]
+
+    def _benefit_groups(self, user: str) -> list[dict]:
+        out = []
+        for line in user.splitlines():
+            parts = [p.strip() for p in line.split("|")]
+            if len(parts) < 2 or not re.fullmatch(r"[A-Z]\d{4}[A-Z]?", parts[0]):
+                continue
+            code, description = parts[0], parts[1].lower()
+            heading = parts[2].split(":", 1)[-1].strip() if len(parts) > 2 else ""
+            group = next((name for needle, name in self.GROUP_RULES if needle in description), None)
+            out.append({"code": code, "benefit_group": group or heading or "-"})
+        return out
 
     @staticmethod
     def _first(pattern: re.Pattern[str], text: str) -> str | None:

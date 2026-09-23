@@ -65,3 +65,39 @@ class LlmPackageExtraction(Base):
 
 def llm_json_schema() -> dict:
     return LlmPackageExtraction.model_json_schema()
+
+
+# --------------------------------------------------------------------------
+# Dental Guide contracts
+# --------------------------------------------------------------------------
+
+
+class LlmBenefitGroup(Base):
+    code: str = Field(description="The dental code exactly as given to you")
+    benefit_group: str = Field(
+        description="Short benefit group name, 1-4 words, e.g. 'Bitewing X-rays', 'Amalgam'")
+
+
+class LlmBenefitGrouping(Base):
+    """Naming the benefit group for a batch of rows: the one genuinely semantic
+    step in Dental Guide extraction. Codes, descriptions, frequencies and
+    coverage are read from the table itself and never come from here."""
+    groups: list[LlmBenefitGroup] = Field(default_factory=list)
+
+
+class LlmColumnRole(Base):
+    label: str = Field(description="The column header exactly as given to you")
+    role: str = Field(description="code|description|frequency|in_network|out_network|group|other")
+
+
+class LlmColumnMapping(Base):
+    """Fallback for header labels the synonym table does not recognise."""
+    columns: list[LlmColumnRole] = Field(default_factory=list)
+
+
+def benefit_grouping_schema() -> dict:
+    return LlmBenefitGrouping.model_json_schema()
+
+
+def column_mapping_schema() -> dict:
+    return LlmColumnMapping.model_json_schema()

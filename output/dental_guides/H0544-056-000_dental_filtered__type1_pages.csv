@@ -1,0 +1,343 @@
+Benefit Group,Dental Code,Description,Frequency/Limitations,In-Network Coverage,Out-of-Network Coverage
+Oral Exam,D0120,Periodic oral evaluation,2 of (D0120-D0180) every calendar year,-,-
+Oral Exam,D0140,Limited oral evaluation,2 of (D0120-D0180) every calendar year,-,-
+Oral Exam,D0150,Comprehensive oral evaluation,2 of (D0120-D0180) every calendar year,-,-
+Oral Exam,D0160,"Oral evaluation, problem focused",2 of (D0120-D0180) every calendar year,-,-
+Oral Exam,D0170,established patient; not post-operative visit,2 of (D0120-D0180) every calendar year,-,-
+Oral Exam,D0171,"Re-evaluation, post operative office visit",2 of (D0120-D0180) every calendar year,-,-
+Oral Exam,D0180,Comprehensive periodontal evaluation,2 of (D0120-D0180) every calendar year,-,-
+Dental X-Rays,D0210,"Intraoral, comprehensive series of radiographic images","1 of (D0210, D0330, D0709) every 3 calendar years",-,-
+Dental X-Rays,D0220,"Intraoral, periapical, first radiographic image",-,-,-
+Dental X-Rays,D0230,"Intraoral, periapical, each add 'l radiographic image",-,-,-
+Dental X-Rays,D0270,"Bitewing, single radiographic image","2 of (D0270-D0274, D0708) every calendar year",-,-
+Dental X-Rays,D0272,"Bitewings, two radiographic images","2 of (D0270-D0274, D0708) every calendar year",-,-
+Dental X-Rays,D0273,"Bitewings, three radiographic images","2 of (D0270-D0274, D0708) every calendar year",-,-
+Dental X-Rays,D0274,"Bitewings, four radiographic images","2 of (D0270-D0274, D0708) every calendar year",-,-
+Dental X-Rays,D0277,"Vertical bitewings, 7 to 8 radiographic images",1 (D0277) every 3 calendar years,-,-
+Dental X-Rays,D0330,Panoramic radiographic image,"1 of (D0210, D0330, D0709) every 3 calendar years",-,-
+Other Diagnostic Services,D0364,"Cone beam CT capture & interpretation, limited view, less than one whole jaw",-,-,-
+Other Diagnostic Services,D0365,"Cone beam CT capture & interpretation, view of one full arch, mandible",-,-,-
+Other Diagnostic Services,D0366,"Cone beam CT capture & interpretation, view of one full arch, maxilla, cranium",-,-,-
+Other Diagnostic Services,D0367,"Cone beam CT capture & interpretation, view of both jaws; cranium",-,-,-
+Other Diagnostic Services,D0368,Cone beam CT capture and interpretation for TMJ series including two or more exposures,-,-,-
+Other Diagnostic Services,D0380,"Cone beam CT image capture with limited field of view, less than one whole jaw",-,-,-
+Other Diagnostic Services,D0381,"Cone beam CT image capture with field of view of one full dental arch, mandible",-,-,-
+Other Diagnostic Services,D0382,"Cone beam CT image capture with field of view of one full dental arch, maxilla",-,-,-
+Other Diagnostic Services,D0383,Cone beam CT image capture with field of view of both jaws,-,-,-
+Other Diagnostic Services,D0384,Cone beam CT image capture for TMJ series including two or more exposures,-,-,-
+Other Diagnostic Services,D0460,Pulp vitality tests,-,-,-
+Other Diagnostic Services,D0707,"Intraoral, periapical radiographic image, image capture only",-,-,-
+Other Diagnostic Services,D0708,"Intraoral, bitewing radiographic image, image capture only","2 of (D0270-D0274, D0708) every calendar year",-,-
+Other Diagnostic Services,D0709,"Intraoral, comprehensive series of radiographic images, image capture only","1 of (D0210, D0330, D0709) every 3 calendar years",-,-
+Prophylaxis (Cleaning),D1110,"Prophylaxis, adult","2 of (D1110, D4346, D4910) every calendar year",-,-
+Fluoride Treatment,D1206,Topical application of fluoride varnish,"2 of (D1206, D1208) every calendar year",-,-
+Fluoride Treatment,D1208,"Topical application of fluoride, excluding varnish","2 of (D1206, D1208) every calendar year",-,-
+Other Preventive Dental Services,D1354,"Application of caries arresting medicament, per tooth",-,-,-
+Other Preventive Dental Services,D1355,"Caries preventive medicament application, per tooth",-,-,-
+Restorative Services,D2140,"Amalgam, one surface, primary or permanent","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2150,"Amalgam, two surfaces, primary or permanent","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2160,"Amalgam, three surfaces, primary or permanent","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2161,"Amalgam, four or more surfaces, primary or permanent","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2330,"Resin-based composite, one surface, anterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2331,"Resin-based composite, two surfaces, anterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2332,"Resin-based composite, three surfaces, anterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2335,"Resin-based composite, four or more surfaces, involving incisal angle","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2390,"Resin-based composite crown, anterior",1 (D2390) per tooth every 2 calendar years,-,-
+Restorative Services,D2391,"Resin-based composite, one surface, posterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2392,"Resin-based composite, two surfaces, posterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2393,"Resin-based composite, three surfaces, posterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2394,"Resin-based composite, four or more surfaces, posterior","1 of (D2140-D2394) per surface, per tooth every 2 calendar years",-,-
+Restorative Services,D2542,"Onlay, metallic, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2543,"Onlay, metallic, three surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2544,"Onlay, metallic, four or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2620,"Inlay, porcelain/ceramic, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2630,"Inlay, porcelain/ceramic, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2642,"Onlay, porcelain/ceramic, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2643,"Onlay, porcelain/ceramic, three surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2644,"Onlay, porcelain/ceramic, four or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2651,"Inlay, resin-based composite, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2652,"Inlay, resin-based composite, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2662,"Onlay, resin-based composite, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2663,"Onlay, resin-based composite, three surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2664,"Onlay, resin-based composite, four or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2710,"Crown, resin-based composite (indirect)","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2712,"Crown, ¾ resin-based composite (indirect)","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2720,"Crown, resin with high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2721,"Crown, resin with predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2722,"Crown, resin with noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2740,"Crown, porcelain/ceramic","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2750,"Crown, porcelain fused to high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2751,"Crown, porcelain fused to predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2752,"Crown, porcelain fused to noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2753,"Crown, porcelain fused to titanium and titanium alloys","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2780,"Crown, ¾ cast high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2781,"Crown, ¾ cast predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2782,"Crown, ¾ cast noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2783,"Crown, ¾ porcelain/ceramic","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2790,"Crown, full cast high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2791,"Crown, full cast predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2792,"Crown, full cast noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2794,"Crown, titanium and titanium alloys","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+Restorative Services,D2910,"Re-cement or re-bond inlay, onlay, veneer, or partial coverage",-,-,-
+Restorative Services,D2915,Re-cement or re-bond indirectly fabricated/prefabricated post & core,-,-,-
+Restorative Services,D2920,Re-cement or re-bond crown,-,-,-
+Restorative Services,D2921,"Reattachment of tooth fragment, incisal edge or cusp",-,-,-
+Restorative Services,D2928,"Prefabricated porcelain/ceramic crown, permanent tooth",-,-,-
+Restorative Services,D2950,"Core buildup, including any pins when required",1 (D2950) per tooth every 5 calendar years,-,-
+Restorative Services,D2951,"Pin retention, per tooth, in addition to restoration",1 (D2951) per tooth every 5 calendar years,-,-
+Restorative Services,D2952,"Post and core in addition to crown, indirectly fabricated","1 of (D2952, D2954) per tooth every 5 calendar years",-,-
+Restorative Services,D2953,"Each additional indirectly fabricated post, same tooth","1 of (D2953, D2957) per tooth every 5 calendar years",-,-
+Restorative Services,D2954,Prefabricated post and core in addition to crown,"1 of (D2952, D2954) per tooth every 5 calendar years",-,-
+Restorative Services,D2955,Post removal,1 (D2955) per tooth every 5 calendar years,-,-
+Restorative Services,D2957,"Each additional prefabricated post, same tooth","1 of (D2953, D2957) per tooth every 5 calendar years",-,-
+Restorative Services,D2971,"Additional procedure to customize new crown, existing partial denture frame",-,-,-
+Restorative Services,D2980,Crown repair necessitated by restorative material failure,-,-,-
+Restorative Services,D2981,Inlay repair necessitated by restorative material failure,-,-,-
+Restorative Services,D2982,Onlay repair necessitated by restorative material failure,-,-,-
+Restorative Services,D2983,Veneer repair necessitated by restorative material failure,-,-,-
+Restorative Services,D2990,Resin infiltration of incipient smooth surface lesions,-,-,-
+Endodontics,D3110,excluding final restoration,"1 of (D3110, D3120) per tooth in a lifetime",-,-
+Endodontics,D3120,excluding final restoration,"1 of (D3110, D3120) per tooth in a lifetime",-,-
+Endodontics,D3221,"Pulpal debridement, primary and permanent teeth",1 (D3221) per tooth in a lifetime,-,-
+Endodontics,D3230,excluding final restoration,"1 of (D3230, D3240) per tooth in a lifetime",-,-
+Endodontics,D3240,excluding finale restoration,"1 of (D3230, D3240) per tooth in a lifetime",-,-
+Endodontics,D3310,excluding final restoration,1 of (D3310-D3330) per tooth in a lifetime,-,-
+Endodontics,D3320,excluding final restoration,1 of (D3310-D3330) per tooth in a lifetime,-,-
+Endodontics,D3330,excluding final restoration,1 of (D3310-D3330) per tooth in a lifetime,-,-
+Endodontics,D3331,Treatment of root canal obstruction; non-surgical access,1 (D3331) per tooth in a lifetime,-,-
+Endodontics,D3332,"Incomplete endodontic therapy; inoperable, unrestorable, fractured tooth",1 (D3332) per tooth in a lifetime,-,-
+Endodontics,D3333,Internal root repair of perforation defects,1 (D3333) per tooth in a lifetime,-,-
+Endodontics,D3346,"Retreatment of previous root canal therapy, anterior",1 of (D3346-D3348) per tooth in a lifetime; not payable within 12 months if performed by same provider,-,-
+Endodontics,D3347,"Retreatment of previous root canal therapy, premolar",1 of (D3346-D3348) per tooth in a lifetime; not payable within 12 months if performed by same provider,-,-
+Endodontics,D3348,"Retreatment of previous root canal therapy, molar",1 of (D3346-D3348) per tooth in a lifetime; not payable within 12 months if performed by same provider,-,-
+Endodontics,D3351,"Apexification/ recalcification, initial visit",1 of (D3351) per tooth in a lifetime,-,-
+Endodontics,D3352,"Apexification/ recalcification, interim medication replacement",1 of (D3352) per tooth in a lifetime,-,-
+Endodontics,D3353,"Apexification/ recalcification, final visit",1 of (D3353) per tooth in a lifetime,-,-
+Endodontics,D3410,"Apicoectomy, anterior",1 of (D3410-D3425) per tooth in a lifetime,-,-
+Endodontics,D3421,"Apicoectomy, premolar (first root)",1 of (D3410-D3425) per tooth in a lifetime,-,-
+Endodontics,D3425,"Apicoectomy, molar (first root)",1 of (D3410-D3425) per tooth in a lifetime,-,-
+Endodontics,D3426,"Apicoectomy, (each additional root)",1 (D3426) per tooth in a lifetime,-,-
+Endodontics,D3428,"Bone graft in conjunction with periradicular surgery, per tooth, single site","1 of (D3428, D3429) per tooth in a lifetime",-,-
+Endodontics,D3429,"Bone graft in conjunction with periradicular surgery, each add'l tooth, same site","1 of (D3428, D3429) per tooth in a lifetime",-,-
+Endodontics,D3430,"Retrograde filling, per root",1 (D3430) per tooth in a lifetime,-,-
+Endodontics,D3431,"Biologic materials, soft osseous tissue regeneration with periradicular surgery","1 of (D3431, D3432) per site in a lifetime",-,-
+Endodontics,D3432,"Guided tissue regeneration, per site, with periradicular surgery","1 of (D3431, D3432) per site in a lifetime",-,-
+Endodontics,D3450,"Root amputation, per root",1 (D3450) per tooth in a lifetime,-,-
+Endodontics,D3920,"Hemisection, not including root canal therapy",1 (D3920) per tooth in a lifetime,-,-
+Periodontics,D4210,"Gingivectomy or gingivoplasty, four or more teeth per quadrant",1 of (D4210-D4212) per site/quad every 3 calendar years,-,-
+Periodontics,D4211,"Gingivectomy or gingivoplasty, one to three teeth per quadrant",1 of (D4210-D4212) per site/quad every 3 calendar years,-,-
+Periodontics,D4212,"Gingivectomy or gingivoplasty, restorative procedure, per tooth",1 of (D4210-D4212) per site/quad every 3 calendar years,-,-
+Periodontics,D4230,"Anatomical crown exposure, four or more contiguous teeth per quadrant","1 of (D4230, D4231) per site/quad every 3 calendar years",-,-
+Periodontics,D4231,"Anatomical crown exposure, one to three teeth per quadrant","1 of (D4230, D4231) per site/quad every 3 calendar years",-,-
+Periodontics,D4240,"Gingival flap procedure, four or more teeth per quadrant",1 of (D4240-D4245) per site/quad every 3 calendar years,-,-
+Periodontics,D4241,"Gingival flap procedure, one to three teeth per quadrant",1 of (D4240-D4245) per site/quad every 3 calendar years,-,-
+Periodontics,D4245,Apically positioned flap,1 of (D4240-D4245) per site/quad every 3 calendar years,-,-
+Periodontics,D4249,"Clinical crown lengthening, hard tissue",1 (D4249) per tooth in a lifetime,-,-
+Periodontics,D4260,"Osseous surgery, four or more teeth per quadrant","1 of (D4260, D4261) per site/quad every 5 calendar years",-,-
+Periodontics,D4261,"Osseous surgery, one to three teeth per quadrant","1 of (D4260, D4261) per site/quad every 5 calendar years",-,-
+Periodontics,D4263,"Bone replacement graft, retained natural tooth, first site, quadrant","1 of (D4263, D4264) per site/quad in a lifetime",-,-
+Periodontics,D4264,"Bone replacement graft, retained natural tooth, each additional site","1 of (D4263, D4264) per site/quad in a lifetime",-,-
+Periodontics,D4266,"Guided tissue regeneration, natural teeth, resorbable barrier, per site","1 of (D4266, D4267) per site/quad every 5 calendar years",-,-
+Periodontics,D4267,"Guided tissue regeneration, natural teeth, non-resorbable barrier, per site","1 of (D4266, D4267) per site/quad every 5 calendar years",-,-
+Periodontics,D4268,"Surgical revision procedure, per tooth",1 (D4268) per tooth every 3 calendar years,-,-
+Periodontics,D4270,Pedicle soft tissue graft procedure,1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4273,"Autogenous connective tissue graft procedure, first tooth",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4274,"Mesial/distal wedge procedure, single tooth",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4275,"Non-autogenous connective tissue graft, first tooth",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4276,Combined connective tissue and pedicle graft,1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4277,"Free soft tissue graft, first tooth",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4278,"Free soft tissue graft, each additional tooth",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4283,"Autogenous connective tissue graft procedure, each additional tooth, per site",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4285,"Non-autogenous connective tissue graft procedure, each additional tooth, per site",1 of (D4270-D4285) per site/quad every 3 calendar years,-,-
+Periodontics,D4322,Splint intra-coronal; natural teeth or prosthetic crowns,"1 of (D4322, D4323) per arch every 3 calendar years",-,-
+Periodontics,D4323,Splint extra-coronal; natural teeth or prosthetic crowns,"1 of (D4322, D4323) per arch every 3 calendar years",-,-
+Periodontics,D4341,"Periodontal scaling and root planing, four or more teeth per quadrant","1 of (D4341, D4342) per site/quad every 2 calendar years",-,-
+Periodontics,D4342,"Periodontal scaling and root planing, one to three teeth per quadrant","1 of (D4341, D4342) per site/quad every 2 calendar years",-,-
+Periodontics,D4346,"Scaling in presence of moderate or severe inflammation, full mouth after evaluation","2 of (D1110, D4346, D4910) every calendar year",-,-
+Periodontics,D4355,"Full mouth debridement to enable comprehensive periodontal evaluation and diagnosis, subsequent visit",1 (D4355) every 2 calendar years,-,-
+Periodontics,D4910,Periodontal maintenance,"2 of (D1110, D4346, D4910) every calendar year",-,-
+"Prosthodontics, removable",D5110,"Complete denture, maxillary","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5120,"Complete denture, mandibular","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5130,"Immediate denture, maxillary","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5140,"Immediate denture, mandibular","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5211,"Maxillary partial denture, resin base","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5212,"Mandibular partial denture, resin base","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5213,"Maxillary partial denture, cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5214,"Mandibular partial denture, cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5221,"Immediate maxillary partial denture - resin base (including retentive/clasping materials, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5222,"Immediate mandibular partial denture - resin base (including retentive/clasping materials, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5223,"Immediate maxillary partial denture - cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5224,"Immediate mandibular partial denture - cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5225,"Maxillary partial denture, flexible base","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5226,"Mandibular partial denture, flexible base","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5227,"Immediate maxillary partial denture - flexible base (including any clasps, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5228,"Immediate mandibular partial denture - flexible base (including any clasps, rests and teeth)","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5410,"Adjust complete denture, maxillary",1 of (D5410-D5422) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5411,"Adjust complete denture, mandibular",1 of (D5410-D5422) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5421,"Adjust partial denture, maxillary",1 of (D5410-D5422) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5422,"Adjust partial denture, mandibular",1 of (D5410-D5422) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5511,"Repair broken complete denture base, mandibular","1 of (D5511, D5512) per arch every calendar year; not payable within 6 months of initial placement by the same provider",-,-
+"Prosthodontics, removable",D5512,"Repair broken complete denture base, maxillary","1 of (D5511, D5512) per arch every calendar year; not payable within 6 months of initial placement by the same provider",-,-
+"Prosthodontics, removable",D5520,"Replace missing or broken teeth, complete denture",1 (D5520) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5611,"Repair resin partial denture base, mandibular",1 of (D5611-D5622) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5612,"Repair resin partial denture base, maxillary",1 of (D5611-D5622) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5621,"Repair cast partial framework, mandibular",1 of (D5611-D5622) per arch every calendar year,-,-
+"Prosthodontics, removable",D5622,"Repair cast partial framework, maxillary",1 of (D5611-D5622) per arch every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5630,"Repair or replace broken clasp, per tooth",1 (D5630) per tooth every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5640,"Replace broken teeth, per tooth",1 (D5640) per tooth every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5650,Add tooth to existing partial denture,1 (D5650) per tooth every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5660,"Add clasp to existing partial denture, per tooth",1 (D5660) per tooth every calendar year; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5670,"Replace all teeth & acrylic on cast metal frame, maxillary","1 of (D5670, D5671) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider",-,-
+"Prosthodontics, removable",D5671,"Replace all teeth & acrylic on cast metal frame, mandibular","1 of (D5670, D5671) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider",-,-
+"Prosthodontics, removable",D5710,Rebase complete maxillary denture,1 of (D5710-D5721 per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5711,Rebase complete mandibular denture,1 of (D5710-D5721 per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5720,Rebase maxillary partial denture,1 of (D5710-D5721 per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5721,Rebase mandibular partial denture,1 of (D5710-D5721 per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5725,Rebase hybrid prosthesis,1 of (D5725) per site every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5730,"Reline complete maxillary denture, direct",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5731,"Reline complete mandibular denture, direct",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5740,"Reline maxillary partial denture, direct",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5741,"Reline mandibular partial denture, direct",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5750,"Reline complete maxillary denture, indirect",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5751,"Reline complete mandibular denture, indirect",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5760,"Reline maxillary partial denture, indirect",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5761,"Reline mandibular partial denture, indirect",1 of (D5730-D5761) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5765,Soft liner for complete or partial removable denture indirect,1 (D5765) per arch every 2 calendar years; not payable within 6 months of initial placement by the same provider,-,-
+"Prosthodontics, removable",D5810,"Interim complete denture, maxillary",-,-,-
+"Prosthodontics, removable",D5811,"Interim complete denture, mandibular",-,-,-
+"Prosthodontics, removable",D5820,"Interim partial denture, maxillary",-,-,-
+"Prosthodontics, removable",D5821,"Interim partial denture, mandibular",-,-,-
+"Prosthodontics, removable",D5850,"Tissue conditioning, maxillary","1 of (D5850, D5851) per arch every calendar year",-,-
+"Prosthodontics, removable",D5851,"Tissue conditioning, mandibular","1 of (D5850, D5851) per arch every calendar year",-,-
+"Prosthodontics, removable",D5863,"Overdenture, complete, maxillary","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5864,"Overdenture, partial, maxillary","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5865,"Overdenture, complete, mandibular","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5866,"Overdenture, partial, mandibular","1 of (D5110-D5228, D5863-D5866) per arch every 5 calendar years",-,-
+"Prosthodontics, removable",D5867,"Replacement of part of semi-precision, precision attachment, per attachment",-,-,-
+"Prosthodontics, removable",D5899,"Unspecified removable prosthodontic procedure, by report","1 of (D5867, D5899) per site every 5 calendar years",-,-
+"Prosthodontics, fixed",D6205,"Pontic, indirect resin based composite","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6210,"Pontic, cast high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6211,"Pontic, cast predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6212,"Pontic, cast noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6214,"Pontic, titanium, and titanium alloys","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6240,"Pontic, porcelain fused to high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6241,"Pontic, porcelain fused to predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6242,"Pontic, porcelain fused to noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6243,"Pontic, porcelain fused to titanium and titanium alloys","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6245,"Pontic, porcelain/ceramic","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6250,"Pontic, resin with high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6251,"Pontic, resin with predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6252,"Pontic, resin with noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6545,"Retainer, cast metal for resin bonded fixed prosthesis","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6548,"Retainer, porcelain/ceramic, resin bonded fixed prosthesis","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6549,"Resin retainer, for resin bonded fixed prosthesis","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6600,"Retainer inlay, porcelain/ceramic, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6601,"Retainer inlay, porcelain/ceramic, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6602,"Retainer inlay, cast high noble metal, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6603,"Retainer inlay, cast high noble metal, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6604,"Retainer inlay, cast base metal, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6605,"Retainer inlay, cast base metal, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6606,"Retainer inlay, cast noble metal, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6607,"Retainer inlay, cast noble metal, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6608,"Retainer onlay, porcelain/ceramic, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6609,"Retainer onlay, porcelain/ceramic, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6610,"Retainer onlay, cast high noble metal, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6611,"Retainer onlay, cast high noble metal, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6612,"Retainer onlay, cast base metal, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6613,"Retainer onlay, cast base metal, three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6614,"Retainer onlay, cast noble metal, two surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6615,"Retainer onlay, cast noble metal three or more surfaces","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6710,"Retainer crown, indirect resin based composite","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6720,"Retainer crown, resin with high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6721,"Retainer crown, resin with predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6722,"Retainer crown, resin with noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6740,"Retainer crown, porcelain/ceramic","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6750,"Retainer crown, porcelain fused to high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6751,"Retainer crown, porcelain fused to predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6752,"Retainer crown, porcelain fused to noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6753,"Retainer crown, porcelain fused to titanium and titanium alloys","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6780,"Retainer crown,¾ cast high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6781,"Retainer crown, ¾ cast predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6782,"Retainer crown, ¾ cast noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6783,"Retainer crown, ¾ porcelain/ceramic","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6790,"Retainer crown, full cast high noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6791,"Retainer crown, full cast predominantly base metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6792,"Retainer crown, full cast noble metal","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6794,"Retainer crown, titanium and titanium alloys","1 of (D2542-D2794, D6205-D6794) per tooth every 5 calendar years",-,-
+"Prosthodontics, fixed",D6930,Re-cement or re-bond fixed partial denture,-,-,-
+"Prosthodontics, fixed",D6980,"Fixed partial denture repair, restorative material failure",-,-,-
+Oral and Maxillofacial Surgery,D7111,"Extraction, coronal remnants, primary tooth",-,-,-
+Oral and Maxillofacial Surgery,D7140,"Extraction, erupted tooth or exposed root",-,-,-
+Oral and Maxillofacial Surgery,D7210,"Extraction, erupted tooth requiring removal of bone and/or sectioning of tooth",-,-,-
+Oral and Maxillofacial Surgery,D7220,"Removal of impacted tooth, soft tissue",-,-,-
+Oral and Maxillofacial Surgery,D7230,"Removal of impacted tooth, partially bony",-,-,-
+Oral and Maxillofacial Surgery,D7240,"Removal of impacted tooth, completely bony",-,-,-
+Oral and Maxillofacial Surgery,D7241,"Removal impacted tooth, complete bony, complication",-,-,-
+Oral and Maxillofacial Surgery,D7250,Removal of residual tooth roots (cutting procedure),-,-,-
+Oral and Maxillofacial Surgery,D7260,Oroantral fistula closure,1 (D7260) per site in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7261,Primary closure of a sinus perforation,1 (D7261) per site in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7270,"Tooth reimplantation and/or stabilization, accident",1 (D7270) per tooth in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7280,Exposure of an unerupted tooth,1 (D7280) per tooth in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7285,"Incisional biopsy of oral tissue, hard (bone, tooth)",1 (D7285) per site every 2 calendar years,-,-
+Oral and Maxillofacial Surgery,D7286,"Incisional biopsy of oral tissue, soft",1 (D7286) per site every 2 calendar years,-,-
+Oral and Maxillofacial Surgery,D7288,"Brush biopsy, transepithelial sample collection",1 (D7288) per site every 2 calendar years,-,-
+Oral and Maxillofacial Surgery,D7310,"Alveoloplasty with extractions, four or more teeth per quadrant",1 of (D7310-D7321) per site quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7311,"Alveoloplasty with extractions, one to three teeth per quadrant",1 of (D7310-D7321) per site quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7320,"Alveoloplasty, w/o extractions, four or more teeth per quadrant",1 of (D7310-D7321) per site quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7321,"Alveoloplasty, w/o extractions, one to three teeth per quadrant",1 of (D7310-D7321) per site quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7340,"Vestibuloplasty, ridge extension (2nd epithelialization)",1 (D7340) per site/quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7350,"Vestibuloplasty, ridge extension",1 (D7350) per site/quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7410,"Excision of benign lesion, up to 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7411,"Excision of benign lesion, greater than 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7412,"Excision of benign lesion, complicated",-,-,-
+Oral and Maxillofacial Surgery,D7413,"Excision of malignant lesion, up to 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7414,"Excision of malignant lesion, greater than 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7415,"Excision of malignant lesion, complicated",-,-,-
+Oral and Maxillofacial Surgery,D7440,"Excision of malignant tumor, up to 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7441,"Excision of malignant tumor, greater than 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7450,"Removal, benign odontogenic cyst/tumor, up to 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7451,"Removal, benign odontogenic cyst/tumor, greater than 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7460,"Removal, benign nonodontogenic cyst/tumor, up to 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7461,"Removal, benign nonodontogenic cyst/tumor, greater than 1.25 cm",-,-,-
+Oral and Maxillofacial Surgery,D7465,"Destruction of lesion(s) by physical or chemical method, by report",-,-,-
+Oral and Maxillofacial Surgery,D7471,"Removal of lateral exostosis, maxilla or mandible",1 (D7471) per arch in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7472,Removal of torus palatinus,1 (D7472) in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7473,Removal of torus mandibularis,1 (D7473) in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7485,Reduction of osseous tuberosity,1 (D7485) per site/quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7510,"Incision & drainage of abscess, intraoral soft tissue",-,-,-
+Oral and Maxillofacial Surgery,D7511,"Incision & drainage of abscess, intraoral soft tissue, complicated",-,-,-
+Oral and Maxillofacial Surgery,D7520,"Incision & drainage of abscess, extraoral soft tissue",-,-,-
+Oral and Maxillofacial Surgery,D7521,"Incision & drainage of abscess, extraoral soft tissue, complicated",-,-,-
+Oral and Maxillofacial Surgery,D7530,"Remove foreign body, mucosa, skin, tissue",-,-,-
+Oral and Maxillofacial Surgery,D7540,"Removal of reaction producing foreign bodies, musculoskeletal system",-,-,-
+Oral and Maxillofacial Surgery,D7953,"Bone replacement graft for ridge preservation, per site",1 (D7953) per site in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7961,Buccal / labial frenectomy (frenulectomy),1 (D7961) per arch every 5 calendar years,-,-
+Oral and Maxillofacial Surgery,D7962,Lingual frenectomy (frenulectomy),1 (D7962) every 5 calendar years,-,-
+Oral and Maxillofacial Surgery,D7963,Frenuloplasty,1 (D7963) every 5 calendar years,-,-
+Oral and Maxillofacial Surgery,D7970,"Excision of hyperplastic tissue, per arch",1 (D7970) per arch every 5 calendar years,-,-
+Oral and Maxillofacial Surgery,D7971,Excision of pericoronal gingiva,1 (D7971) per tooth in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7972,Surgical reduction of fibrous tuberosity,1 (D7972) per quad in a lifetime,-,-
+Oral and Maxillofacial Surgery,D7997,"Appliance removal (not by dentist who placed appliance), includes removal of archbar",1 (D7997) every 5 calendar years,-,-
+Adjunctive General Services,D9110,"Palliative (emergency) treatment, minor procedure",2 (D9110) every calendar year,-,-
+Adjunctive General Services,D9120,Fixed partial denture sectioning,-,-,-
+Adjunctive General Services,D9222,"Deep sedation/general anesthesia, first 15 minute increment",-,-,-
+Adjunctive General Services,D9223,"Deep sedation/general anesthesia, each subsequent 15 minute increment",-,-,-
+Adjunctive General Services,D9230,"Inhalation of nitrous oxide/analgesia, anxiolysis",-,-,-
+Adjunctive General Services,D9239,"Intravenous moderate (conscious) sedation/analgesia, first 15 minute increment",-,-,-
+Adjunctive General Services,D9243,"Intravenous moderate (conscious) sedation/analgesia, each subsequent 15 minute increment",-,-,-
+Adjunctive General Services,D9248,"Non-intravenous (conscious) sedation, includes non-IV minimal and moderate sedation",-,-,-
+Adjunctive General Services,D9310,"Consultation, other than requesting dentist",-,-,-
+Adjunctive General Services,D9410,House/extended care facility call,-,-,-
+Adjunctive General Services,D9610,"Therapeutic parenteral drug, single administration",-,-,-
+Adjunctive General Services,D9910,Application of desensitizing medicament,1 (D9910) every calendar year,-,-
+Adjunctive General Services,D9911,"Application of desensitizing resin for cervical, root surface, per tooth",1 (D9911) per tooth every calendar year,-,-
+Adjunctive General Services,D9930,"Treatment of complications, post surgical, unusual, by report",-,-,-
+Adjunctive General Services,D9942,Repair and/or reline of occlusal guard,1 (D9942) every calendar year,-,-
+Adjunctive General Services,D9944,"Occlusal guard, hard appliance, full arch",1 of (D9944-D9946) every 3 calendar years,-,-
+Adjunctive General Services,D9945,"Occlusal guard, soft appliance, full arch",1 of (D9944-D9946) every 3 calendar years,-,-
+Adjunctive General Services,D9946,"Occlusal guard, hard appliance, partial arch",1 of (D9944-D9946) every 3 calendar years,-,-
+Adjunctive General Services,D9950,"Occlusion analysis, mounted case",-,-,-
+Adjunctive General Services,D9951,"Occlusal adjustment, limited","1 of (D9951, D9952) every 2 calendar years",-,-
+Adjunctive General Services,D9952,"Occlusal adjustment, complete","1 of (D9951, D9952) every 2 calendar years",-,-
+Adjunctive General Services,D9995,"Teledentistry, synchronous; real-time encounter","2 of (D9995, D9996) every calendar year",-,-
+Adjunctive General Services,D9996,"Teledentistry, asynchronous; information stored and","2 of (D9995, D9996) every calendar year",-,-

@@ -1,7 +1,13 @@
-# EOC Benefit Extraction Service
+# Dental Benefit Extraction Service
 
-Text in, schema-conformant evidence-anchored JSON out. FastAPI + Pydantic, hexagonal
-layering, no value in the output without a quote that resolves in the source.
+Plan documents in, structured data out. Two extraction paths share one service:
+
+| Input | Output | Entry point |
+|---|---|---|
+| Unstructured EOC **text** | Packages JSON, every field anchored to a quote in the source | `POST /extract` |
+| Dental Guide **PDF** | Benefit rows → CSV in the customer's column format | `POST /extract/upload`, `GET /extract/{id}?format=csv` |
+
+FastAPI + Pydantic, hexagonal layering, no value in the output without evidence behind it.
 
 `DESIGN.md` is the design deliverable (assumptions, architecture, failure modes). This file
 is how to run and read the implementation. [`output/README.md`](output/README.md) explains the
@@ -12,13 +18,16 @@ committed output; [`PROMPTS.md`](PROMPTS.md) records how the repo was produced.
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/uvicorn app.api.main:app --reload            # http://127.0.0.1:8000/docs
-.venv/bin/python -m pytest                             # 64 tests, ~0.6s
-.venv/bin/python -m tools.extract_cli extracted_text.txt      # -> output/service_output.json
+.venv/bin/python -m pytest                             # 98 tests, ~25s
+.venv/bin/python -m tools.extract_cli extracted_text.txt      # EOC text -> output/service_output.json
+.venv/bin/python -m tools.extract_dg data/dental_guides       # PDFs     -> output/dental_guides/*.csv
 ```
 
-**Start here if you are reviewing this:** [`output/README.md`](output/README.md) — the
-service's real output for `extracted_text.txt`, how each field was produced, and exactly what
-would change if it ran against an external model instead of the offline stub.
+**Start here if you are reviewing this:**
+[`output/dental_guides/README.md`](output/dental_guides/README.md) for the Dental Guide CSVs
+(782 rows from three differently-laid-out PDFs, how each column was produced, and where our
+reading differs from the supplied sample), or [`output/README.md`](output/README.md) for the
+EOC text extraction.
 
 No API key is needed: the default LLM adapter is an offline stub that implements the same
 port. For real extraction:
@@ -59,18 +68,23 @@ from status: a perfectly healthy run on a truncated document still asks for a hu
 ```
 app/
   domain/        models.py contracts.py ports.py errors.py    # no framework imports
-  application/   preprocess -> segmentation -> scanners -> llm_extractor -> merge -> validation
-                 pipeline.py (use case)   service.py (jobs, idempotency)   retry.py
-  adapters/      llm/{openrouter,stub,scripted}.py   repository/memory.py
+  application/   text path : preprocess -> segmentation -> scanners -> llm_extractor
+                             -> merge -> validation
+                 pdf path  : tables/{ruled,geometric,cascade,mapping} -> dental_guide.py
+                             -> csv_export.py
+                 pipeline.py · dental_guide.py (use cases)   service.py (jobs, idempotency)
+  adapters/      llm/{openrouter,stub,scripted}.py   pdf/pdfplumber_source.py
+                 repository/memory.py
   api/           main.py routes.py schemas.py deps.py         # thin: no business logic
-tests/           preprocess · llm reliability · validation · api · e2e · provider adapter
+tests/           preprocess · tables · llm reliability · validation · api · dental guide
+                 · generalization guard · provider adapter
 ```
 
 Dependencies point inward. `app/api/deps.py` is the only place adapters are chosen, which is
 what makes the LLM swappable by config and replaceable in tests
 (`app.dependency_overrides[get_service]`, `ScriptedLLMClient`).
 
-## Flow
+## Flow (EOC text)
 
 ```
 text ─▶ preprocess ─▶ segment ─▶ ┌ deterministic scanners ┐ ─▶ merge ─▶ validate ─▶ result
@@ -81,6 +95,21 @@ text ─▶ preprocess ─▶ segment ─▶ ┌ deterministic scanners ┐ ─�
 
 Package blocks are independent, so they run concurrently under a semaphore. A block whose
 LLM pass fails degrades to deterministic-only output; the document still completes.
+
+## Flow (Dental Guide PDF)
+
+```
+pdf ─▶ strategy cascade ─▶ column mapping ─▶ row assembly ─▶ benefit group ─▶ CSV
+       ruled | geometric   labels matched     wrapped lines   category column
+       | LLM fallback      by vocabulary      merged cells    > heading > model
+       (scored, best wins) (never position)   furniture out
+```
+
+No strategy is trusted to be the one that works: each page is read by every deterministic
+reader, scored on how many rows carry a code and real text, and the best reading is kept. A
+layout that defeats them all falls back to the LLM reader rather than yielding nothing. The
+extractor keys off nothing document-specific — `tests/test_generalization.py` fails the build
+if a carrier, plan or file name appears anywhere in `app/`.
 
 ## Never trusting the model
 
@@ -108,7 +137,10 @@ LLM pass fails degrades to deterministic-only output; the document still complet
 | `test_preprocess.py` | header/footer stripping that does **not** eat repeated content, page-break spanning, window-scoped quote resolution |
 | `test_extraction_e2e.py` | every fact in the real excerpt, offsets re-verified independently, block concurrency |
 | `test_openrouter_adapter.py` | which HTTP failures are retryable |
-| `test_api.py` | status codes, idempotent replay, error bodies |
+| `test_api.py`, `test_api_pdf.py` | status codes, idempotent replay, PDF upload, CSV projection, error bodies |
+| `test_tables.py` | the layout hazards, on synthetic pages: unruled tables, wrapped cells, merged cells spanning rows, page furniture, partial headers on continuation pages |
+| `test_dental_guide.py` | all three real guides, the customer sample comparison, guides with no coverage columns |
+| `test_generalization.py` | no document-specific identifiers in `app/`; unseen header wording still maps |
 
 ## Deliberately not built
 

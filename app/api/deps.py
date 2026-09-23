@@ -11,6 +11,7 @@ from functools import lru_cache
 from app.adapters.llm.openrouter import OpenRouterClient
 from app.adapters.llm.stub import StubLLMClient
 from app.adapters.repository.memory import InMemoryJobRepository
+from app.application.dental_guide import DentalGuidePipeline
 from app.application.pipeline import ExtractionPipeline
 from app.application.service import ExtractionService
 from app.config import Settings, get_settings
@@ -34,7 +35,8 @@ def build_service(settings: Settings | None = None, llm: LLMClient | None = None
     return ExtractionService(
         repo=InMemoryJobRepository(),
         pipeline=ExtractionPipeline(settings, llm),
-        settings=settings)
+        settings=settings,
+        dental_guide=DentalGuidePipeline(settings, llm))
 
 
 @lru_cache

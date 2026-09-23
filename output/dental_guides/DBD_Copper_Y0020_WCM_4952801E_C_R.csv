@@ -1,0 +1,154 @@
+Benefit Group,Dental Code,Description,Frequency/Limitations,In-Network Coverage,Out-of-Network Coverage
+Exams,D0120,Periodic Oral Evaluation,"2 of (D0120) every plan year, not within 6 months of D0150",-,-
+Exams,D0140,Limited Oral Evaluation,"2 of (D0140, D0160, D9310) every plan year",-,-
+Exams,D0150,Comprehensive oral evaluation,1 of (D0150) every 3 plan years; not within 3 plan years of D0120,-,-
+Exams,D0160,"Oral evaluation, problem focused","2 of (D0140, D0160, D9310) every plan year",-,-
+Additional exam,D0180,Comprehensive Periodontal Evaluation,2 of (D0180) every plan year; not on same date as D0120 or D0150,-,-
+Intraoral X-rays (inside the mouth),D0210,"Intraoral, complete series of radiographic images","1 of (D0210, D0330, D0701, D0709) every 3 plan years",-,-
+Intraoral X-rays (inside the mouth),D0220,"Intraoral, periapical, first radiographic image",1 of (D0220) per date of service. Maximum number of x-rays on a single date of service limited to a complete mouth series,-,-
+Intraoral X-rays (inside the mouth),D0230,"Intraoral, periapical, each add additional radiographic image",4 of (D0230) per date of service. Maximum reimbursement for x-rays on a single date of service limited to the allowed reimbursement for a complete mouth series,-,-
+Intraoral X-rays (inside the mouth),D0240,"Intraoral, occlusal radiographic image",1 of (D0240) every plan year,-,-
+X-rays,D0251,Extra-oral posterior dental radiographic image,2 of (D0251) every plan year,-,-
+Bitewing X-rays,D0270,"Bitewing, single radiographic image",2 of (D0270-D0277) every plan year. Maximum reimbursement for a single date of service limited to the allowed reimbursement for a complete mouth series,-,-
+Bitewing X-rays,D0272,"Bitewings, two radiographic images",2 of (D0270-D0277) every plan year. Maximum reimbursement for a single date of service limited to the allowed reimbursement for a complete mouth series,-,-
+Bitewing X-rays,D0273,"Bitewings, three radiographic images",2 of (D0270-D0277) every plan year. Maximum reimbursement for a single date of service limited,-,-
+Bitewing X-rays,D0274,"Bitewings, four radiographic images",2 of (D0270-D0277) every plan year. Maximum reimbursement for a single date of service limited to the allowed reimbursement for a complete mouth series,-,-
+Bitewing X-rays,D0277,Vertical bitewings – 7 to 8 radiographic images,2 of (D0270-D0277) every plan year. Maximum reimbursement for a single date of service limited to the allowed reimbursement for a complete mouth series,-,-
+X-rays,D0330,Panoramic radiographic image,"1 of (D0210, D0330, D0701, D0709) every 3 plan years. Maximum reimbursement for a single date of service limited to the allowed reimbursement for a complete mouth series",-,-
+X-rays,D0350,"2D oral/facial photographic image, intra-orally/extra-orally",1 of (D0350) every 3 plan years,-,-
+Diagnostic (Preventive) Services,D0391,"Interpretation of diagnostic image by a practitioner not associated with capture of image, including report","1 of (D0391) per date of service; allowed only when submitted along with (D0701, D0703, D0706-D0709)",-,-
+Endodontics,D0460,Pulp Vitality Test,1 of (D0460) per visit,-,-
+X-rays,D0701,Panoramic radiographic image - image capture only,"1 of (D0210, D0330, D0701, D0709) every 3 plan years",-,-
+X-rays,D0703,2-D photographic image - image capture only,1 of (D0703) every 3 plan years,-,-
+Intraoral X-rays (inside the mouth),D0706,Intraoral - occlusal radiographic image - image capture only,2 of (D0706) every plan year,-,-
+Intraoral X-rays (inside the mouth),D0707,Intraoral - periapical radiographic image - image capture only,1 of (D0707) per date of service,-,-
+Bitewing X-rays,D0708,Intraoral - bitewing radiographic image - image capture only,2 of (D0708) every plan year,-,-
+Intraoral X-rays (inside the mouth),D0709,Intraoral - complete series of radiographic images - image capture only,"1 of (D0210, D0330, D0701, D0709) every 3 plan years",-,-
+Prophylaxis adult,D1110,"Prophylaxis, adult",2 of (D1110) every plan year,-,-
+Fluoride treatment,D1206,Fluoride varnish,"1 of (D1206, D1208) every plan year",-,-
+Fluoride treatment,D1208,"Topical application of fluoride, excluding varnish","1 of (D1206, D1208) every plan year",-,-
+Diagnostic (Preventive) Services,D1355,Application of a caries preventive medicament,One of (D1355) per tooth per 6 months,-,-
+Adjunctive general services,D9310,"Consultation, other than requesting dentist","2 of (D0140, D0160, D9310) every plan year",-,-
+Amalgam,D2140,"Amalgam, one surface, primary or permanent","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Amalgam,D2150,"Amalgam, two surfaces, primary or permanent","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Amalgam,D2160,"Amalgam, three surfaces, primary or permanent","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Amalgam,D2161,"Amalgam, four or more surfaces, primary or permanent","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2330,"Resin-based composite, one surface, anterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2331,"Resin-based composite, two surfaces, anterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2332,"Resin-based composite, three surfaces, anterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2335,"Resin-based composite, four or more surfaces, involving incisal angle","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2390,"Resin-based composite crown, anterior","1 of (D2390) per tooth, every 2 plan years. Must have at least 50% remaining bone support",-,-
+Resin-based composite,D2391,"Resin-based composite, one surface, posterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2392,"Resin-based composite, two surfaces, posterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2393,"Resin-based composite, three surfaces, posterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2394,"Resin-based composite, four or more surfaces, posterior","1 of (D2140-D2335, D2391 - D2394) per surface, per tooth, every 2 plan years",-,-
+Resin-based composite,D2710P,"Crown, resin-based composite (indirect)","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) every plan year; one per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Resin-based composite,D2720P,"Crown, resin-based composite (indirect)","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or",-,-
+Crowns,D2721P,"Crown, resin with predominantly base metal","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2722P,"Crown, resin with noble metal","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2740P,"Crown, porcelain/ceramic","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2750P,Crown - porcelain fused to high noble metal,"1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2751P,"Crown, porcelain fused to predominantly base metal","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2752P,"Crown, porcelain fused to noble metal","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2753P,"Crown, porcelain fused to titanium alloy","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires",-,-
+Crowns,D2790P,Crown - full cast high noble metal,"1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2791P,"Crown, full cast predominantly base metal","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2792P,"Crown, full cast noble metal","1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Crowns,D2794P,Crown - titanium,"1 of (D2710, D2720, D2721, D2722, D2740, D2750, D2751, D2752, D2753, D2790, D2791, D2792, D2794) per tooth every 7 plan years. Requires extensive loss of tooth structure due to decay or fracture; requires at least 50% remaining bone support",-,-
+Inlay/Onlay restorations,D2910,"Re-cement or re-bond inlay, onlay, veneer, or partial coverage",1 of (D2910-D2920) per tooth every plan year; not covered within 6 months of delivery,-,-
+Diagnostic (Preventive) Services,D2915,Re-cement or re-bond indirectly fabricated/prefabricated post & core,1 of (D2910-D2920) per tooth every plan year; not covered within 6 months of delivery,-,-
+Crowns,D2920,Re-cement or re-bond crown,1 of (D2910-D2920) per tooth every plan year; not covered within 6 months of delivery,-,-
+Crowns,D2928,Prefabricated porcelain/ceramic crown,"1 of (D2928, D2931) every 3 plan years per tooth. Exclude third molars, except when medically necessary. Must have 50% bone support at minimum",-,-
+Crowns,D2931,"Prefabricated stainless steel crown, permanent tooth","1 of (D2928, D2931) every 3 plan years per tooth. Exclude third molars, except when medically necessary. Must have 50% bone support at minimum",-,-
+Diagnostic (Preventive) Services,D2950P,"Core buildup, including any pins when required","1 of (D2950, D2952-D2954, D2957) per tooth every 7 plan years. Must be necessary to provide retention for an approved crown",-,-
+Diagnostic (Preventive) Services,D2951,"Pin retention, per tooth, in addition to restoration",1 of (D2951) per tooth every 7 plan years,-,-
+Crowns,D2952P,"Post and core in addition to crown, indirectly fabricated","1 of (D2950, D2952-D2954, D2957) per tooth every 7 plan years. Must be necessary to provide retention for an approved crown",-,-
+Diagnostic (Preventive) Services,D2953P,"Each additional indirectly fabricated post, same tooth","1 of (D2950, D2952-D2954, D2957) per tooth every 7 plan years. Must be necessary to provide retention for an approved crown",-,-
+Crowns,D2954P,Prefabricated post and core in addition to crown,"1 of (D2950, D2952-D2954, D2957) per tooth every 7 plan years. Must be necessary to provide retention for an approved crown",-,-
+Diagnostic (Preventive) Services,D2955,Post removal,1 (D2955) per tooth every 7 plan years,-,-
+Diagnostic (Preventive) Services,D2957,"Each additional prefabricated post, same tooth","1 of (D2950, D2952-D2954, D2957) per tooth every 7 plan years. Must be necessary to provide retention for an approved crown",-,-
+Crowns,D2971,Additional procedure to customize a crown to fit under an existing partial denture framework,1 (D2971) per tooth every 7 plan years,-,-
+Crowns,D2980,Crown repair necessitated by restorative material failure,1 of (D2980) per tooth every 3 plan years,-,-
+"Pulp cap, direct",D3110,excluding final restoration,"1 of (D3110, D3120, D3220) per tooth per lifetime; requires at least 50% remaining bone support",-,-
+"Pulp cap, indirect",D3120,excluding final restoration,"1 of (D3110, D3120, D3220) per tooth per lifetime; requires at least 50% remaining bone support",-,-
+Therapeutic pulpotomy,D3220,excluding final restoration,"1 of (D3110, D3120, D3220) per tooth per lifetime; requires at least 50% remaining bone support",-,-
+"Endodontic therapy, anterior tooth",D3310,excluding final restoration,1 of (D3310-D3330) per tooth per lifetime; requires at least 50% remaining bone support,-,-
+"Endodontic therapy, premolar tooth",D3320,excluding final restoration,1 of (D3310-D3330) per tooth per lifetime; requires at least 50% remaining bone support,-,-
+"Endodontic therapy, molar tooth",D3330,excluding final restoration,1 of (D3310-D3330) per tooth per lifetime; requires at least 50% remaining bone support,-,-
+Endodontics,D3331,Treatment of root canal obstruction; non-surgical access,1 of (D3331-D3333) per tooth per lifetime; requires at least 50% remaining bone support,-,-
+Diagnostic (Preventive) Services,D3332,"Incomplete endodontic therapy; inoperable, unrestorable, fractured tooth",1 of (D3331-D3333) per tooth per lifetime; requires at least 50% remaining bone support,-,-
+Diagnostic (Preventive) Services,D3333,Internal root repair of perforation defects,1 of (D3331-D3333) per tooth per lifetime; requires at least 50% remaining bone support,-,-
+Endodontics,D3346,"Retreatment of previous root canal therapy, anterior",1 of (D3346-D3348) per tooth per lifetime; requires at least 50% remaining bone support; retreatment not payable to same provider within 1 plan year of original root canal treatment,-,-
+Endodontics,D3347,"Retreatment of previous root canal therapy, premolar",1 of (D3346-D3348) per tooth per lifetime; requires at least 50% remaining bone support; retreatment not payable to same provider within 1 plan year of original root canal treatment,-,-
+Endodontics,D3348,"Retreatment of previous root canal therapy, molar",1 of (D3346-D3348) per tooth per lifetime; requires at least 50% remaining bone support; retreatment not payable to same provider within 1 plan year of original root canal treatment,-,-
+Diagnostic (Preventive) Services,D3351,"Apexification/recalcification, initial visit",1 of (D3351- D3353) per tooth per lifetime; not allowed if by same provider or provider group,-,-
+Diagnostic (Preventive) Services,D3352,"Apexification/recalcification, interim medication replacement",1 of (D3351- D3353) per tooth per lifetime; not allowed if by same provider or provider group,-,-
+Diagnostic (Preventive) Services,D3353,"Apexification/recalcification, final visit",1 of (D3351- D3353) per tooth per lifetime; not allowed if by same provider or provider group,-,-
+Crowns,D4322,Splint - intra-coronal; natural teeth or prosthetic crowns,1 of (D4322-D4323) per arch every 3 plan years,-,-
+Crowns,D4323,Splint - extra-coronal; natural teeth or prosthetic crowns,1 of (D4322-D4323) per arch every 3 plan years,-,-
+Diagnostic (Preventive) Services,D4341P,Deep cleaning for 4 or more teeth in a quadrant,1 of (D4341-D4342) per quadrant every 2 plan years; only two quadrants allowed on same date of service,-,-
+Diagnostic (Preventive) Services,D4342P,Deep cleaning for 1-3 teeth in a quadrant,1 of (D4341-D4342) per quadrant every 2 plan years; only two quadrants allowed on same date of service,-,-
+Periodontics,D4346,"Scaling in presence of moderate or severe inflammation, full mouth after evaluation","1 (D4346) every 2 plan years, not allowed within six months of D1110, D4341, D4342, D4355, or D4910",-,-
+Exams,D4355,full mouth debridement to enable comprehensive oral evaluation and diagnosis on subsequent visit,"1 of (D4355) every 2 plan years not allowed same DOS as D0180 or within 6 months of D0120, D0150 or D0180",-,-
+Diagnostic (Preventive) Services,D4381,Localized delivery of antimicrobial agent/per tooth,8 of (D4381) every 2 plan years; at least 28 days after D4341 or D4342; requires evidence of pockets 5 mm or greater with persistent inflammation,-,-
+Diagnostic (Preventive) Services,D4910,Periodontal maintenance,2 of (D4910) every plan year; not within 90 days of D1110,-,-
+Unscheduled dressing change,D4920,other than treating dentist or staff,1 of (D4920) every plan year per procedure,-,-
+Dentures,D6930,Re-cement or re-bond fixed partial denture,1 of (D6930) per tooth every 2 plan years; not payable within 6 months of delivery,-,-
+Extractions,D7140,"Extraction, erupted tooth or exposed root",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Extractions,D7210P,"Extraction, erupted tooth requiring removal of bone and/or sectioning of tooth",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7220,"Removal of impacted tooth, soft tissue",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7230,"Removal of impacted tooth, partially bony",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7240,"Removal of impacted tooth, completely bony",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7241,"Removal impacted tooth, complete bony, complication",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7250P,Removal of residual tooth roots (cutting procedure),1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7251,"Coronectomy - intentional partial tooth removal, impacted teeth only",1 of (D7140-D7251) per tooth per lifetime; D7250 requires evidence of previous failed extraction with retained root and not by same provider or group,-,-
+Diagnostic (Preventive) Services,D7260,Oroantral fistula closure,"1 of (D7260, D7261) per quadrant per date of service",-,-
+Diagnostic (Preventive) Services,D7261,Primary closure of a sinus perforation,"1 of (D7260, D7261) per quadrant per date of service",-,-
+Implants,D7270,"Tooth reimplantation and/or stabilization, accident",1 of (D7270-D7282) per tooth per lifetime,-,-
+Diagnostic (Preventive) Services,D7272,Tooth transplantation,1 of (D7270-D7282) per tooth per lifetime,-,-
+Diagnostic (Preventive) Services,D7280,Exposure of an unerupted tooth,1 of (D7270-D7282) per tooth per lifetime,-,-
+Diagnostic (Preventive) Services,D7282,Mobilization of erupted/malpositioned tooth,1 of (D7270-D7282) per tooth per lifetime,-,-
+Diagnostic (Preventive) Services,D7285,"Incisional biopsy of oral tissue, hard (bone, tooth)","1 of (D7285, D7286, D7288) every 2 plan years; 1 of (D7287) per site every 2 plan years",-,-
+Diagnostic (Preventive) Services,D7286,"Incisional biopsy of oral tissue, soft","1 of (D7285, D7286, D7288) every 2 plan years; 1 of (D7287) per site every 2 plan years",-,-
+Diagnostic (Preventive) Services,D7287,Exfoliative cytological sample collection,"1 of (D7285, D7286, D7288) every 2 plan years; 1 of (D7287) per site every 2 plan years",-,-
+Diagnostic (Preventive) Services,D7288,"Brush biopsy, transepithelial sample collection","1 of (D7285, D7286, D7288) every 2 plan years; 1 of (D7287) per site every 2 plan years",-,-
+Extractions,D7310P,"Alveoloplasty with extractions, four or more teeth per quadrant",1 of (D7310-D7321) per quadrant per lifetime. Only in preparation for a treatment planned complete denture or partial denture with an edentulous space of at least three contiguous teeth,-,-
+Extractions,D7311P,"Alveoloplasty with extractions, one to three teeth per quadrant",1 of (D7310-D7321) per quadrant per lifetime. Only in preparation for a treatment planned complete denture or partial denture with an edentulous space of at least three contiguous teeth,-,-
+Extractions,D7320P,"Alveoloplasty, w/o extractions, four or more teeth per quadrant",1 of (D7310-D7321) per quadrant per lifetime. Only in preparation for a treatment planned complete denture or partial denture with an edentulous space of at least three contiguous teeth,-,-
+Extractions,D7321P,"Alveoloplasty, w/o extractions, one to three teeth per quadrant",1 of (D7310-D7321) per quadrant per lifetime. Only in preparation for a treatment planned complete denture or partial denture with an edentulous space of at least three contiguous teeth,-,-
+Diagnostic (Preventive) Services,D7340,"Vestibuloplasty, ridge extension (2nd epithelialization)","1 of (D7340, D7350) per quadrant every 5 plan years",-,-
+Diagnostic (Preventive) Services,D7350,"Vestibuloplasty, ridge extension","1 of (D7340, D7350) per quadrant every 5 plan years",-,-
+Diagnostic (Preventive) Services,D7410,"Excision of benign lesion, up to 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7411,"Excision of benign lesion, greater than 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7412,"Excision of benign lesion, complicated",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7413,"Excision of malignant lesion, up to 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7414,"Excision of malignant lesion, greater than 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7415,"Excision of malignant lesion, complicated",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7440,"Excision of malignant tumor, up to 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7441,"Excision of malignant tumor, greater than 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7450,"Removal, benign odontogenic cyst/tumor, up to 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7451,"Removal, benign odontogenic cyst/tumor, greater than 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7460,"Removal, benign nonodontogenic cyst/tumor, up to 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7461,"Removal, benign nonodontogenic cyst/tumor, greater than 1.25 cm",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7465,"Destruction of lesion(s) by physical or chemical method, by report",1 of (D7410-D7465) per date of service,-,-
+Diagnostic (Preventive) Services,D7471,"Removal of lateral exostosis, maxilla or mandible",1 of (D7471) per arch per lifetime,-,-
+Diagnostic (Preventive) Services,D7472,Removal of torus palatinus,1 of (D7472) per lifetime,-,-
+Diagnostic (Preventive) Services,D7473,Removal of torus mandibularis,1 of (D7473) per quadrant per lifetime,-,-
+Periodontics,D7485,Reduction of osseous tuberosity,1 of (D7485) per quadrant per lifetime,-,-
+Diagnostic (Preventive) Services,D7509,Marsupialization of odontogenic cyst,1 of (D7509) per date of service,-,-
+Intraoral X-rays (inside the mouth),D7510,"Incision & drainage of abscess, intraoral soft tissue",1 of (D7510-D7540) per date of service,-,-
+Intraoral X-rays (inside the mouth),D7511,"Incision & drainage of abscess, intraoral soft tissue, complicated",1 of (D7510-D7540) per date of service,-,-
+Diagnostic (Preventive) Services,D7520,"Incision & drainage of abscess, extraoral soft tissue",1 of (D7510-D7540) per date of service,-,-
+Diagnostic (Preventive) Services,D7521,"Incision & drainage of abscess, extraoral soft tissue, complicated",1 of (D7510-D7540) per date of service,-,-
+Diagnostic (Preventive) Services,D7530,"Remove foreign body, mucosa, skin, tissue",1 of (D7510-D7540) per date of service,-,-
+Diagnostic (Preventive) Services,D7540,"Removal of reaction producing foreign bodies, musculoskeletal system",1 of (D7510-D7540) per date of service,-,-
+Diagnostic (Preventive) Services,D7970,"Excision of hyperplastic tissue, per arch",1 of (D7970) per arch every 5 plan years,-,-
+Periodontics,D7971,Excision of pericoronal gingiva,1 of (D7971) per tooth per lifetime,-,-
+Diagnostic (Preventive) Services,D7972,Surgical Reduction of Fibrous Tuberosity,1 of (D7972) per maxillary quadrant per lifetime,-,-
+Diagnostic (Preventive) Services,D9110,"Palliative (emergency) treatment, minor procedure",1 of (D9110) every plan year,-,-
+Dentures,D9120,Fixed Partial Denture Sectioning,1 of (D9120) every plan year,-,-
+Diagnostic (Preventive) Services,D9410,House/Extended Care Facility Call,"1 of (D9410, D9420, D9997) per date of service",-,-
+Diagnostic (Preventive) Services,D9420,Hospital or ambulatory surgical center call,"1 of (D9410, D9420, D9997) per date of service",-,-
+Diagnostic (Preventive) Services,D9995,Teledentistry - synchronous; real- time encounter,1 of (D9995-D9996) per date of service,-,-
+Diagnostic (Preventive) Services,D9996,Teledentistry - asynchronous; information stored and forwarded to dentist for subsequent review,1 of (D9995-D9996) per date of service,-,-
+Diagnostic (Preventive) Services,D9997,Dental Case Management - patients with special needs,"1 of (D9410, D9420, D9997) per date of service",-,-

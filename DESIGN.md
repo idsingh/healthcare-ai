@@ -406,3 +406,39 @@ document — self-consistency, model failover, shadow evaluation — is the seco
 
 Built as specified; §8's metrics exporter and §5's outbox are the two pieces left as design
 only, because this service keeps jobs in process.
+
+
+---
+
+## 12. Extension: Dental Guide PDFs to CSV
+
+The second brief keeps the same architecture and adds one input adapter, one use case and one
+projection. Nothing in the existing text path changed.
+
+**Assumptions.** Guides have a text layer (no OCR in scope — a scanned file is rejected with a
+clear reason, not silently empty). Benefit tables run across many pages and repeat only part
+of their header. Codes follow the CDT shape. Column names, column order and column *set* vary
+between carriers; the output column set does not.
+
+**Components added**
+
+| Component | Responsibility |
+|---|---|
+| `adapters/pdf/pdfplumber_source.py` | The only module that knows pdfplumber: pages as words with geometry, ruled tables, rectangles, text |
+| `application/tables/ruled.py` | Read the grid the PDF draws |
+| `application/tables/geometric.py` | Rebuild a table with no grid: code column anchors rows, whitespace defines columns, proximity binds wrapped lines, tall rectangles mark merged cells |
+| `application/tables/cascade.py` | Run the readers, score them, keep the best; LLM reader last |
+| `application/tables/mapping.py` | Header label → canonical field by vocabulary, with an LLM fallback for unknown labels |
+| `application/dental_guide.py` | The use case: pages → rows → benefit groups → validation |
+| `application/csv_export.py` | The customer's six columns, `-` for anything not stated |
+
+**Deterministic vs LLM, unchanged in principle.** Structure, codes, descriptions, frequencies
+and coverage are read from the table. The model names benefit groups when the guide has no
+category column — the one genuinely semantic step — and its reply is schema-constrained and
+checked against the codes it was given.
+
+**Why this survives an unseen guide.** Three independent readers with a quality score instead
+of one reader that must always win; column mapping by vocabulary rather than position; a
+carried header so continuation pages keep working; per-document validation flags that say
+*which* column was missing rather than emitting a silently empty CSV; and a test that fails the
+build if any document-specific identifier appears in `app/`.

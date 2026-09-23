@@ -27,10 +27,12 @@ class Settings(BaseSettings):
     retry_base_delay_seconds: float = 0.5
     retry_max_delay_seconds: float = 8.0
     block_concurrency: int = 4                       # parallel package blocks per doc
+    dg_llm_grouping: bool = True                     # name benefit groups with the model
     job_concurrency: int = 8                         # parallel jobs in this process
 
     # Input validation
     max_input_bytes: int = 2_000_000
+    max_pdf_bytes: int = 25_000_000
     min_input_chars: int = 40
     min_printable_ratio: float = 0.85
 

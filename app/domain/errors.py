@@ -26,6 +26,13 @@ class JobNotFound(ExtractionError):
     http_status = 404
 
 
+class UnsupportedProjection(ExtractionError):
+    """The caller asked for a representation this job cannot produce, e.g. CSV
+    for a job that extracted packages rather than benefit rows."""
+    code = "unsupported_projection"
+    http_status = 409
+
+
 class LLMTransientError(ExtractionError):
     """Timeout, 429, 5xx, connection reset — worth retrying as-is."""
     code = "llm_transient"

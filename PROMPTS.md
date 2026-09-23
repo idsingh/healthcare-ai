@@ -94,6 +94,24 @@ external-model section.
 
 > Also document the prompts i used in this conversation to generate the code
 
+## 11. Second brief: Dental Guides to CSV
+
+> Check the new requirements and pdf documents are under /Users/inder/Downloads/Assignment_extended
+> and enhance the solution
+
+> For pdf extraction, Remember to use a scalable solution. it must not break over new pdfs
+
+Produced: the PDF path — `adapters/pdf/`, `application/tables/` (ruled, geometric, cascade,
+mapping), `application/dental_guide.py`, `application/csv_export.py`, `tools/extract_dg.py`,
+`POST /extract/upload`, `GET /extract/{id}?format=csv`, and
+[`output/dental_guides/`](output/dental_guides/README.md) — 782 rows from three guides with
+three different layouts.
+
+The second instruction is why the design is a scored cascade of independent readers with an
+LLM fallback, rather than whichever single extraction call happened to work on these three
+files, and why `tests/test_generalization.py` fails the build if a carrier or file name ever
+appears in `app/`.
+
 ---
 
 ## Corrections made along the way

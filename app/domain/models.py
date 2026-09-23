@@ -258,6 +258,56 @@ class ExtractionResult(Base):
     validation: ValidationReport = ValidationReport()
 
 
+# --------------------------------------------------------------------------
+# Dental Guide extraction (benefit tables -> CSV rows)
+# --------------------------------------------------------------------------
+
+
+class GroupSource(str, Enum):
+    column = "column"            # the guide has an explicit category column
+    heading = "heading"          # taken from the section heading above the row
+    llm = "llm"                  # named by the model from code + description
+    missing = "missing"
+
+
+class BenefitRow(Base):
+    """One CSV row. Every field is text, because a benefit guide states things
+    like '100%', '$25 copay' or 'Not covered' in the same column."""
+    benefit_group: str | None = None
+    dental_code: str
+    description: str | None = None
+    frequency: str | None = None
+    in_network: str | None = None
+    out_network: str | None = None
+    page: int = 0
+    source_file: str | None = None
+    strategy: str | None = None
+    group_source: GroupSource = GroupSource.missing
+
+
+class DentalGuideDocument(Base):
+    file_name: str
+    pages: int = 0
+    pages_with_rows: int = 0
+    column_labels: list[str] = []
+    mapped_fields: list[str] = []
+    unmapped_columns: list[str] = []
+    strategies: dict[str, int] = {}
+
+
+class DentalGuideResult(Base):
+    schema_version: str = SCHEMA_VERSION
+    run: RunInfo
+    document: DentalGuideDocument
+    rows: list[BenefitRow] = []
+    validation: ValidationReport = ValidationReport()
+
+
+class JobKind(str, Enum):
+    eoc_text = "eoc_text"            # unstructured plan text -> packages JSON
+    dental_guide = "dental_guide"    # dental guide PDF -> benefit rows / CSV
+
+
 class JobStatus(str, Enum):
     queued = "queued"
     running = "running"
@@ -276,13 +326,19 @@ class JobError(Base):
 
 class Job(Base):
     job_id: str
+    kind: JobKind = JobKind.eoc_text
     status: JobStatus = JobStatus.queued
     content_sha256: str
     idempotency_key: str
     created_at: datetime = PField(default_factory=utcnow)
     updated_at: datetime = PField(default_factory=utcnow)
     result: ExtractionResult | None = None
+    rows_result: DentalGuideResult | None = None
     error: JobError | None = None
+
+    @property
+    def payload(self) -> ExtractionResult | DentalGuideResult | None:
+        return self.rows_result if self.kind is JobKind.dental_guide else self.result
 
     def touch(self, status: JobStatus) -> "Job":
         return self.model_copy(update={"status": status, "updated_at": utcnow()})

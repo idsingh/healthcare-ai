@@ -1,0 +1,29 @@
+Benefit Group,Dental Code,Description,Frequency/Limitations,In-Network Coverage,Out-of-Network Coverage
+Exams,D0120,Periodic oral evaluation – established patient,Unlimited up to annual maximum,100%,100%
+Exams,D0140,Limited oral evaluation – problem focused,Unlimited up to annual maximum,100%,100%
+Exams,D0150,Comprehensive oral evaluation – new or established patient,Unlimited up to annual maximum,100%,100%
+Exams,D0160,"Detailed and extensive oral evaluation – problem focused, by report",Unlimited up to annual maximum,100%,100%
+Additional exam,D0180,Comprehensive periodontal evaluation – new or established patient,As stated in plan,100%,100%
+Full mouth and panoramic X-rays,D0210,Intraoral – comprehensive series of radiographic images,As stated in plan,100%,100%
+Intraoral X-rays (inside the mouth),D0220,Intraoral – periapical first radiographic image,As stated in plan,100%,100%
+Intraoral X-rays (inside the mouth),D0230,Intraoral – periapical each additional radiographic image,As stated in plan,100%,100%
+Bitewing X-rays,D0270,Bitewing – single radiographic image,As stated in plan,100%,100%
+Bitewing X-rays,D0272,Bitewings – two radiographic images,As stated in plan,100%,100%
+Bitewing X-rays,D0273,Bitewings – three radiographic images,As stated in plan,100%,100%
+Bitewing X-rays,D0274,Bitewings – four radiographic images,As stated in plan,100%,100%
+X-rays,D0330,Panoramic radiographic image,Unlimited up to annual maximum,100%,100%
+X-rays,D0364,Cone beam CT capture and interpretation with limited field of view – less than one whole jaw,Unlimited up to annual maximum,100%,100%
+X-rays,D0365,Cone beam CT capture and interpretation with field of view of one full dental arch – mandible,Unlimited up to annual maximum,100%,100%
+X-rays,D0366,"Cone beam CT capture and interpretation with field of view of one full dental arch – maxilla, with or without cranium",Unlimited up to annual maximum,100%,100%
+X-rays,D0367,Cone beam CT capture and interpretation with field of view of both jaws; with or without cranium,Unlimited up to annual maximum,100%,100%
+Prophylaxis adult,D1110,"Removal of plaque, calculus and stains from the tooth structures and implants in the permanent and transitional dentition. It is intended to control local irritational factors.",Unlimited up to annual maximum,100%,100%
+Amalgam,D2140,"Amalgam – one surface, primary or permanent",As stated in plan,100%,100%
+Amalgam,D2150,"Amalgam – two surfaces, primary or permanent",As stated in plan,100%,100%
+Amalgam,D2160,"Amalgam – three surfaces, primary or permanent",As stated in plan,100%,100%
+Amalgam,D2161,"Amalgam – four or more surfaces, primary or permanent",As stated in plan,100%,100%
+Resin-based composite,D2330,"Resin-based composite – one surface, anterior (front)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2331,"Resin-based composite – two surfaces, anterior (front)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2332,"Resin-based composite – three surfaces, anterior (front)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2335,Resin-based composite – four or more surfaces (anterior),Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2390,"Resin-based composite crown, anterior",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2391,"Resin-based composite – one surface, posterior (back)",Unlimited up to annual maximum,100%,100%

@@ -1,0 +1,288 @@
+Benefit Group,Dental Code,Description,Frequency/Limitations,In-Network Coverage,Out-of-Network Coverage
+Exams,D0120,Periodic oral evaluation – established patient,Unlimited up to annual maximum,100%,100%
+Exams,D0140,Limited oral evaluation – problem focused,Unlimited up to annual maximum,100%,100%
+Exams,D0150,Comprehensive oral evaluation – new or established patient,Unlimited up to annual maximum,100%,100%
+Exams,D0160,"Detailed and extensive oral evaluation – problem focused, by report",Unlimited up to annual maximum,100%,100%
+Additional exam,D0180,Comprehensive periodontal evaluation – new or established patient,Unlimited up to annual maximum,100%,100%
+Intraoral X-rays (inside the mouth),D0210,Intraoral – comprehensive series of radiographic images,Unlimited up to annual maximum,100%,100%
+Intraoral X-rays (inside the mouth),D0220,Intraoral – periapical first radiographic image,Unlimited up to annual maximum,100%,100%
+Intraoral X-rays (inside the mouth),D0230,Intraoral – periapical each additional radiographic image,Unlimited up to annual maximum,100%,100%
+Bitewing X-rays,D0270,Bitewing – single radiographic image,Unlimited up to annual maximum,100%,100%
+Bitewing X-rays,D0272,Bitewings – two radiographic images,Unlimited up to annual maximum,100%,100%
+Bitewing X-rays,D0273,Bitewings – three radiographic images,Unlimited up to annual maximum,100%,100%
+Bitewing X-rays,D0274,Bitewings – four radiographic images,Unlimited up to annual maximum,100%,100%
+X-rays,D0330,Panoramic radiographic image,Unlimited up to annual maximum,100%,100%
+X-rays,D0364,Cone beam CT capture and interpretation with limited field of view – less than one whole jaw,Unlimited up to annual maximum,100%,100%
+X-rays,D0365,Cone beam CT capture and interpretation with field of view of one full dental arch – mandible,Unlimited up to annual maximum,100%,100%
+X-rays,D0366,"Cone beam CT capture and interpretation with field of view of one full dental arch – maxilla, with or without cranium",Unlimited up to annual maximum,100%,100%
+X-rays,D0367,Cone beam CT capture and interpretation with field of view of both jaws; with or without cranium,Unlimited up to annual maximum,100%,100%
+Implants,D1110,"Removal of plaque, calculus and stains from the tooth structures and implants in the permanent and transitional dentition. It is intended to control local irritational factors",Unlimited up to annual maximum,100%,100%
+Amalgam,D2140,"Amalgam – one surface, primary or permanent",Unlimited up to annual maximum,100%,100%
+Amalgam,D2150,"Amalgam – two surfaces, primary or permanent",Unlimited up to annual maximum,100%,100%
+Amalgam,D2160,"Amalgam – three surfaces, primary or permanent",Unlimited up to annual maximum,100%,100%
+Amalgam,D2161,"Amalgam – four or more surfaces, primary or permanent",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2330,"Resin-based composite – one surface, anterior (front)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2331,"Resin-based composite – two surfaces, anterior (front)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2332,"Resin-based composite – three surfaces, anterior (front)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2335,Resin-based composite – four or more surfaces (anterior),Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2390,"Resin-based composite crown, anterior",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2391,"Resin-based composite – one surface, posterior (back)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2392,"Resin-based composite – two surfaces, posterior (back)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2393,"Resin-based composite – three surfaces, posterior (back)",Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2394,"Resin-based composite – four or more surfaces, posterior (back)",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2542,Onlay – metallic – two surfaces,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2543,Onlay – metallic – three surfaces,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2544,Onlay – metallic – four or more surfaces,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2642,Onlay – porcelain/ceramic – two surfaces,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2643,Onlay – porcelain/ceramic – three surfaces,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2644,Onlay – porcelain/ceramic – four or more surfaces,Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2662,Onlay – resin-based composite – two surfaces,Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2663,Onlay – resin-based composite – three surfaces,Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2664,Onlay – resin-based composite – four or more surfaces,Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2710,Crown – resin-based composite (indirect),Unlimited up to annual maximum,100%,100%
+Resin-based composite,D2712,Crown – 3/4 resin-based composite (indirect),Unlimited up to annual maximum,100%,100%
+Crowns,D2720,Crown – resin with high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2721,Crown – resin with predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2722,Crown – resin with noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2740,Crown – porcelain/ceramic,Unlimited up to annual maximum,100%,100%
+Crowns,D2750,Crown – porcelain fused to high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2751,Crown – porcelain fused to predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2752,Crown – porcelain fused to noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2753,Crown – porcelain fused to titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Crowns,D2780,Crown – 3/4 cast high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2781,Crown – 3/4 cast predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2782,Crown – 3/4 cast noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2783,Crown – 3/4 porcelain/ceramic,Unlimited up to annual maximum,100%,100%
+Crowns,D2790,Crown – full cast high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2791,Crown – full cast predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2792,Crown – full cast noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D2794,Crown – titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2910,"Re-cement or re-bond inlay, onlay, veneer or partial coverage restoration",Unlimited up to annual maximum,100%,100%
+Other restorative services,D2915,Re-cement or re-bond indirectly fabricated or prefabricated post and core,Unlimited up to annual maximum,100%,100%
+Crowns,D2920,Re-cement or re-bond crown,Unlimited up to annual maximum,100%,100%
+Crowns,D2928,Prefabricated porcelain/ceramic crown – permanent tooth,Unlimited up to annual maximum,100%,100%
+Crowns,D2931,Prefabricated stainless steel crown – permanent tooth,Unlimited up to annual maximum,100%,100%
+Crowns,D2932,Prefabricated resin crown,Unlimited up to annual maximum,100%,100%
+Crowns,D2933,Prefabricated stainless steel crown with resin window,Unlimited up to annual maximum,100%,100%
+Other restorative services (continued),D2950,"Core buildup, including any pins when required",Unlimited up to annual maximum,100%,100%
+Other restorative services (continued),D2951,"Pin retention – per tooth, in addition to restoration",Unlimited up to annual maximum,100%,100%
+Crowns,D2952,"Post and core in addition to crown, indirectly fabricated",Unlimited up to annual maximum,100%,100%
+Other restorative services (continued),D2953,Each additional indirectly fabricated post – same tooth,Unlimited up to annual maximum,100%,100%
+Crowns,D2954,Prefabricated post and core in addition to crown,Unlimited up to annual maximum,100%,100%
+Other restorative services (continued),D2955,Post removal,Unlimited up to annual maximum,100%,100%
+Other restorative services (continued),D2957,Each additional prefabricated post – same tooth,Unlimited up to annual maximum,100%,100%
+Other restorative services (continued),D2975,Coping,Unlimited up to annual maximum,100%,100%
+Crowns,D2980,Crown repair necessitated by restorative material failure,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2981,Inlay repair necessitated by restorative material failure,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D2982,Onlay repair necessitated by restorative material failure,Unlimited up to annual maximum,100%,100%
+Endodontics,D3221,"Pulpal debridement, primary and permanent teeth",Unlimited up to annual maximum,100%,100%
+Endodontics,D3222,Partial pulpotomy for apexogenesis – permanent tooth with incomplete root development,Unlimited up to annual maximum,100%,100%
+"Endodontic therapy, anterior tooth",D3310,excluding final restoration,Unlimited up to annual maximum,100%,100%
+"Endodontic therapy, premolar tooth",D3320,excluding final restoration,Unlimited up to annual maximum,100%,100%
+"Endodontic therapy, molar tooth",D3330,excluding final restoration,Unlimited up to annual maximum,100%,100%
+Endodontics,D3331,Treatment of root canal obstruction; non-surgical access,Unlimited up to annual maximum,100%,100%
+Endodontic services,D3332,"Incomplete endodontic therapy; inoperable, unrestorable or fractured tooth",Unlimited up to annual maximum,100%,100%
+Endodontic services,D3333,Internal root repair of perforation defects,Unlimited up to annual maximum,100%,100%
+Endodontics,D3346,Retreatment of previous root canal therapy – anterior,Unlimited up to annual maximum,100%,100%
+Endodontics,D3347,Retreatment of previous root canal therapy – premolar,Unlimited up to annual maximum,100%,100%
+Endodontics,D3348,Retreatment of previous root canal therapy – molar,Unlimited up to annual maximum,100%,100%
+Endodontics,D3410,Apicoectomy – anterior,Unlimited up to annual maximum,100%,100%
+Endodontics,D3421,Apicoectomy – bicuspid (first root),Unlimited up to annual maximum,100%,100%
+Endodontics,D3425,Apicoectomy – molar (first root),Unlimited up to annual maximum,100%,100%
+Endodontics,D3426,Apicoectomy (each additional root),Unlimited up to annual maximum,100%,100%
+Endodontic services (continued),D3430,Retrograde filling – per root,Unlimited up to annual maximum,100%,100%
+Endodontic services (continued),D3450,Root amputation – per root,Unlimited up to annual maximum,100%,100%
+Endodontic services (continued),D3471,Surgical repair of root resorption – anterior,Unlimited up to annual maximum,100%,100%
+Endodontic services (continued),D3472,Surgical repair of root resorption – premolar,Unlimited up to annual maximum,100%,100%
+Endodontic services (continued),D3473,Surgical repair of root resorption – molar,Unlimited up to annual maximum,100%,100%
+Endodontics,D3501,Surgical exposure of root surface without apicoectomy or repair of root resorption – anterior,Unlimited up to annual maximum,100%,100%
+Endodontics,D3502,Surgical exposure of root surface without apicoectomy or repair of root resorption – premolar,Unlimited up to annual maximum,100%,100%
+Endodontics,D3503,Surgical exposure of root surface without apicoectomy or repair of root resorption – molar,Unlimited up to annual maximum,100%,100%
+Endodontics,D3920,"Hemisection (including any root removal), not including root canal therapy",Unlimited up to annual maximum,100%,100%
+Periodontics,D4210,Gingivectomy or gingivoplasty – four or more contiguous teeth or tooth bounded spaces per quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics,D4211,Gingivectomy or gingivoplasty – one to three contiguous teeth or tooth bounded spaces per quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics,D4212,"Gingivectomy or gingivoplasty to allow access for restorative procedure, per tooth",Unlimited up to annual maximum,100%,100%
+Periodontics,D4240,"Gingival flap procedure, including root planing – four or more contiguous teeth or tooth bounded spaces per quadrant",Unlimited up to annual maximum,100%,100%
+Periodontics,D4241,"Gingival flap procedure, including root planing – one to three contiguous teeth or tooth bounded spaces per quadrant",Unlimited up to annual maximum,100%,100%
+Periodontics,D4245,Apically positioned flap,Unlimited up to annual maximum,100%,100%
+Crowns,D4249,Clinical crown lengthening – hard tissue Osseous surgery (including elevation of a,Unlimited up to annual maximum,100%,100%
+Periodontics,D4260,full thickness flap and closure) – four or more contiguous teeth or tooth bounded spaces per quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics,D4261,Osseous surgery (including elevation of a full thickness flap and closure) – one to three contiguous teeth or tooth bounded spaces per quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4263,Bone replacement graft – retained natural tooth – first site in quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4264,Bone replacement graft – retained natural tooth – each additional site in quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics,D4265,Biologic materials to aid in soft and osseous tissue regeneration,Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4266,"Guided tissue regeneration, natural teeth – resorbable barrier, per site",Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4267,"Guided tissue regeneration, natural teeth – nonresorbable barrier, per site",Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4270,Pedicle soft tissue graft procedure Autogenous connective tissue graft,Unlimited up to annual maximum,100%,100%
+Implants,D4273,"procedure (including donor and recipient surgical sites) first tooth, implant, or edentulous tooth position in graft",Unlimited up to annual maximum,100%,100%
+"Mesial/distal wedge procedure, single tooth",D4274,when not performed in conjunction with surgical procedures in the same anatomical area,Unlimited up to annual maximum,100%,100%
+Implants,D4275,"Non-autogenous connective tissue graft (including recipient site and donor material) first tooth, implant, or edentulous tooth position in graft",Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4276,"Combined connective tissue and pedicle graft, per tooth",Unlimited up to annual maximum,100%,100%
+Implants,D4277,"Free soft tissue graft procedure (including recipient and donor surgical sites) first tooth, implant or edentulous tooth position in graft",Unlimited up to annual maximum,100%,100%
+Implants,D4278,"Free soft tissue graft procedure (including recipient and donor surgical sites) each additional contiguous tooth, implant or edentulous tooth position in same graft site",Unlimited up to annual maximum,100%,100%
+Implants,D4283,"Autogenous connective tissue graft procedure (including donor and recipient surgical sites) – each additional contiguous tooth, implant or edentulous tooth position in same graft site",Unlimited up to annual maximum,100%,100%
+Implants,D4285,"Non-autogenous connective tissue graft procedure (including recipient surgical site and donor material) – each additional contiguous tooth, implant or edentulous tooth position in same graft",Unlimited up to annual maximum,100%,100%
+Periodontics,D4341,site Periodontal scaling and root planing – four or more teeth per quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics,D4342,Periodontal scaling and root planing – one to three teeth per quadrant,Unlimited up to annual maximum,100%,100%
+Periodontics,D4346,"Scaling in presence of generalized moderate or severe gingival inflammation – full mouth, after oral",Unlimited up to annual maximum,100%,100%
+Periodontics (continued),D4910,evaluation Periodontal maintenance,Unlimited up to annual maximum,100%,100%
+Dentures,D5110,Complete denture – maxillary,Unlimited up to annual maximum,100%,100%
+Dentures,D5120,Complete denture – mandibular,Unlimited up to annual maximum,100%,100%
+Dentures,D5130,Immediate denture – maxillary,Unlimited up to annual maximum,100%,100%
+Dentures,D5140,Immediate denture – mandibular,Unlimited up to annual maximum,100%,100%
+Maxillary partial denture – resin base,D5211,"including retentive/clasping materials, rests and teeth",Unlimited up to annual maximum,100%,100%
+Mandibular partial denture – resin base,D5212,"including retentive/clasping materials, rests and teeth",Unlimited up to annual maximum,100%,100%
+Dentures,D5213,"Maxillary partial denture – cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5214,"Mandibular partial denture – cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5221,"Immediate maxillary partial denture – resin base (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5222,"Immediate mandibular partial denture – resin base (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5223,"Immediate maxillary partial denture – cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5224,"Immediate mandibular partial denture – cast metal framework with resin denture bases (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Maxillary partial denture – flexible base,D5225,"including retentive/clasping materials, rests and teeth",Unlimited up to annual maximum,100%,100%
+Mandibular partial denture – flexible base,D5226,"including retentive/clasping materials, rests and teeth",Unlimited up to annual maximum,100%,100%
+Dentures,D5227,"Immediate Maxillary partial denture – flexible base (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5228,"Immediate Mandibular partial denture – flexible base (including retentive/clasping materials, rests and teeth)",Unlimited up to annual maximum,100%,100%
+Dentures,D5282,"Removable unilateral partial denture – one piece cast metal (including retentive/clasping materials, rests and teeth), maxillary",Unlimited up to annual maximum,100%,100%
+Dentures,D5283,"Removable unilateral partial denture – one piece cast metal (including retentive/clasping materials, rests and teeth), mandibular",Unlimited up to annual maximum,100%,100%
+Dentures,D5284,"Removable unilateral partial denture – one piece flexible base (including retentive/clasping materials, rests and teeth) – per quadrant",Unlimited up to annual maximum,100%,100%
+Dentures,D5286,"Removable unilateral partial denture – one piece resin (including retentive/clasping materials, rests and teeth) – per quadrant",Unlimited up to annual maximum,100%,100%
+Dentures,D5410,Adjust complete denture – maxillary,Unlimited up to annual maximum,100%,100%
+Dentures,D5411,Adjust complete denture – mandibular,Unlimited up to annual maximum,100%,100%
+Dentures,D5421,Adjust partial denture – maxillary,Unlimited up to annual maximum,100%,100%
+Dentures,D5422,Adjust partial denture – mandibular,Unlimited up to annual maximum,100%,100%
+Dentures,D5511,"Repair broken complete denture base, mandibular",Unlimited up to annual maximum,100%,100%
+Dentures,D5512,"Repair broken complete denture base, maxillary",Unlimited up to annual maximum,100%,100%
+Repairs to dentures,D5520,Replace missing or broken teeth,Unlimited up to annual maximum,100%,100%
+Dentures,D5611,"Repair resin partial denture base, mandibular",Unlimited up to annual maximum,100%,100%
+Dentures,D5612,"Repair resin partial denture base, maxillary",Unlimited up to annual maximum,100%,100%
+Repairs to dentures,D5621,"Repair cast partial framework, mandibular",Unlimited up to annual maximum,100%,100%
+Repairs to dentures,D5622,"Repair cast partial framework, maxillary",Unlimited up to annual maximum,100%,100%
+Repairs to dentures,D5630,Repair or replace broken retentive/clasping materials – per tooth,Unlimited up to annual maximum,100%,100%
+Dentures,D5640,Replace missing or broken teeth – partial denture – per tooth,Unlimited up to annual maximum,100%,100%
+Dentures,D5650,Add tooth to existing partial denture – per tooth,Unlimited up to annual maximum,100%,100%
+Dentures,D5660,Add clasp to existing partial denture – per tooth,Unlimited up to annual maximum,100%,100%
+Repairs to dentures,D5670,Replace all teeth and acrylic on cast metal framework (maxillary),Unlimited up to annual maximum,100%,100%
+Repairs to dentures,D5671,Replace all teeth and acrylic on cast metal framework (mandibular),Unlimited up to annual maximum,100%,100%
+Dentures,D5710,Rebase complete maxillary denture,Unlimited up to annual maximum,100%,100%
+Dentures,D5711,Rebase complete mandibular denture,Unlimited up to annual maximum,100%,100%
+Dentures,D5720,Rebase maxillary partial denture,Unlimited up to annual maximum,100%,100%
+Dentures,D5721,Rebase mandibular partial denture,Unlimited up to annual maximum,100%,100%
+Dentures rebase,D5725,Rebase hybrid prosthesis,Unlimited up to annual maximum,100%,100%
+Dentures,D5730,Reline complete maxillary denture (direct),Unlimited up to annual maximum,100%,100%
+Dentures,D5731,Reline complete mandibular denture (direct),Unlimited up to annual maximum,100%,100%
+Dentures,D5740,Reline maxillary partial denture (direct),Unlimited up to annual maximum,100%,100%
+Dentures,D5741,Reline mandibular partial denture (direct),Unlimited up to annual maximum,100%,100%
+Dentures,D5750,Reline complete maxillary denture (indirect),Unlimited up to annual maximum,100%,100%
+Dentures,D5751,Reline complete mandibular denture (indirect),Unlimited up to annual maximum,100%,100%
+Dentures,D5760,Reline maxillary partial denture (indirect),Unlimited up to annual maximum,100%,100%
+Dentures,D5761,Reline mandibular partial denture (indirect),Unlimited up to annual maximum,100%,100%
+Other removable prosthetic services,D5850,"Tissue conditioning, maxillary",Unlimited up to annual maximum,100%,100%
+Other removable prosthetic services,D5851,"Tissue conditioning, mandibular",Unlimited up to annual maximum,100%,100%
+Other removable prosthetic services,D5862,"Precision attachment, by report",Unlimited up to annual maximum,100%,100%
+Dentures,D5863,Overdenture – complete maxillary – natural tooth borne,Unlimited up to annual maximum,100%,100%
+Dentures,D5864,Overdenture – partial maxillary – natural tooth borne,Unlimited up to annual maximum,100%,100%
+Dentures,D5865,Overdenture – complete mandibular – natural tooth borne,Unlimited up to annual maximum,100%,100%
+Dentures,D5866,Overdenture – partial mandibular – natural tooth borne,Unlimited up to annual maximum,100%,100%
+Other removable prosthetic services,D5867,"Replacement of replaceable part of semi-precision or precision attachment of natural tooth borne prosthesis, per attachment",Unlimited up to annual maximum,100%,100%
+Dentures,D5876,Add metal substructure to acrylic complete denture – per arch,Unlimited up to annual maximum,100%,100%
+Bridges,D6205,Pontic – indirect resin based composite,Unlimited up to annual maximum,100%,100%
+Bridges,D6210,Pontic – cast high noble metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6211,Pontic – cast predominantly base metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6212,Pontic – cast noble metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6214,Pontic – titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Bridges,D6240,Pontic – porcelain fused to high noble metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6241,Pontic – porcelain fused to predominantly base metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6242,Pontic – porcelain fused to noble metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6243,Pontic – porcelain fused to titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Bridges,D6245,Pontic – porcelain/ceramic,Unlimited up to annual maximum,100%,100%
+Bridges,D6250,Pontic – resin with high noble metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6251,Pontic – resin with predominantly base metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6252,Pontic – resin with noble metal,Unlimited up to annual maximum,100%,100%
+Bridges,D6545,Retainer – cast metal for resin bonded fixed prosthesis,Unlimited up to annual maximum,100%,100%
+Bridges,D6548,Retainer – porcelain/ceramic for resin bonded fixed prosthesis,Unlimited up to annual maximum,100%,100%
+Bridges,D6549,Resin retainer – for resin bonded fixed prosthesis,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6600,"Retainer inlay – porcelain/ceramic, two",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6601,"Retainer inlay – porcelain/ceramic, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6602,"Retainer inlay – cast high noble metal, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6603,"Retainer inlay – cast high noble metal, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6604,"Retainer inlay – cast predominantly base metal, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6605,"Retainer inlay – cast predominantly base metal, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6606,"Retainer inlay – cast noble metal, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6607,"Retainer inlay – cast noble metal, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6608,"Retainer onlay – porcelain/ceramic, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6609,"Retainer onlay – porcelain/ceramic, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6610,"Retainer onlay – cast high noble metal, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6611,"Retainer onlay – cast high noble metal, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6612,"Retainer onlay – cast predominantly base metal, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6613,"Retainer onlay – cast predominantly base metal, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6614,"Retainer onlay – cast noble metal, two surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6615,"Retainer onlay – cast noble metal, three or more surfaces",Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6624,Retainer inlay – titanium,Unlimited up to annual maximum,100%,100%
+Inlay/Onlay restorations,D6634,Retainer onlay – titanium,Unlimited up to annual maximum,100%,100%
+Crowns,D6710,Retainer crown – indirect resin based composite,Unlimited up to annual maximum,100%,100%
+Crowns,D6720,Retainer crown – resin with high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6721,Retainer crown – resin with predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6722,Retainer crown – resin with noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6740,Retainer crown – porcelain/ceramic,Unlimited up to annual maximum,100%,100%
+Crowns,D6750,Retainer crown – porcelain fused to high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6751,Retainer crown – porcelain fused to predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6752,Retainer crown – porcelain fused to noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6753,Retainer crown – porcelain fused to titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Crowns,D6780,Retainer crown – 3/4 cast high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6781,Retainer crown – 3/4 cast predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6782,Retainer crown – 3/4 cast noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6783,Retainer crown – 3/4 porcelain/ceramic,Unlimited up to annual maximum,100%,100%
+Crowns,D6784,Retainer crown – 3/4 titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Crowns,D6790,Retainer crown – full cast high noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6791,Retainer crown – full cast predominantly base metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6792,Retainer crown – full cast noble metal,Unlimited up to annual maximum,100%,100%
+Crowns,D6794,Retainer crown – titanium and titanium alloys,Unlimited up to annual maximum,100%,100%
+Dentures,D6930,Re-cement or re-bond fixed partial denture,Unlimited up to annual maximum,100%,100%
+Dentures,D6980,Fixed partial denture repair necessitated by restorative material failure,Unlimited up to annual maximum,100%,100%
+Extractions,D7111,"Extraction, coronal remnants – primary tooth",Unlimited up to annual maximum,100%,100%
+"Extraction, erupted tooth or exposed root",D7140,elevation and/or forceps removal,Unlimited up to annual maximum,100%,100%
+Extractions,D7210,"Extraction, erupted tooth requiring removal of bone and/or sectioning of tooth, and including elevation of mucoperiosteal flap if indicated",Unlimited up to annual maximum,100%,100%
+Oral surgery,D7220,Removal of impacted tooth – soft tissue,Unlimited up to annual maximum,100%,100%
+Oral surgery,D7230,Removal of impacted tooth – partially bony,Unlimited up to annual maximum,100%,100%
+Oral surgery,D7240,Removal of impacted tooth – completely bony,Unlimited up to annual maximum,100%,100%
+Oral surgery,D7241,"Removal of impacted tooth – completely bony, with unusual surgical complications",Unlimited up to annual maximum,100%,100%
+Oral surgery,D7250,Removal of residual tooth roots (cutting procedure),Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7251,"Coronectomy – intentional partial tooth removal, impacted teeth only",Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7260,Oroantral fistula closure,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7261,Primary closure of a sinus perforation,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7284,Excisional biopsy of minor salivary glands,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7285,"Incisional biopsy of oral tissue – hard (bone, tooth)",Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7286,Incisional biopsy of oral tissue – soft,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7287,Exfoliative cytological sample collection,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7288,Brush biopsy – transepithelial sample collection,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7290,Surgical repositioning of teeth,Unlimited up to annual maximum,100%,100%
+Extractions,D7310,"Alveoloplasty in conjunction with extractions – four or more teeth or tooth spaces, per quadrant",Unlimited up to annual maximum,100%,100%
+Extractions,D7311,"Alveoloplasty in conjunction with extractions – one to three teeth or tooth spaces, per quadrant",Unlimited up to annual maximum,100%,100%
+Extractions,D7320,"Alveoloplasty not in conjunction with extractions – four or more teeth or tooth spaces, per quadrant",Unlimited up to annual maximum,100%,100%
+Extractions,D7321,"Alveoloplasty not in conjunction with extractions – one to three teeth or tooth spaces, per quadrant",Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7340,Vestibuloplasty – ridge extension (secondary epithelialization) Vestibuloplasty – ridge extension,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7350,"(including soft tissue grafts, muscle reattachment, revision of soft tissue attachment and management of",Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7450,hypertrophied and hyperplastic tissue) Removal of benign odontogenic cyst or tumor – lesion diameter up to 1.25 cm,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7451,Removal of benign odontogenic cyst or tumor – lesion diameter greater than 1.25 cm,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7509,Marsupialization of odontogenic cyst,Unlimited up to annual maximum,100%,100%
+Intraoral X-rays (inside the mouth),D7510,Incision and drainage of abscess – intraoral soft tissue,Unlimited up to annual maximum,100%,100%
+Intraoral X-rays (inside the mouth),D7511,Incision and drainage of abscess – intraoral soft tissue – complicated (includes drainage of multiple fascial spaces),Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7560,Maxillary sinusotomy for removal of,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7921,Collection and application of autologous blood concentrate product,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7955,Repair of maxillofacial soft and/or hard tissue defect,Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7957,"Guided tissue regeneration, edentulous area – non-resorbable barrier, per site",Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7961,Buccal/labial frenectomy (frenulectomy),Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7962,Lingual frenectomy (frenulectomy),Unlimited up to annual maximum,100%,100%
+Oral surgery (continued),D7963,Frenuloplasty,Unlimited up to annual maximum,100%,100%
+Adjunctive general services,D9110,Palliative treatment of dental pain – per visit,Unlimited up to annual maximum,100%,100%
+Anesthesia,D9222,"Administration of deep sedation/general anesthesia – first 15 minute increment, or any portion thereof",Unlimited up to annual maximum,100%,100%
+Anesthesia,D9223,"Administration of deep sedation/general anesthesia – each subsequent 15 minute increment, or any portion thereof",Unlimited up to annual maximum,100%,100%
+Anesthesia,D9239,"Administration of moderate sedation – intravenous – first 15 minute increment, or any portion thereof",Unlimited up to annual maximum,100%,100%
+Anesthesia,D9243,"Administration of moderate sedation – intravenous – each subsequent 15 minute increment, or any portion thereof",Unlimited up to annual maximum,100%,100%
+Anesthesia,D9246,"Administration of moderate sedation – non-intravenous parenteral – first 15 minute increment, or any portion thereof",Unlimited up to annual maximum,100%,100%
+Anesthesia,D9247,"Administration of moderate sedation – non-intravenous parenteral – each subsequent 15 minute increment, or any portion thereof",Unlimited up to annual maximum,100%,100%
+"exclusions, subject to clinical review)",D9230,Administration of nitrous oxide,Unlimited up to annual maximum,100%,100%
+Miscellaneous services,D9944,"Occlusal guard – hard appliance, full arch",Unlimited up to annual maximum,100%,100%
+Miscellaneous services,D9945,"Occlusal guard – soft appliance, full arch",Unlimited up to annual maximum,100%,100%
+Miscellaneous services,D9946,"Occlusal guard – hard appliance, partial arch",Unlimited up to annual maximum,100%,100%
+Miscellaneous services,D9951,Occlusal adjustment – limited,Unlimited up to annual maximum,100%,100%
