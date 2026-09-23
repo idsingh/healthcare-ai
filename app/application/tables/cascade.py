@@ -10,6 +10,7 @@ degrades to a different strategy rather than to zero rows.
 """
 from __future__ import annotations
 
+import inspect
 from typing import Protocol, Sequence
 
 from app.adapters.pdf.pdfplumber_source import PageView
@@ -30,17 +31,42 @@ class TableStrategy(Protocol):
 
 class TableCascade:
     def __init__(self, strategies: Sequence[TableStrategy] | None = None,
-                 llm_strategy: TableStrategy | None = None):
+                 llm_strategy: TableStrategy | None = None,
+                 fallbacks: Sequence[TableStrategy] | None = None):
         self._strategies = list(strategies) if strategies is not None else [
             RuledTableStrategy(), GeometricTableStrategy()]
-        self._llm = llm_strategy
+        # Fallbacks cost money or determinism, so they run only when the free,
+        # reproducible readers found nothing on a page that clearly has codes.
+        self._fallbacks = list(fallbacks or [])
+        if llm_strategy is not None:
+            self._fallbacks.append(llm_strategy)
 
-    def extract_page(self, page: PageView, carried: TableSchema | None = None) -> PageTable:
+    @staticmethod
+    def _needs_fallback(page: PageView) -> bool:
+        """Worth paying for: a page that clearly holds benefit codes but nothing
+        could read, or a page with no text layer at all (a scan)."""
+        return _page_has_codes(page) or not page.has_text
+
+    @property
+    def has_fallbacks(self) -> bool:
+        """True when a reader exists that can handle a page with no text layer."""
+        return bool(self._fallbacks)
+
+    def start_document(self) -> None:
+        """Per-document hook: fallbacks that meter themselves reset their budget."""
+        for fallback in self._fallbacks:
+            if hasattr(fallback, "reset_budget"):
+                fallback.reset_budget()
+
+    async def extract_page(self, page: PageView, carried: TableSchema | None = None) -> PageTable:
+        """Async because a fallback may call a remote service; the deterministic
+        strategies stay plain functions and are awaited only if they return an
+        awaitable, so both kinds implement the same interface."""
         best = PageTable(schema=carried, strategy="none")
         best_score = 0.0
         for strategy in self._strategies:
             try:
-                result = strategy.extract(page, carried)
+                result = await _maybe_await(strategy.extract(page, carried))
             except Exception as exc:                     # a broken page must not kill the document
                 log.warning("table strategy failed", extra={
                     "strategy": strategy.name, "page": page.number, "error": str(exc)[:200]})
@@ -51,19 +77,26 @@ class TableCascade:
             if score >= GOOD_ENOUGH:
                 break
 
-        if best_score == 0.0 and self._llm is not None and _page_has_codes(page):
-            log.info("falling back to llm table reader", extra={"page": page.number})
-            try:
-                fallback = self._llm.extract(page, carried)
-                if fallback.score() > 0:
-                    best = fallback
-            except Exception as exc:
-                log.warning("llm table strategy failed", extra={
-                    "page": page.number, "error": str(exc)[:200]})
+        if best_score == 0.0 and self._fallbacks and self._needs_fallback(page):
+            for fallback in self._fallbacks:
+                log.info("falling back", extra={"page": page.number, "strategy": fallback.name})
+                try:
+                    result = await _maybe_await(fallback.extract(page, carried))
+                except Exception as exc:
+                    log.warning("fallback strategy failed", extra={
+                        "page": page.number, "strategy": fallback.name, "error": str(exc)[:200]})
+                    continue
+                if result.score() > 0:
+                    return result
+        
 
         log.debug("page read", extra={"page": page.number, "strategy": best.strategy,
                                       "rows": len(best.rows), "score": round(best_score, 2)})
         return best
+
+
+async def _maybe_await(value):
+    return await value if inspect.isawaitable(value) else value
 
 
 def _page_has_codes(page: PageView) -> bool:

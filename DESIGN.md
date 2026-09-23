@@ -530,3 +530,65 @@ cascade:
 The one case for going service-first is a corpus that is mostly scans, where OCR is the whole
 problem and our geometry has nothing to work with. That is a business input, not a design
 preference: it is measured by what share of incoming guides have a text layer.
+
+---
+
+## 15. The document-AI fallback, and the PDF reader underneath
+
+### Where the fallback sits
+
+`MistralDocumentAIStrategy` implements the same `extract(page, carried)` contract as the
+deterministic readers and is registered as a **fallback** in `TableCascade`. It is asked for a
+page only when:
+
+- every deterministic strategy scored zero on that page, **and**
+- the page either clearly holds benefit codes, or has no text layer at all (a scan).
+
+So it never touches the hot path. On the three supplied guides it is called zero times.
+
+| Concern | How it is handled |
+|---|---|
+| Cost | One **page** is sent, not the document; `document_ai_max_pages` caps spend per document (default 25) and resets per file |
+| Exposure | Only the page that could not be read leaves the process; off by default (`EXTRACT_DOCUMENT_AI_PROVIDER=none`) |
+| Trust | Every returned row is re-verified locally: the code must match the CDT shape, and on a page that *does* have text it must appear on that page |
+| Scans | Rows from a page with no text layer cannot be cross-checked, so the result carries `dental_guide.rows_not_locally_verifiable` |
+| Failure | Transient errors retry with backoff; auth errors fail fast; either way the page degrades to zero rows and the document still completes |
+| Vendor shape | The request/response format lives in one module. Swapping Mistral for Azure Document Intelligence is a second adapter, not a redesign |
+
+Enable it with:
+
+```bash
+export EXTRACT_DOCUMENT_AI_PROVIDER=mistral
+export EXTRACT_MISTRAL_API_KEY=...
+export EXTRACT_DOCUMENT_AI_MAX_PAGES=25
+```
+
+Without it, a scanned PDF is refused with *"OCR is required"*. With it, the same PDF is read
+and flagged. That is the whole behavioural difference.
+
+### Why pdfplumber, and the open-source alternatives
+
+pdfplumber (pdfminer.six underneath) was chosen because this problem is **geometry**, not OCR:
+it gives per-word bounding boxes, ruling lines and the filled rectangles that reveal merged
+cells — the three signals the geometric strategy runs on. It is pure Python, MIT licensed,
+and deterministic.
+
+| Library | What it adds | Why not the default here |
+|---|---|---|
+| **PyMuPDF (fitz)** | 5–10× faster, excellent text and geometry | AGPL-3.0 unless you buy a licence — a real constraint for a commercial product |
+| **Docling** (IBM) | Layout and table-structure ML models, reading order, OCR, markdown/JSON out; strong on complex tables | Heavyweight (torch model downloads), slower per page, non-deterministic across versions; better as a *strategy* than as the base reader |
+| **Camelot / Tabula** | Focused table extraction (`lattice` / `stream`) | Camelot's stream mode is roughly what our geometric strategy does, with less control over merged cells; Tabula needs a JVM |
+| **Unstructured** | Many formats, chunking for RAG pipelines | Optimised for RAG text chunks, not for cell-accurate tables |
+| **Marker / Surya** | High-quality PDF→markdown, strong OCR | Licence restrictions for commercial use; GPU-oriented |
+
+The honest position: **Docling is the strongest open-source candidate to sit beside the
+document-AI fallback**, and it slots into exactly the same seam — implement `extract(page,
+carried)`, register it in the cascade, let the score decide. It would cover scanned and
+exotic-layout pages without sending anything to a vendor, at the cost of model weights, GPU-ish
+latency and version-to-version variability. That is a deployment trade-off (privacy and cost
+versus footprint and reproducibility), not an architectural one, which is the point of keeping
+the reader behind a port.
+
+What would not change either way: column mapping, merged-cell handling, benefit-group naming,
+the validators and the CSV contract. That is where the domain lives, and no extraction library
+provides it.

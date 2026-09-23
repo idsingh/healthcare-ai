@@ -99,6 +99,16 @@ is missing or contradicts its column, then by the mapping carried from the last 
 a header. See `DESIGN.md` §13, and §14 for how this compares with Mistral Document AI and
 Azure AI Document Intelligence.
 
+## Pages nothing deterministic can read
+
+An optional document-AI fallback (`EXTRACT_DOCUMENT_AI_PROVIDER=mistral`) reads pages where
+every deterministic strategy scored zero — a scanned page, or a layout the geometry cannot
+segment. It sends one page rather than the document, is capped per document, and everything it
+returns is re-verified locally: the code must match the CDT shape and, on a page that has text,
+must appear on that page. Rows from a page with no text layer carry the flag
+`dental_guide.rows_not_locally_verifiable`, because there is nothing local to check them
+against. It was not needed for any of the three guides here.
+
 ## Validation the extractor runs on itself
 
 Recorded per document in `extraction_report.json`:

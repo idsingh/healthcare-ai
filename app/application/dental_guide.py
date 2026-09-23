@@ -83,7 +83,7 @@ class DentalGuidePipeline:
         started, t0 = utcnow(), time.perf_counter()
 
         self._column_cache.clear()
-        rows, document = self._read_pages(path)
+        rows, document = await self._read_pages(path)
         rows = self._dedupe(rows)
         flags = await self._assign_groups(rows)
         result = DentalGuideResult(
@@ -104,17 +104,18 @@ class DentalGuidePipeline:
         return result
 
     # -- read ---------------------------------------------------------------
-    def _read_pages(self, path: Path) -> tuple[list[BenefitRow], DentalGuideDocument]:
+    async def _read_pages(self, path: Path) -> tuple[list[BenefitRow], DentalGuideDocument]:
         schema: TableSchema | None = None
         best_mapping: dict[Col, int] = {}
         best_labels: list[str] = []
         rows: list[BenefitRow] = []
         strategies: dict[str, int] = {}
-        pages = pages_with_rows = 0
+        pages = pages_with_rows = unverifiable = 0
 
-        for page in PdfPlumberSource(path).pages():
+        self._cascade.start_document()
+        for page in PdfPlumberSource(path, require_text=not self._cascade.has_fallbacks).pages():
             pages += 1
-            table = self._cascade.extract_page(page, schema)
+            table = await self._cascade.extract_page(page, schema)
             schema = table.schema or schema
             # A guide with no header row anywhere still yields rows: the columns
             # are then identified from their contents.
@@ -132,11 +133,20 @@ class DentalGuidePipeline:
                     best_mapping, best_labels = mapping, list(labels)
                 for raw in segment.rows:
                     row = self._to_row(raw, mapping, table.strategy, path.name)
-                    if row and row.dental_code in page_text:   # the code must be on the page
-                        rows.append(row)
+                    if not row:
+                        continue
+                    # The code must be on the page. A page with no text layer (a
+                    # scan read by the document-AI fallback) cannot be checked
+                    # this way; those rows are flagged instead.
+                    if page_text and row.dental_code not in page_text:
+                        continue
+                    if not page_text:
+                        unverifiable += 1
+                    rows.append(row)
 
         document = DentalGuideDocument(
             file_name=path.name, pages=pages, pages_with_rows=pages_with_rows,
+            rows_without_text_layer=unverifiable,
             column_labels=best_labels or (schema.labels if schema else []),
             mapped_fields=[f.value for f in best_mapping],
             unmapped_columns=unmapped(best_labels), strategies=strategies)
@@ -287,6 +297,11 @@ class DentalGuidePipeline:
             flags.append(Flag(rule="dental_guide.descriptions_missing", severity=Severity.warn,
                               message=f"{missing_description} of {len(rows)} rows have no description",
                               path="/rows"))
+        if doc.rows_without_text_layer:
+            flags.append(Flag(rule="dental_guide.rows_not_locally_verifiable", severity=Severity.warn,
+                              message=f"{doc.rows_without_text_layer} rows come from pages with no "
+                                      "text layer, so their codes could not be checked against the "
+                                      "page itself", path="/rows"))
         duplicates = len(rows) - len({r.dental_code for r in rows})
         if duplicates:
             flags.append(Flag(rule="dental_guide.repeated_codes", severity=Severity.info,

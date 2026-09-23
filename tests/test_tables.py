@@ -127,15 +127,15 @@ def test_ruled_strategy_reads_headings_and_rows():
     assert table.rows[0].cells[2].startswith("2 of (D0120)")
 
 
-def test_cascade_prefers_the_strategy_that_reads_the_page_better():
+async def test_cascade_prefers_the_strategy_that_reads_the_page_better():
     good = page([], tables=[[
         ["Code", "Description", "Frequency"],
         ["D0120", "Periodic oral evaluation", "2 per year"]]])
-    result = TableCascade().extract_page(good)
+    result = await TableCascade().extract_page(good)
     assert result.strategy == "ruled" and len(result.rows) == 1
 
 
-def test_cascade_survives_a_strategy_that_raises():
+async def test_cascade_survives_a_strategy_that_raises():
     class Exploding:
         name = "exploding"
 
@@ -145,10 +145,10 @@ def test_cascade_survives_a_strategy_that_raises():
     view = page([], tables=[[["Code", "Description", "Frequency"],
                              ["D0120", "Periodic oral evaluation", "2 per year"]]])
     cascade = TableCascade(strategies=[Exploding(), RuledTableStrategy()])
-    assert len(cascade.extract_page(view).rows) == 1
+    assert len((await cascade.extract_page(view)).rows) == 1
 
 
-def test_cascade_falls_back_to_the_llm_reader_when_nothing_deterministic_works():
+async def test_cascade_falls_back_to_the_llm_reader_when_nothing_deterministic_works():
     class Fallback:
         name = "llm"
 
@@ -160,7 +160,7 @@ def test_cascade_falls_back_to_the_llm_reader_when_nothing_deterministic_works()
 
     view = page(words([("D0120", 20, 60, 400)]))          # a code, but no readable table
     cascade = TableCascade(strategies=[], llm_strategy=Fallback())
-    result = cascade.extract_page(view)
+    result = await cascade.extract_page(view)
     assert result.strategy == "llm" and len(result.rows) == 1
 
 

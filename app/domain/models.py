@@ -289,6 +289,7 @@ class DentalGuideDocument(Base):
     file_name: str
     pages: int = 0
     pages_with_rows: int = 0
+    rows_without_text_layer: int = 0
     column_labels: list[str] = []
     mapped_fields: list[str] = []
     unmapped_columns: list[str] = []

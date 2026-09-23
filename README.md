@@ -115,10 +115,24 @@ reordered columns, invented header wording, or no header at all still extracts (
 document-specific — `tests/test_generalization.py` fails the build if a carrier, plan or file
 name appears anywhere in `app/`.
 
-PDF reading is `pdfplumber` (pdfminer.six underneath), behind one adapter. There is no OCR: a
-scanned PDF is refused with a reason rather than silently yielding an empty CSV. `DESIGN.md`
-§14 compares this with Mistral Document AI and Azure AI Document Intelligence and says where
-each belongs.
+PDF reading is `pdfplumber` (pdfminer.six underneath), behind one adapter, because this problem
+is geometry rather than OCR: word boxes, ruling lines and the rectangles that reveal merged
+cells. `DESIGN.md` §15 compares it with PyMuPDF, Docling, Camelot and friends.
+
+**Document-AI fallback (optional).** `MistralDocumentAIStrategy` is registered in the same
+cascade and is asked for a page only when every deterministic reader scored zero — an exotic
+layout, or a scanned page with no text layer. One page is sent, not the document; spend is
+capped per document; every returned row is re-verified locally before it can reach the CSV.
+Off by default:
+
+```bash
+export EXTRACT_DOCUMENT_AI_PROVIDER=mistral
+export EXTRACT_MISTRAL_API_KEY=...
+```
+
+Without it a scanned PDF is refused with *"OCR is required"*; with it the same PDF is read and
+flagged `rows_not_locally_verifiable`. `DESIGN.md` §14 compares Mistral and Azure Document
+Intelligence, §15 covers the fallback's cost and trust controls.
 
 ## Never trusting the model
 

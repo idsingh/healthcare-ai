@@ -21,6 +21,14 @@ class Settings(BaseSettings):
     seed: int = 7
     llm_timeout_seconds: float = 60.0
 
+    # Document AI fallback (used only when deterministic table readers fail)
+    document_ai_provider: str = "none"               # none | mistral
+    mistral_api_key: str | None = None
+    mistral_base_url: str = "https://api.mistral.ai/v1"
+    mistral_ocr_model: str = "mistral-ocr-latest"
+    document_ai_timeout_seconds: float = 120.0
+    document_ai_max_pages: int = 25                  # cost ceiling per document
+
     # Reliability
     max_llm_attempts: int = 3                        # transient retries per call
     max_repair_attempts: int = 1                     # schema-repair round trips

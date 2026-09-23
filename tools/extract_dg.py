@@ -17,7 +17,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from app.api.deps import build_llm                          # noqa: E402
+from app.api.deps import build_cascade, build_llm            # noqa: E402
 from app.application.csv_export import COLUMNS, write_csv   # noqa: E402
 from app.application.dental_guide import DentalGuidePipeline  # noqa: E402
 from app.config import get_settings                         # noqa: E402
@@ -51,7 +51,7 @@ async def main() -> int:
         return 2
 
     out_dir = Path(args.out_dir)
-    pipeline = DentalGuidePipeline(settings, build_llm(settings))
+    pipeline = DentalGuidePipeline(settings, build_llm(settings), cascade=build_cascade(settings))
     combined, report, failed = [], [], 0
 
     for path in files:
