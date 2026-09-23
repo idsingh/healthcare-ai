@@ -604,7 +604,7 @@ holds benefit codes or has no text layer at all.
 |---|---|
 | Cost | The document is converted **once** and cached per page — conversion is the expensive part, so per-page conversion would repeat it for every page; `document_ai_max_pages` bounds how many pages one document may claim |
 | Latency | Conversion runs in a worker thread (`asyncio.to_thread`), so the API event loop keeps serving |
-| Trust | Every returned row is re-verified locally. The code must match the CDT shape and, on a page that has text, be on that page; every other cell is checked against the page text too and blanked when it is not there, so an invented frequency or percentage cannot reach the CSV |
+| Trust | Every returned row is re-verified locally. The code must match the CDT shape and, on a page that has text, be on that page; every other cell is checked against the page's words and blanked when they are not there. Word coverage, not substring: a flattened two-column page splits a description in the page text, so a contiguous match would reject text that is genuinely present — this was caught by running docling against a real guide page, where the stricter rule silently blanked 17 correct descriptions |
 | Scans | Rows from a page with no text layer cannot be cross-checked, so the result carries `dental_guide.rows_not_locally_verifiable` |
 | Version drift | Docling's table export API has changed across versions, so the adapter accepts the dataframe export, the cell grid, or the markdown export, in that order |
 | Failure | A conversion error raises `DoclingUnavailable`, the cascade logs it, that page yields zero rows, and the document still completes. The failure is remembered per document, so a broken model is not re-run for every page |

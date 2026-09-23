@@ -17,6 +17,7 @@ for every page of a scan.
 from __future__ import annotations
 
 import asyncio
+import re
 from collections import OrderedDict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -42,6 +43,30 @@ class DoclingUnavailable(LLMPermanentError):
 class DoclingBudgetExhausted(DoclingUnavailable):
     """This document has used its page allowance; later pages are not read."""
     code = "docling_budget_exhausted"
+
+
+WORD = re.compile(r"[a-z0-9]{3,}")
+MIN_WORD_SUPPORT = 0.6      # share of a cell's words that must be on the page
+
+
+def _tokens(text: str) -> set[str]:
+    return set(WORD.findall(text.lower()))
+
+
+def _supported_by(cell: str, page_tokens: set[str]) -> bool:
+    """Is this cell's text actually on the page?
+
+    Checked by word coverage, not by substring: a two-column table flattened
+    into reading order splits a description across the page text ('Periodic oral
+    evaluation - established' ... 'patient'), so a contiguous match would reject
+    text that is genuinely there. Invented text still fails, because its words
+    are not on the page at all.
+    """
+    words = _tokens(collapse(cell))
+    if not words:
+        return True
+    present = sum(1 for w in words if w in page_tokens)
+    return present / len(words) >= MIN_WORD_SUPPORT
 
 
 @dataclass
@@ -275,6 +300,7 @@ class DoclingTableStrategy:
         CSV. A page with no text layer has nothing to check against; those rows
         are flagged downstream instead."""
         page_text = collapse(page.text) if page.has_text else ""
+        page_tokens = _tokens(page_text)
         kept = []
         for row in segment.rows:
             code = row.code
@@ -284,12 +310,11 @@ class DoclingTableStrategy:
                 log.warning("docling row dropped: code not on the page", extra={
                     "page": page.number, "code": code})
                 continue
-            if page_text:
+            if page_tokens:
                 for i, cell in enumerate(row.cells):
-                    text = collapse(cell)
-                    if len(text) > 3 and not find_code(text) and text not in page_text:
-                        log.warning("docling cell dropped: text not on the page", extra={
-                            "page": page.number, "code": code, "cell": text[:40]})
+                    if not _supported_by(cell, page_tokens):
+                        log.warning("docling cell dropped: words not on the page", extra={
+                            "page": page.number, "code": code, "cell": collapse(cell)[:40]})
                         row.cells[i] = ""
             kept.append(row)
         return TableSegment(schema=segment.schema, rows=kept)

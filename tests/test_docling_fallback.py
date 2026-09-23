@@ -331,3 +331,20 @@ async def test_a_failed_conversion_is_not_retried_for_every_page(tmp_path):
         with pytest.raises(DoclingUnavailable):
             await reader.extract(page_of(path, number=number))
     assert converter.calls == 1                                # the failure is remembered
+
+
+async def test_cell_text_is_verified_by_word_coverage_not_contiguity(tmp_path):
+    """A two-column table flattened into reading order splits a description in
+    the page text; a contiguous match would reject text that is genuinely there,
+    while invented text must still be rejected."""
+    rows = [["D0120", "Periodic oral evaluation established patient", "2 per year", "", ""],
+            ["D0140", "Dental implants covered in full", "2 per year", "", ""]]
+    reader = strategy(FakeConverter([FakeTable(HEADER, rows)]))
+    words = [Word(text=t, x0=0, x1=10, top=0, bottom=10, bold=False) for t in
+             ("D0120", "Periodic", "oral", "evaluation", "established", "D0140", "100%",
+              "patient", "2", "per", "year")]
+    table = await reader.extract(page_of(scanned_pdf(tmp_path / "s.pdf"), words=words))
+
+    by_code = {r.code: r for r in table.rows}
+    assert by_code["D0120"].cells[1] == "Periodic oral evaluation established patient"  # split, kept
+    assert by_code["D0140"].cells[1] == ""                     # invented, blanked
