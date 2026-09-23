@@ -643,3 +643,63 @@ cells — the three signals the geometric strategy runs on. It is MIT, pure Pyth
 Under any reader, what does not change: column mapping, merged-cell handling, benefit-group
 naming, the validators and the CSV contract. That is where the domain lives, and no extraction
 library provides it.
+
+---
+
+## 16. When to stop maintaining this and buy a service
+
+The deterministic readers are worth maintaining while they carry the traffic. They stop being
+worth it at a measurable point, and this section names that point in advance so the decision is
+made on evidence rather than on whoever is tired of regex that week.
+
+### The ladder
+
+```
+1. deterministic readers        every page, free, ~56 ms, reproducible, no egress
+        ↓ page scored zero
+2. Docling, in-process          scans and exotic layouts; ~13 s/page, no egress, no bill
+        ↓ still failing, or the mix has shifted
+3. hosted document AI           Azure Document Intelligence / Mistral Document AI
+```
+
+Rung 2 can also be invoked deliberately rather than on failure — `EXTRACT_DOCUMENT_AI_MODE=always`
+(or `--reader docling`) makes Docling the primary reader and leaves the deterministic strategies
+as the backup. That is the right setting for a scan-heavy corpus, and it costs nothing to flip.
+
+### Triggers for rung 3
+
+Escalate when any of these holds for a month, measured from data the service already emits
+(`extraction_report.json` per document, plus the validation flags):
+
+| Signal | Where it comes from | Threshold |
+|---|---|---|
+| Share of pages needing the fallback | `strategies` per document in the run report | **> 20%** sustained — the deterministic layer is no longer carrying the traffic |
+| Pages nothing could read | `dental_guide.pages_unreadable` | **> 2%** of pages |
+| Emergency patches to `geometric.py` / `mapping.py` | git history | **> 1 per month** — edge cases are arriving faster than they are being retired |
+| Scanned share of intake | `rows_without_text_layer` | **> 30%** — geometry has nothing to work with on most input |
+| Fallback wall-clock | run duration | Docling at ~13 s/page makes batch windows miss their SLA |
+
+Any single trigger is a discussion; two at once is the decision.
+
+### What changes, and what does not
+
+Escalating is an adapter, not a redesign: a hosted reader implements the same
+`extract(page, carried)` contract and registers in the same cascade, scored the same way. What
+must survive the switch — and what no vendor supplies — is the part that encodes the customer's
+domain:
+
+- the canonical column mapping (`Periodicity` is a frequency; `Non-Participating` is
+  out-of-network),
+- merged-cell semantics, benefit-group naming, the `-` convention for "not stated",
+- the five validators and the CSV contract,
+- local verification of whatever the reader returns.
+
+### What escalation costs, stated plainly
+
+A hosted service buys accuracy on input we cannot read and removes the maintenance of layout
+edge cases. It costs: pages leaving the boundary (BAA, vendor review, data-residency questions
+for member-facing plan documents), a per-page bill that grows with volume, output that can
+change under you between model versions, and an outage in someone else's system becoming an
+outage in this pipeline. Those are acceptable trade-offs once the triggers fire — and only
+then, because today the deterministic readers handle every supplied guide at 56 ms a page with
+nothing leaving the process.

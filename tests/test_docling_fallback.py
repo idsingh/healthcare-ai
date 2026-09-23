@@ -348,3 +348,41 @@ async def test_cell_text_is_verified_by_word_coverage_not_contiguity(tmp_path):
     by_code = {r.code: r for r in table.rows}
     assert by_code["D0120"].cells[1] == "Periodic oral evaluation established patient"  # split, kept
     assert by_code["D0140"].cells[1] == ""                     # invented, blanked
+
+
+async def test_document_ai_mode_always_reads_every_page_with_the_fallback(tmp_path):
+    """A scan-heavy corpus can invert the order: the fallback becomes the primary
+    reader and the deterministic strategies become the backup."""
+    converter = FakeConverter([FakeTable(HEADER, BODY)])
+    ruled = PageView(number=1, width=612.0, height=792.0, words=[], text="D0120 D0274",
+                     ruled_tables=[[["Code", "Description", "Frequency"],
+                                    ["D0120", "Periodic oral evaluation", "2 per year"]]],
+                     rects=[], source_path=scanned_pdf(tmp_path / "s.pdf"))
+
+    normal = await TableCascade(fallbacks=[strategy(converter)]).extract_page(ruled)
+    assert normal.strategy == "ruled" and converter.calls == 0
+
+    inverted = await TableCascade(fallbacks=[strategy(converter)],
+                                  fallback_first=True).extract_page(ruled)
+    assert inverted.strategy == "docling" and converter.calls == 1
+
+
+async def test_deterministic_readers_still_catch_a_failing_primary(tmp_path):
+    """With the order inverted, a broken fallback must not lose the page."""
+    ruled = PageView(number=1, width=612.0, height=792.0, words=[], text="D0120",
+                     ruled_tables=[[["Code", "Description", "Frequency"],
+                                    ["D0120", "Periodic oral evaluation", "2 per year"]]],
+                     rects=[], source_path=scanned_pdf(tmp_path / "s.pdf"))
+    cascade = TableCascade(fallbacks=[strategy(FakeConverter(fail=RuntimeError("boom")))],
+                           fallback_first=True)
+    result = await cascade.extract_page(ruled)
+
+    assert result.strategy == "ruled" and len(result.rows) == 1
+
+
+def test_cli_reader_flag_switches_the_mode():
+    from app.config import Settings
+
+    assert Settings().document_ai_mode == "fallback"
+    forced = Settings(document_ai_provider="docling", document_ai_mode="always")
+    assert forced.document_ai_mode == "always"

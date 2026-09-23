@@ -38,11 +38,17 @@ async def main() -> int:
     ap.add_argument("-o", "--out-dir", default="output/dental_guides")
     ap.add_argument("--missing", default="-", help="placeholder for values the guide does not state")
     ap.add_argument("--no-llm", action="store_true", help="skip model-assisted benefit-group naming")
+    ap.add_argument("--reader", choices=("auto", "docling"), default="auto",
+                    help="auto: deterministic readers, docling only where they fail (default). "
+                         "docling: read every page with docling first — for scan-heavy input")
     args = ap.parse_args()
 
     settings = get_settings()
     if args.no_llm:
         settings = settings.model_copy(update={"dg_llm_grouping": False})
+    if args.reader == "docling":
+        settings = settings.model_copy(update={"document_ai_provider": "docling",
+                                               "document_ai_mode": "always"})
     configure_logging(settings.log_level, json_logs=False)
 
     files = collect(args.paths)

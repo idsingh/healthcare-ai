@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     # Docling runs locally: no page leaves the process and there is no per-page bill,
     # at the cost of a large dependency and seconds-per-page latency.
     document_ai_provider: str = "none"               # none | docling
+    document_ai_mode: str = "fallback"               # fallback | always
     docling_ocr: bool = True                         # needed for scans; slower
     docling_table_mode: str = "accurate"             # accurate | fast
     docling_artifacts_path: str | None = None        # pre-downloaded models for offline use

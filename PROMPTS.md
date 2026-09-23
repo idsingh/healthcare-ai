@@ -139,6 +139,22 @@ in-process once the trade-off was examined properly: in a healthcare pipeline, n
 member-facing plan document to a third party and not carrying a per-page bill outweigh the
 convenience of an API key. `DESIGN.md` §15 records that decision, including what it costs.
 
+## 13. Invocation policy, escalation path and the reviewer guide
+
+> We can have a mix of digital text + docling so ideally we should call it only if as a fallback
+> or as per the requirement and if we still face issues then document that mistral AI or document
+> AI can serve better than maintaining a solution with edge cases.
+
+> In the end i want you to include the outputs and inputs to the new requirements in the repo and
+> document similar to how it was done in previous exercise along with the guide for reviewer.
+> Make sure everything is documented in the repo around technical decisions and documentation
+
+Produced: `EXTRACT_DOCUMENT_AI_MODE=always` / `--reader docling` so the fallback can be invoked
+deliberately rather than only on failure; `DESIGN.md` §16, which names the measurable point at
+which a hosted service beats maintaining layout edge cases; and
+[`REVIEWER_GUIDE.md`](REVIEWER_GUIDE.md), mapping every requirement from both exercises to the
+file, test and output that satisfies it.
+
 ## Corrections made along the way
 
 Worth reading, because they are the parts a demo usually hides. Each was caught by a test or

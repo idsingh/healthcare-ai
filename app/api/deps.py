@@ -61,7 +61,10 @@ def build_document_ai(settings: Settings):
 
 def build_cascade(settings: Settings) -> TableCascade:
     fallback = build_document_ai(settings)
-    return TableCascade(fallbacks=[fallback] if fallback else None)
+    if fallback and settings.document_ai_mode == "always":
+        log.info("document ai runs first; deterministic readers are the backup")
+    return TableCascade(fallbacks=[fallback] if fallback else None,
+                        fallback_first=bool(fallback) and settings.document_ai_mode == "always")
 
 
 def build_service(settings: Settings | None = None, llm: LLMClient | None = None) -> ExtractionService:

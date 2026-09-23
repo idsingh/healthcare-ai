@@ -1,5 +1,8 @@
 # Dental Guide extraction — output
 
+> Reviewing the whole submission? [`../../REVIEWER_GUIDE.md`](../../REVIEWER_GUIDE.md) maps every
+> requirement from both exercises to the file, test and output that satisfies it.
+
 CSV extracted from the three Dental Guide PDFs in [`../../data/dental_guides`](../../data/dental_guides),
 in the column format of the customer's `Sample_output.csv`.
 

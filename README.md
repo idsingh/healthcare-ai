@@ -23,7 +23,10 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 .venv/bin/python -m tools.extract_dg data/dental_guides       # PDFs     -> output/dental_guides/*.csv
 ```
 
-**Start here if you are reviewing this:**
+**Reviewing this?** [`REVIEWER_GUIDE.md`](REVIEWER_GUIDE.md) maps every requirement from both
+exercises to the file, test and output that satisfies it, and lists the known deviations.
+
+**Start here for the output itself:**
 [`output/dental_guides/README.md`](output/dental_guides/README.md) for the Dental Guide CSVs
 (782 rows from three differently-laid-out PDFs, how each column was produced, and where our
 reading differs from the supplied sample), or [`output/README.md`](output/README.md) for the
@@ -131,9 +134,14 @@ pip install -r requirements-docling.txt
 export EXTRACT_DOCUMENT_AI_PROVIDER=docling
 ```
 
+`EXTRACT_DOCUMENT_AI_MODE=always` (or `--reader docling`) inverts the order for a scan-heavy
+corpus: Docling reads every page and the deterministic strategies become the backup.
+
 Without it a scanned PDF is refused with *"OCR is required"*; with it the same PDF is read and
 flagged `rows_not_locally_verifiable`. `DESIGN.md` §15 records why Docling rather than a hosted
-document-AI service, and compares pdfplumber with PyMuPDF, Camelot and friends.
+document-AI service, §16 says at which measured point a hosted service becomes the better trade
+instead of maintaining layout edge cases, and §15 compares pdfplumber with PyMuPDF, Camelot and
+friends.
 
 ## Never trusting the model
 

@@ -32,7 +32,8 @@ class TableStrategy(Protocol):
 class TableCascade:
     def __init__(self, strategies: Sequence[TableStrategy] | None = None,
                  llm_strategy: TableStrategy | None = None,
-                 fallbacks: Sequence[TableStrategy] | None = None):
+                 fallbacks: Sequence[TableStrategy] | None = None,
+                 fallback_first: bool = False):
         self._strategies = list(strategies) if strategies is not None else [
             RuledTableStrategy(), GeometricTableStrategy()]
         # Fallbacks cost money or determinism, so they run only when the free,
@@ -40,6 +41,10 @@ class TableCascade:
         self._fallbacks = list(fallbacks or [])
         if llm_strategy is not None:
             self._fallbacks.append(llm_strategy)
+        # Normally the fallback runs only where the deterministic readers fail.
+        # A corpus that is mostly scans can invert that with document_ai_mode=always,
+        # keeping the deterministic readers as the backup instead.
+        self._fallback_first = fallback_first
 
     @staticmethod
     def _needs_fallback(page: PageView) -> bool:
@@ -62,6 +67,17 @@ class TableCascade:
         """Async because a fallback may call a remote service; the deterministic
         strategies stay plain functions and are awaited only if they return an
         awaitable, so both kinds implement the same interface."""
+        if self._fallback_first and self._fallbacks:
+            for fallback in self._fallbacks:
+                try:
+                    result = await _maybe_await(fallback.extract(page, carried))
+                except Exception as exc:
+                    log.warning("primary reader failed; falling back to deterministic", extra={
+                        "page": page.number, "strategy": fallback.name, "error": str(exc)[:200]})
+                    continue
+                if result.rows:
+                    return result
+
         best = PageTable(schema=carried, strategy="none")
         best_score = 0.0
         for strategy in self._strategies:
