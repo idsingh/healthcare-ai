@@ -84,6 +84,21 @@ The one description difference is D1110, where the PDF reads
 into the benefit group and keep the parenthetical as the description, which is what the sample
 does too — the remaining gap is only in where the trailing text is cut.
 
+## Layouts it has never seen
+
+`tests/test_unseen_layouts.py` builds PDFs with hazards none of these three guides have, and
+asserts the outcome. Current results: reordered columns with unseen header wording, dollar
+copays instead of percentages, no header row at all, a landscape page with extra columns, an
+unruled table with invented wording, and two differently-shaped tables on one page all extract
+**every row with every column filled**. A scanned page with no text layer is refused with
+*"OCR is required"*, and a booklet with no benefit table produces zero rows plus a
+`dental_guide.no_rows` error rather than an empty CSV that looks successful.
+
+How: columns are identified by header vocabulary first, then by cell contents when the header
+is missing or contradicts its column, then by the mapping carried from the last page that had
+a header. See `DESIGN.md` §13, and §14 for how this compares with Mistral Document AI and
+Azure AI Document Intelligence.
+
 ## Validation the extractor runs on itself
 
 Recorded per document in `extraction_report.json`:

@@ -10,7 +10,8 @@ import re
 
 from app.adapters.pdf.pdfplumber_source import PageView
 from app.application.tables.geometric import HEADER_TOKENS
-from app.application.tables.models import Column, PageTable, RawRow, TableSchema, find_code
+from app.application.tables.models import (
+    Column, PageTable, RawRow, TableSchema, TableSegment, find_code)
 
 
 def _looks_like_header(cells: list[str]) -> bool:
@@ -30,8 +31,14 @@ class RuledTableStrategy:
 
     def extract(self, page: PageView, carried: TableSchema | None = None) -> PageTable:
         schema = carried
-        rows: list[RawRow] = []
         group = carried.group if carried else None
+        segments: list[TableSegment] = []
+        rows: list[RawRow] = []
+
+        def close() -> None:
+            if rows:
+                segments.append(TableSegment(schema=schema, rows=list(rows)))
+                rows.clear()
 
         for table in page.ruled_tables:
             for raw in table:
@@ -39,6 +46,7 @@ class RuledTableStrategy:
                 if not any(cells):
                     continue
                 if _looks_like_header(cells):
+                    close()                       # a new header starts a new table
                     schema = TableSchema(
                         columns=[Column(label=c, left=i, right=i + 1) for i, c in enumerate(cells)],
                         source=self.name, group=group)
@@ -48,7 +56,9 @@ class RuledTableStrategy:
                     continue
                 if find_code(cells[0] if cells else ""):
                     rows.append(RawRow(cells=cells, group=group, page=page.number, y=len(rows)))
+        close()
 
         if schema:
             schema.group = group
-        return PageTable(schema=schema, rows=rows, strategy=self.name)
+        return PageTable(schema=schema, rows=[r for s in segments for r in s.rows],
+                         strategy=self.name, segments=segments or [TableSegment(schema, [])])

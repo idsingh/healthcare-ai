@@ -442,3 +442,91 @@ of one reader that must always win; column mapping by vocabulary rather than pos
 carried header so continuation pages keep working; per-document validation flags that say
 *which* column was missing rather than emitting a silently empty CSV; and a test that fails the
 build if any document-specific identifier appears in `app/`.
+
+---
+
+## 13. What happens when a guide has a layout we have never seen
+
+The guarantee is not "every layout parses". It is: **either the rows come out right, or the
+output says which column it could not find — never a confident wrong CSV.**
+
+### Three ways to identify a column, cheapest first
+
+1. **Header vocabulary.** Labels are matched by longest phrase, so a label carrying two
+   vocabularies resolves to the more specific one: `Code Description` → description,
+   `Benefit Limitations` → frequency, `Non-Participating Provider` → out-of-network.
+2. **Cell contents.** For anything the header did not give us — or a header that contradicts
+   its column — the column is identified by what it holds: CDT-shaped cells are the code
+   column, money/percent cells are coverage (first = in-network, second = out-of-network),
+   "per year / every 12 months" text is frequency, the longest free text is the description.
+   Content beats wording: a column headed `Procedure` that holds D-codes is the code column.
+3. **Carried mapping.** A continuation page that repeats none of its header inherits the
+   mapping from the page that had one.
+
+### Measured on layouts the code had never seen
+
+Each row is a PDF generated in `tests/test_unseen_layouts.py`, not one of the supplied guides.
+
+| Layout hazard | Result |
+|---|---|
+| Columns reordered, headers never seen (`Nomenclature`, `CDT Code`, `Participating Provider`) | All rows, all six columns |
+| Dollar copays instead of percentages (`You Pay (In-Network)`) | All rows, all six columns |
+| No header row at all | All rows, all six columns, identified from content |
+| Landscape page, three columns we do not need | All rows; extra columns reported as unmapped |
+| Unruled table, invented wording (`Procedure`, `What it covers`, `How often`, `In-plan`) | All rows, all six columns |
+| Two tables with different shapes on one page | Each table mapped separately; no cross-contamination |
+| Scanned page, no text layer | Refused: *"no extractable text layer (scanned image?); OCR is required"* |
+| A booklet with no benefit table at all | Zero rows, `dental_guide.no_rows` error, job marked `partial` |
+
+### Where it still fails, honestly
+
+- **Scanned or image-only PDFs.** No OCR in this service. It refuses with a reason instead of
+  emitting an empty CSV. Adding OCR is an adapter, not a redesign (see §14).
+- **A layout no reader can segment** — a benefit "table" laid out as prose paragraphs, or
+  rotated text. The LLM reader is the seam for this; it is wired into the cascade and fires
+  only when every deterministic reader scores zero.
+- **Semantics we cannot see.** If coverage lives in a footnote ("all preventive services are
+  covered in full") rather than a column, the CSV says `-` and a flag says the column was not
+  present. That is a deliberate choice: `-` is recoverable, a wrong 100% is not.
+
+---
+
+## 14. Why this rather than a document-AI service
+
+Reasonable question, and the answer is "both, in different places". Three options, and what
+each is actually good at:
+
+| | This service (pdfplumber + geometry + narrow LLM) | Mistral Document AI | Azure AI Document Intelligence |
+|---|---|---|---|
+| What it does best | Digital-text benefit tables, mapped straight onto the customer's columns | Reading messy, scanned, handwritten documents into markdown/JSON | Layout + table extraction with cell geometry and confidence, plus custom models trained on labelled samples |
+| Scanned pages | Refuses (no OCR) | Strong — this is the point of it | Strong |
+| Determinism | Byte-identical for the same input | Model-dependent; re-runs can differ | Versioned models; stable in practice |
+| Provenance | Page, strategy and column for every row | Document-level | Bounding boxes and confidences per cell |
+| Cost at 100k pages/month | Compute only (~56 ms/page here: 75 pages, 782 rows in 4.2 s) | Per page, roughly $1 per 1k pages (verify current pricing) | Per page, roughly an order of magnitude more for layout, more again for custom models |
+| PHI / data residency | Nothing leaves the process | Data leaves your boundary unless self-hosted | BAA and private networking available on Azure |
+| Schema mapping | Built in — it knows what "Benefit Group" means | You still write it | You still write it (or train and maintain a custom model) |
+| Failure mode | Flags the column it could not find | Can hallucinate plausible values | Low confidence scores you must act on |
+| Effort | Weeks of engineering, ours to maintain | Hours to integrate | Days, plus labelling for custom models |
+
+**Where I would actually spend money.** Neither service removes the work that matters here:
+both hand back *a* table, and you still have to decide that `Periodicity` is the frequency
+column, that a merged cell applies to five rows, and that a missing coverage column means `-`
+and not `0%`. That mapping and its validation is the product; the PDF reader underneath is
+replaceable.
+
+So the design keeps the reader behind a port and treats a service as one more strategy in the
+cascade:
+
+- **Deterministic readers first** for the digital-text majority — free, ~56 ms/page,
+  reproducible, auditable, no PHI leaving the process.
+- **A document-AI service as a fallback strategy** for what they cannot read: scanned pages,
+  rotated text, exotic layouts. `TableCascade` already takes an `llm_strategy`; an
+  `AzureLayoutStrategy` or `MistralOcrStrategy` implements the same `extract(page, carried)`
+  and slots in beside it, scored the same way.
+- **Our validation over whichever reader won**, because a confidence score from a vendor is
+  not the same as "this code appears on this page and this column was the one labelled
+  out-of-network".
+
+The one case for going service-first is a corpus that is mostly scans, where OCR is the whole
+problem and our geometry has nothing to work with. That is a business input, not a design
+preference: it is measured by what share of incoming guides have a text layer.

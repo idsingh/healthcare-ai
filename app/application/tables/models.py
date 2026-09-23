@@ -57,10 +57,23 @@ class RawRow:
 
 
 @dataclass
+class TableSegment:
+    """One table on a page. A page can hold several with different headers —
+    'Preventive' above 'Major services' — and each needs its own column map."""
+    schema: TableSchema | None
+    rows: list[RawRow] = field(default_factory=list)
+
+
+@dataclass
 class PageTable:
     schema: TableSchema | None
     rows: list[RawRow] = field(default_factory=list)
     strategy: str = "none"
+    segments: list[TableSegment] = field(default_factory=list)
+
+    def __post_init__(self) -> None:
+        if not self.segments:
+            self.segments = [TableSegment(schema=self.schema, rows=self.rows)]
 
     def score(self) -> float:
         """Quality of a strategy's reading of one page: the share of rows that

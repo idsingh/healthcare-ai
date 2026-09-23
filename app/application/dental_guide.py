@@ -20,7 +20,7 @@ from pydantic import ValidationError
 from app.adapters.pdf.pdfplumber_source import PdfPlumberSource
 from app.application.tables.cascade import TableCascade
 from app.application.tables.mapping import Field as Col
-from app.application.tables.mapping import map_labels, unmapped, unqualified_coverage
+from app.application.tables.mapping import infer_roles, map_labels, unmapped, unqualified_coverage
 from app.application.tables.models import RawRow, TableSchema
 from app.config import PIPELINE_VERSION, PROMPT_VERSION, Settings
 from app.domain.contracts import LlmBenefitGrouping, benefit_grouping_schema
@@ -73,6 +73,7 @@ class DentalGuidePipeline:
         self._s = settings
         self._llm = llm
         self._cascade = cascade or TableCascade()
+        self._column_cache: dict[tuple, dict[Col, int]] = {}
 
     # -- public -------------------------------------------------------------
     async def run(self, path: str | Path, *, run_id: str | None = None) -> DentalGuideResult:
@@ -81,6 +82,7 @@ class DentalGuidePipeline:
             raise InputRejected(f"file not found: {path}", stage="pdf_ingest")
         started, t0 = utcnow(), time.perf_counter()
 
+        self._column_cache.clear()
         rows, document = self._read_pages(path)
         rows = self._dedupe(rows)
         flags = await self._assign_groups(rows)
@@ -114,22 +116,24 @@ class DentalGuidePipeline:
             pages += 1
             table = self._cascade.extract_page(page, schema)
             schema = table.schema or schema
-            if not table.rows or schema is None:
+            # A guide with no header row anywhere still yields rows: the columns
+            # are then identified from their contents.
+            if not table.rows:
                 continue
             pages_with_rows += 1
             strategies[table.strategy] = strategies.get(table.strategy, 0) + 1
 
-            mapping = map_labels(schema.labels)
-            if len(mapping) >= len(best_mapping):
-                best_mapping, best_labels = mapping, list(schema.labels)
-            if Col.code not in mapping and len(best_labels) == len(schema.labels):
-                mapping = best_mapping                     # continuation page lost its header
-
             page_text = page.text
-            for raw in table.rows:
-                row = self._to_row(raw, mapping, table.strategy, path.name)
-                if row and row.dental_code in page_text:   # the code must be on the page
-                    rows.append(row)
+            for segment in table.segments:
+                seg_schema = segment.schema or schema
+                labels = seg_schema.labels if seg_schema else []
+                mapping = self._columns_for(labels, segment.rows, best_mapping, best_labels)
+                if len(mapping) >= len(best_mapping):
+                    best_mapping, best_labels = mapping, list(labels)
+                for raw in segment.rows:
+                    row = self._to_row(raw, mapping, table.strategy, path.name)
+                    if row and row.dental_code in page_text:   # the code must be on the page
+                        rows.append(row)
 
         document = DentalGuideDocument(
             file_name=path.name, pages=pages, pages_with_rows=pages_with_rows,
@@ -137,6 +141,28 @@ class DentalGuidePipeline:
             mapped_fields=[f.value for f in best_mapping],
             unmapped_columns=unmapped(best_labels), strategies=strategies)
         return rows, document
+
+    def _columns_for(self, labels: list[str], rows: list[RawRow],
+                     best_mapping: dict[Col, int], best_labels: list[str]) -> dict[Col, int]:
+        """Three ways to identify a column, cheapest first:
+
+        1. the header label, matched by vocabulary;
+        2. the cell contents, when the header is missing or worded oddly;
+        3. the carried mapping, for a continuation page that lost its header.
+        """
+        key = tuple(labels)
+        if key in self._column_cache:
+            return self._column_cache[key]
+
+        mapping = map_labels(list(labels))
+        if len(mapping) < 5:
+            mapping = infer_roles([r.cells for r in rows], mapping)
+        if Col.code not in mapping and len(best_labels) == len(labels):
+            mapping = best_mapping                     # continuation page lost its header
+        self._column_cache[key] = mapping
+        log.debug("columns identified", extra={"labels": list(labels),
+                                               "mapping": {k.value: v for k, v in mapping.items()}})
+        return mapping
 
     def _to_row(self, raw: RawRow, mapping: dict[Col, int], strategy: str,
                 file_name: str) -> BenefitRow | None:

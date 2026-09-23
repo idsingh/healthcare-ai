@@ -107,9 +107,18 @@ pdf ─▶ strategy cascade ─▶ column mapping ─▶ row assembly ─▶ ben
 
 No strategy is trusted to be the one that works: each page is read by every deterministic
 reader, scored on how many rows carry a code and real text, and the best reading is kept. A
-layout that defeats them all falls back to the LLM reader rather than yielding nothing. The
-extractor keys off nothing document-specific — `tests/test_generalization.py` fails the build
-if a carrier, plan or file name appears anywhere in `app/`.
+layout that defeats them all falls back to the LLM reader rather than yielding nothing.
+Columns are identified by header vocabulary, then by cell contents when the header is missing
+or misleading, then by the mapping carried from the last page that had one — so a guide with
+reordered columns, invented header wording, or no header at all still extracts (measured in
+`tests/test_unseen_layouts.py`; see `DESIGN.md` §13). The extractor keys off nothing
+document-specific — `tests/test_generalization.py` fails the build if a carrier, plan or file
+name appears anywhere in `app/`.
+
+PDF reading is `pdfplumber` (pdfminer.six underneath), behind one adapter. There is no OCR: a
+scanned PDF is refused with a reason rather than silently yielding an empty CSV. `DESIGN.md`
+§14 compares this with Mistral Document AI and Azure AI Document Intelligence and says where
+each belongs.
 
 ## Never trusting the model
 
