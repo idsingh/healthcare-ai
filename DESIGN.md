@@ -575,6 +575,25 @@ Consequences, and how they are contained:
 - If a hosted service is ever wanted, it is a second adapter implementing the same
   `extract(page, carried)` contract — this decision is reversible per environment.
 
+### Measured, not assumed
+
+Docling 2.130.0, run through this adapter against page 2 of `17_DG.pdf` — a real page from a
+supplied guide, chosen because our geometric strategy already reads it, so the two can be
+compared directly:
+
+| | Geometric strategy | Docling |
+|---|---|---|
+| Rows | 17 | 17 |
+| Codes agreed | — | **17 / 17**, no extras, none missed |
+| Column labels | `ADA code`, `Description of benefits`, `Frequency/limitations`, `In-network coverage`, `Out-of-network coverage` | identical |
+| Time for the page | ~0.06 s | **12.8 s** warm, 142.8 s on the first run (model download and load) |
+
+Two things follow. Docling is **good** — it independently reproduced the reading of an unruled
+table, including the merged frequency cell, which is a genuine cross-check on our geometry. And
+Docling is **~230× slower** on a page the deterministic reader already handles, which is
+exactly why it is the fallback and not the default: on the three supplied guides (75 pages) it
+would turn a 4-second run into roughly 16 minutes, for the same rows.
+
 ### Where it sits
 
 `DoclingTableStrategy` is registered as a **fallback** in `TableCascade`. It is asked for a
