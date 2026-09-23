@@ -245,3 +245,19 @@ async def test_real_docling_reads_a_scanned_guide(tmp_path, settings):
     reader = DoclingTableStrategy(Settings(document_ai_provider="docling"))
     result = await reader.extract(page_of(path))
     assert result.strategy == "docling"          # no rows expected from a blank scan
+
+
+async def test_the_conversion_cache_does_not_grow_across_documents(tmp_path):
+    """A long-running service reads many documents; the cache holds one."""
+    converter = FakeConverter([FakeTable(HEADER, BODY)])
+    reader = strategy(converter)
+
+    first = scanned_pdf(tmp_path / "one.pdf")
+    await reader.extract(page_of(first))
+    assert len(reader._cache) == 1
+
+    reader.reset_budget()                                     # next document
+    second = scanned_pdf(tmp_path / "two.pdf")
+    await reader.extract(page_of(second))
+    assert len(reader._cache) == 1
+    assert converter.calls == 2

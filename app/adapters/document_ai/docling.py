@@ -82,8 +82,12 @@ class DoclingTableStrategy:
             format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=options)})
 
     def reset_budget(self) -> None:
-        """Per document: the page ceiling bounds how much CPU one file can cost."""
+        """Called per document. Resets the page ceiling and drops the cached
+        conversion: a document is read page by page in one pass, so keeping its
+        parsed tables afterwards would grow without bound in a long-running
+        service."""
         self._pages_used = 0
+        self._cache.clear()
 
     # -- strategy -----------------------------------------------------------
     async def extract(self, page: PageView, carried: TableSchema | None = None) -> PageTable:
