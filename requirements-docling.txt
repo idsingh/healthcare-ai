@@ -1,0 +1,7 @@
+# Optional fallback reader: pages no deterministic strategy can parse (scans,
+# exotic layouts). Heavy — pulls torch and downloads model weights on first run —
+# so it is deliberately not in requirements.txt.
+#
+#   pip install -r requirements-docling.txt
+#   export EXTRACT_DOCUMENT_AI_PROVIDER=docling
+docling>=2.0

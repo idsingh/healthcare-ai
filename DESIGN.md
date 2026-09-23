@@ -519,10 +519,10 @@ cascade:
 
 - **Deterministic readers first** for the digital-text majority — free, ~56 ms/page,
   reproducible, auditable, no PHI leaving the process.
-- **A document-AI service as a fallback strategy** for what they cannot read: scanned pages,
-  rotated text, exotic layouts. `TableCascade` already takes an `llm_strategy`; an
-  `AzureLayoutStrategy` or `MistralOcrStrategy` implements the same `extract(page, carried)`
-  and slots in beside it, scored the same way.
+- **A fallback reader** for what they cannot read: scanned pages, rotated text, exotic
+  layouts. That slot is filled by Docling running in-process (§15). A hosted service would
+  implement the same `extract(page, carried)` contract and slot in beside it, scored the same
+  way — the choice is per environment, not per codebase.
 - **Our validation over whichever reader won**, because a confidence score from a vendor is
   not the same as "this code appears on this page and this column was the one labelled
   out-of-network".
@@ -533,62 +533,90 @@ preference: it is measured by what share of incoming guides have a text layer.
 
 ---
 
-## 15. The document-AI fallback, and the PDF reader underneath
+## 15. The fallback reader: Docling
 
-### Where the fallback sits
+### Decision
 
-`MistralDocumentAIStrategy` implements the same `extract(page, carried)` contract as the
-deterministic readers and is registered as a **fallback** in `TableCascade`. It is asked for a
-page only when:
+**Use Docling, running in-process, as the fallback table reader. Do not call a hosted
+document-AI service.**
 
-- every deterministic strategy scored zero on that page, **and**
-- the page either clearly holds benefit codes, or has no text layer at all (a scan).
+Context: the deterministic readers handle digital-text benefit tables, which is every guide
+supplied so far. Two things defeat them — a page with no text layer (a scan), and a layout the
+geometry cannot segment. Something has to read those pages, or the CSV silently loses them.
 
-So it never touches the hot path. On the three supplied guides it is called zero times.
+The candidates were a hosted service (Mistral Document AI, Azure AI Document Intelligence) and
+a local model stack (Docling). Both read scans; the difference is everything around that.
+
+| | Docling (chosen) | Hosted document AI |
+|---|---|---|
+| Where the page goes | Stays in the process | Leaves the boundary — a member-facing plan document sent to a third party |
+| Cost model | CPU time already paid for | Per page, forever, and it grows with volume |
+| Reproducibility | Same container, same output | Model changes under you between runs |
+| Compliance | No BAA needed, no data-residency question | BAA, vendor review, egress controls |
+| Offline / air-gapped | Works with pre-downloaded weights | Impossible |
+| Licence | MIT | Commercial terms |
+| Cost of entry | Large dependency, model weights, seconds per page | An API key |
+| Failure mode | Slow, or the install is missing | Rate limits, outages, bills |
+
+Decision: **Docling**. In a healthcare context the deciding factor is not accuracy, it is that
+nothing leaves the process and there is no per-page meter on a pipeline meant to run over
+thousands of documents. The price is a heavyweight optional dependency and seconds-per-page
+latency, which is acceptable precisely because the fallback is rare: on the three supplied
+guides it is called zero times.
+
+Consequences, and how they are contained:
+
+- Docling is **not** in `requirements.txt`. It lives in `requirements-docling.txt` and is
+  imported lazily; a missing install logs a warning and degrades to deterministic-only.
+- It is **off by default** (`EXTRACT_DOCUMENT_AI_PROVIDER=none`). Turning it on is a
+  deployment decision, not a code change.
+- Model weights download on first run; `docling_artifacts_path` points at pre-downloaded
+  weights for offline or air-gapped deployment.
+- If a hosted service is ever wanted, it is a second adapter implementing the same
+  `extract(page, carried)` contract — this decision is reversible per environment.
+
+### Where it sits
+
+`DoclingTableStrategy` is registered as a **fallback** in `TableCascade`. It is asked for a
+page only when every deterministic strategy scored zero on it, **and** the page either clearly
+holds benefit codes or has no text layer at all.
 
 | Concern | How it is handled |
 |---|---|
-| Cost | One **page** is sent, not the document; `document_ai_max_pages` caps spend per document (default 25) and resets per file |
-| Exposure | Only the page that could not be read leaves the process; off by default (`EXTRACT_DOCUMENT_AI_PROVIDER=none`) |
+| Cost | The document is converted **once** and cached per page — conversion is the expensive part, so per-page conversion would repeat it for every page; `document_ai_max_pages` bounds how many pages one document may claim |
+| Latency | Conversion runs in a worker thread (`asyncio.to_thread`), so the API event loop keeps serving |
 | Trust | Every returned row is re-verified locally: the code must match the CDT shape, and on a page that *does* have text it must appear on that page |
 | Scans | Rows from a page with no text layer cannot be cross-checked, so the result carries `dental_guide.rows_not_locally_verifiable` |
-| Failure | Transient errors retry with backoff; auth errors fail fast; either way the page degrades to zero rows and the document still completes |
-| Vendor shape | The request/response format lives in one module. Swapping Mistral for Azure Document Intelligence is a second adapter, not a redesign |
+| Version drift | Docling's table export API has changed across versions, so the adapter accepts the dataframe export, the cell grid, or the markdown export, in that order |
+| Failure | A conversion error raises `DoclingUnavailable`, the cascade logs it, that page yields zero rows, and the document still completes |
 
 Enable it with:
 
 ```bash
-export EXTRACT_DOCUMENT_AI_PROVIDER=mistral
-export EXTRACT_MISTRAL_API_KEY=...
+pip install -r requirements-docling.txt
+export EXTRACT_DOCUMENT_AI_PROVIDER=docling
+export EXTRACT_DOCLING_OCR=true            # needed for scans, slower
 export EXTRACT_DOCUMENT_AI_MAX_PAGES=25
 ```
 
 Without it, a scanned PDF is refused with *"OCR is required"*. With it, the same PDF is read
 and flagged. That is the whole behavioural difference.
 
-### Why pdfplumber, and the open-source alternatives
+### Why pdfplumber remains the base reader
 
-pdfplumber (pdfminer.six underneath) was chosen because this problem is **geometry**, not OCR:
-it gives per-word bounding boxes, ruling lines and the filled rectangles that reveal merged
-cells — the three signals the geometric strategy runs on. It is pure Python, MIT licensed,
-and deterministic.
+pdfplumber (pdfminer.six underneath) is the primary reader because this problem is **geometry,
+not OCR**: per-word bounding boxes, ruling lines, and the filled rectangles that reveal merged
+cells — the three signals the geometric strategy runs on. It is MIT, pure Python, fast
+(~56 ms/page here) and deterministic.
 
-| Library | What it adds | Why not the default here |
+| Library | What it adds | Why not the base reader |
 |---|---|---|
-| **PyMuPDF (fitz)** | 5–10× faster, excellent text and geometry | AGPL-3.0 unless you buy a licence — a real constraint for a commercial product |
-| **Docling** (IBM) | Layout and table-structure ML models, reading order, OCR, markdown/JSON out; strong on complex tables | Heavyweight (torch model downloads), slower per page, non-deterministic across versions; better as a *strategy* than as the base reader |
-| **Camelot / Tabula** | Focused table extraction (`lattice` / `stream`) | Camelot's stream mode is roughly what our geometric strategy does, with less control over merged cells; Tabula needs a JVM |
-| **Unstructured** | Many formats, chunking for RAG pipelines | Optimised for RAG text chunks, not for cell-accurate tables |
-| **Marker / Surya** | High-quality PDF→markdown, strong OCR | Licence restrictions for commercial use; GPU-oriented |
+| **PyMuPDF (fitz)** | 5–10× faster, excellent geometry | AGPL-3.0 unless licensed — a real constraint for a commercial product |
+| **Docling** | Layout and table-structure models, OCR, reading order | Seconds per page and model weights; ideal as the fallback, wrong as the default |
+| **Camelot / Tabula** | Focused table extraction | Camelot's stream mode is roughly our geometric strategy with less merged-cell control; Tabula needs a JVM |
+| **Unstructured** | Many formats, RAG chunking | Optimised for text chunks, not cell-accurate tables |
+| **Marker / Surya** | Strong PDF→markdown and OCR | Licence restrictions for commercial use; GPU-oriented |
 
-The honest position: **Docling is the strongest open-source candidate to sit beside the
-document-AI fallback**, and it slots into exactly the same seam — implement `extract(page,
-carried)`, register it in the cascade, let the score decide. It would cover scanned and
-exotic-layout pages without sending anything to a vendor, at the cost of model weights, GPU-ish
-latency and version-to-version variability. That is a deployment trade-off (privacy and cost
-versus footprint and reproducibility), not an architectural one, which is the point of keeping
-the reader behind a port.
-
-What would not change either way: column mapping, merged-cell handling, benefit-group naming,
-the validators and the CSV contract. That is where the domain lives, and no extraction library
-provides it.
+Under any reader, what does not change: column mapping, merged-cell handling, benefit-group
+naming, the validators and the CSV contract. That is where the domain lives, and no extraction
+library provides it.

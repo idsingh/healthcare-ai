@@ -119,20 +119,21 @@ PDF reading is `pdfplumber` (pdfminer.six underneath), behind one adapter, becau
 is geometry rather than OCR: word boxes, ruling lines and the rectangles that reveal merged
 cells. `DESIGN.md` §15 compares it with PyMuPDF, Docling, Camelot and friends.
 
-**Document-AI fallback (optional).** `MistralDocumentAIStrategy` is registered in the same
-cascade and is asked for a page only when every deterministic reader scored zero — an exotic
-layout, or a scanned page with no text layer. One page is sent, not the document; spend is
-capped per document; every returned row is re-verified locally before it can reach the CSV.
+**Fallback reader (optional, local).** `DoclingTableStrategy` is registered in the same cascade
+and is asked for a page only when every deterministic reader scored zero — an exotic layout, or
+a scanned page with no text layer. It runs **in-process**: no page leaves the boundary and
+there is no per-page bill. The document is converted once and cached per page, conversion runs
+off the event loop, and every returned row is re-verified locally before it can reach the CSV.
 Off by default:
 
 ```bash
-export EXTRACT_DOCUMENT_AI_PROVIDER=mistral
-export EXTRACT_MISTRAL_API_KEY=...
+pip install -r requirements-docling.txt
+export EXTRACT_DOCUMENT_AI_PROVIDER=docling
 ```
 
 Without it a scanned PDF is refused with *"OCR is required"*; with it the same PDF is read and
-flagged `rows_not_locally_verifiable`. `DESIGN.md` §14 compares Mistral and Azure Document
-Intelligence, §15 covers the fallback's cost and trust controls.
+flagged `rows_not_locally_verifiable`. `DESIGN.md` §15 records why Docling rather than a hosted
+document-AI service, and compares pdfplumber with PyMuPDF, Camelot and friends.
 
 ## Never trusting the model
 

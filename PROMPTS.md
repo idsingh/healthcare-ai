@@ -114,6 +114,31 @@ appears in `app/`.
 
 ---
 
+## 12. Hardening the PDF path
+
+> What if the pdf has a new kind of layout?
+
+> Also explain me how this logic would compare us tools like Mistral AI & Azure Document AI and
+> the tradeoffs
+
+> Also what are you using for extracting the pdf
+
+> Are there any better alternatives for extracting PDFs open source than pdfplumber E.g Docling?
+
+> Add Mistral AI/Document AI as an adapter as fallback for handling cases that can't be parsed
+> using determinstic mechanism
+
+> Replace with docling and document the decision and test everything end to end
+
+The first question was answered by building eight PDFs with layouts the code had never seen
+(`tests/test_unseen_layouts.py`) rather than by assertion; three of them failed, and the fixes —
+content-based column inference, per-table schemas — are in `DESIGN.md` §13.
+
+The fallback was first built against Mistral Document AI, then replaced with Docling running
+in-process once the trade-off was examined properly: in a healthcare pipeline, not sending a
+member-facing plan document to a third party and not carrying a per-page bill outweigh the
+convenience of an API key. `DESIGN.md` §15 records that decision, including what it costs.
+
 ## Corrections made along the way
 
 Worth reading, because they are the parts a demo usually hides. Each was caught by a test or

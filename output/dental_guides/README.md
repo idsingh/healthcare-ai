@@ -96,18 +96,19 @@ unruled table with invented wording, and two differently-shaped tables on one pa
 
 How: columns are identified by header vocabulary first, then by cell contents when the header
 is missing or contradicts its column, then by the mapping carried from the last page that had
-a header. See `DESIGN.md` §13, and §14 for how this compares with Mistral Document AI and
-Azure AI Document Intelligence.
+a header. See `DESIGN.md` §13, §14 for how this compares with hosted document-AI services, and
+§15 for the Docling fallback and why it runs locally.
 
 ## Pages nothing deterministic can read
 
-An optional document-AI fallback (`EXTRACT_DOCUMENT_AI_PROVIDER=mistral`) reads pages where
-every deterministic strategy scored zero — a scanned page, or a layout the geometry cannot
-segment. It sends one page rather than the document, is capped per document, and everything it
-returns is re-verified locally: the code must match the CDT shape and, on a page that has text,
-must appear on that page. Rows from a page with no text layer carry the flag
-`dental_guide.rows_not_locally_verifiable`, because there is nothing local to check them
-against. It was not needed for any of the three guides here.
+An optional Docling fallback (`EXTRACT_DOCUMENT_AI_PROVIDER=docling`) reads pages where every
+deterministic strategy scored zero — a scanned page, or a layout the geometry cannot segment.
+It runs locally, so no page leaves the process and there is no per-page bill; the document is
+converted once and cached per page. Everything it returns is re-verified locally: the code must
+match the CDT shape and, on a page that has text, must appear on that page. Rows from a page
+with no text layer carry the flag `dental_guide.rows_not_locally_verifiable`, because there is
+nothing local to check them against. It was not needed for any of the three guides here —
+all 782 rows come from the deterministic readers.
 
 ## Validation the extractor runs on itself
 

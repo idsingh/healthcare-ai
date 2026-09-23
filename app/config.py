@@ -21,13 +21,15 @@ class Settings(BaseSettings):
     seed: int = 7
     llm_timeout_seconds: float = 60.0
 
-    # Document AI fallback (used only when deterministic table readers fail)
-    document_ai_provider: str = "none"               # none | mistral
-    mistral_api_key: str | None = None
-    mistral_base_url: str = "https://api.mistral.ai/v1"
-    mistral_ocr_model: str = "mistral-ocr-latest"
-    document_ai_timeout_seconds: float = 120.0
-    document_ai_max_pages: int = 25                  # cost ceiling per document
+    # Fallback table reader, used only when deterministic readers fail on a page.
+    # Docling runs locally: no page leaves the process and there is no per-page bill,
+    # at the cost of a large dependency and seconds-per-page latency.
+    document_ai_provider: str = "none"               # none | docling
+    docling_ocr: bool = True                         # needed for scans; slower
+    docling_table_mode: str = "accurate"             # accurate | fast
+    docling_artifacts_path: str | None = None        # pre-downloaded models for offline use
+    document_ai_timeout_seconds: float = 300.0
+    document_ai_max_pages: int = 25                  # ceiling per document
 
     # Reliability
     max_llm_attempts: int = 3                        # transient retries per call
