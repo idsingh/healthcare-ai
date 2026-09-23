@@ -86,7 +86,9 @@ class TableCascade:
                     log.warning("fallback strategy failed", extra={
                         "page": page.number, "strategy": fallback.name, "error": str(exc)[:200]})
                     continue
-                if result.score() > 0:
+                if result.rows:
+                    # Rows, not score: an OCR'd scan of short cells can score
+                    # 0.0 and still be the only reading of that page.
                     return result
         
 

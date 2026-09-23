@@ -17,22 +17,41 @@ for every page of a scan.
 from __future__ import annotations
 
 import asyncio
+from collections import OrderedDict
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 from app.adapters.pdf.pdfplumber_source import PageView
+from app.application.preprocess import collapse
 from app.application.tables.markdown import parse_markdown_tables
 from app.application.tables.models import (
     CODE_RE, Column, PageTable, RawRow, TableSchema, TableSegment, find_code)
 from app.config import Settings
-from app.domain.errors import ExtractionError, LLMPermanentError
+from app.domain.errors import LLMPermanentError
 from app.logging_setup import get_logger
 
 log = get_logger("extract.docling")
+MAX_CACHED_DOCUMENTS = 2         # a job reads one document; a couple may overlap
 
 
 class DoclingUnavailable(LLMPermanentError):
     code = "docling_unavailable"
+
+
+class DoclingBudgetExhausted(DoclingUnavailable):
+    """This document has used its page allowance; later pages are not read."""
+    code = "docling_budget_exhausted"
+
+
+@dataclass
+class _Conversion:
+    """One document's conversion: its tables, what it has served, and why it
+    failed if it did. Keyed by path so concurrent jobs cannot collide."""
+    by_page: dict[int, list[TableSegment]] = field(default_factory=dict)
+    unassigned: list[TableSegment] = field(default_factory=list)
+    pages_served: int = 0
+    failed: str | None = None
 
 
 class DoclingTableStrategy:
@@ -44,8 +63,11 @@ class DoclingTableStrategy:
     def __init__(self, settings: Settings, converter: Any | None = None):
         self._s = settings
         self._converter = converter
-        self._cache: dict[str, dict[int, list[TableSegment]]] = {}
-        self._pages_used = 0
+        # State is per document and keyed by path, never per instance: one
+        # strategy object is shared by every job in the process, so a second
+        # document must not be able to clear or charge the first one's.
+        self._documents: OrderedDict[str, _Conversion] = OrderedDict()
+        self._lock = asyncio.Lock()
         if converter is None:
             self._check_available()
 
@@ -82,32 +104,38 @@ class DoclingTableStrategy:
             format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=options)})
 
     def reset_budget(self) -> None:
-        """Called per document. Resets the page ceiling and drops the cached
-        conversion: a document is read page by page in one pass, so keeping its
-        parsed tables afterwards would grow without bound in a long-running
-        service."""
-        self._pages_used = 0
-        self._cache.clear()
+        """Per-document hook. Nothing to reset: budget and cache are keyed by
+        document path, so documents cannot interfere with each other. Memory is
+        bounded by evicting the least recently used conversion instead."""
+        return None
 
     # -- strategy -----------------------------------------------------------
     async def extract(self, page: PageView, carried: TableSchema | None = None) -> PageTable:
         if not page.source_path:
             return PageTable(schema=carried, strategy=self.name)
-        if self._pages_used >= self._s.document_ai_max_pages:
+
+        conversion = await self._conversion_for(Path(page.source_path))
+        if conversion.failed:
+            raise DoclingUnavailable(conversion.failed, stage="document_ai")
+        if conversion.pages_served >= self._s.document_ai_max_pages:
             log.warning("docling page budget exhausted", extra={
                 "page": page.number, "limit": self._s.document_ai_max_pages})
-            return PageTable(schema=carried, strategy=self.name)
+            raise DoclingBudgetExhausted(
+                f"docling page budget of {self._s.document_ai_max_pages} reached for this document",
+                stage="document_ai")
+        conversion.pages_served += 1
 
-        try:
-            by_page = await self._convert(Path(page.source_path))
-        except ExtractionError:
-            raise
-        except Exception as exc:                          # a model failure must not kill the run
-            raise DoclingUnavailable(f"docling conversion failed: {exc}",
-                                     stage="document_ai") from exc
-
-        self._pages_used += 1
-        segments = [self._verify(segment, page) for segment in by_page.get(page.number, [])]
+        by_page = conversion.by_page
+        found = by_page.get(page.number)
+        if found is None and conversion.unassigned:
+            # The markdown fallback loses page provenance. Serve those tables to
+            # the first page that asks, rather than claiming they are on page 1.
+            found = conversion.unassigned
+            conversion.unassigned = []
+            for segment in found:
+                for row in segment.rows:
+                    row.page = page.number
+        segments = [self._verify(segment, page) for segment in (found or [])]
         segments = [s for s in segments if s.rows]
         rows = [r for s in segments for r in s.rows]
         schema = next((s.schema for s in reversed(segments) if s.schema), carried)
@@ -116,25 +144,53 @@ class DoclingTableStrategy:
         return PageTable(schema=schema, rows=rows, strategy=self.name,
                          segments=segments or [TableSegment(schema, [])])
 
-    async def _convert(self, path: Path) -> dict[int, list[TableSegment]]:
-        """Convert once per document, cached. Docling works on whole documents,
-        so per-page conversion would repeat the expensive part every time."""
+    async def _conversion_for(self, path: Path) -> "_Conversion":
+        """Convert once per document, cached and bounded. Conversion is the
+        expensive part — seconds per document — so per-page conversion would pay
+        it again for every page. A failure is remembered too, or a broken model
+        would be re-run for every page of the document."""
         key = str(path)
-        if key in self._cache:
-            return self._cache[key]
+        async with self._lock:
+            if key in self._documents:
+                self._documents.move_to_end(key)
+                return self._documents[key]
+            conversion = _Conversion()
+            self._documents[key] = conversion
+            while len(self._documents) > MAX_CACHED_DOCUMENTS:
+                self._documents.popitem(last=False)
+
         if self._converter is None:
-            self._converter = self._build_converter()
+            try:
+                self._converter = self._build_converter()
+            except Exception as exc:
+                conversion.failed = f"docling could not be initialised: {exc}"
+                return conversion
+
         log.info("docling converting document", extra={"file": path.name})
-        # Docling is synchronous and CPU-bound; keep the event loop free.
-        result = await asyncio.to_thread(self._converter.convert, str(path))
-        self._cache[key] = self._segments_of(result)
-        return self._cache[key]
+        try:
+            # Docling is synchronous and CPU-bound: keep the event loop free, and
+            # bound it, or one hung conversion blocks the job for ever.
+            result = await asyncio.wait_for(
+                asyncio.to_thread(self._converter.convert, str(path)),
+                timeout=self._s.document_ai_timeout_seconds)
+        except asyncio.TimeoutError:
+            conversion.failed = (f"docling conversion exceeded "
+                                 f"{self._s.document_ai_timeout_seconds:.0f}s")
+            return conversion
+        except Exception as exc:
+            conversion.failed = f"docling conversion failed: {exc}"
+            return conversion
+
+        by_page, unassigned = self._segments_of(result)
+        conversion.by_page, conversion.unassigned = by_page, unassigned
+        return conversion
 
     # -- docling document -> our table shape --------------------------------
-    def _segments_of(self, result: Any) -> dict[int, list[TableSegment]]:
+    def _segments_of(self, result: Any) -> tuple[dict[int, list[TableSegment]], list[TableSegment]]:
+        """Returns (tables with a known page, tables whose page is unknown)."""
         document = getattr(result, "document", None)
         if document is None:
-            return {}
+            return {}, []
         by_page: dict[int, list[TableSegment]] = {}
         for table in getattr(document, "tables", []) or []:
             page_no = self._page_of(table)
@@ -142,8 +198,8 @@ class DoclingTableStrategy:
             if segment and segment.rows:
                 by_page.setdefault(page_no, []).append(segment)
         if by_page:
-            return by_page
-        return self._from_markdown(document)
+            return by_page, []
+        return {}, self._from_markdown(document)
 
     @staticmethod
     def _page_of(table: Any) -> int:
@@ -177,43 +233,63 @@ class DoclingTableStrategy:
 
     @staticmethod
     def _grid_of(table: Any) -> list[list[str]]:
-        """Docling exposes tables as a dataframe; older versions expose a cell
-        grid. Accept either, and give up quietly rather than raising."""
+        """Docling's table export has changed across versions: accept the
+        dataframe export, else the cell grid. Only a *shape* mismatch is treated
+        as 'try the next form' — anything else is logged, so a real failure is
+        not indistinguishable from an old docling."""
         try:
             frame = table.export_to_dataframe()
             return [[str(c) for c in frame.columns]] + \
                    [[str(v) for v in row] for row in frame.itertuples(index=False)]
-        except Exception:
+        except (AttributeError, ImportError, TypeError):
             pass
+        except Exception as exc:
+            log.warning("docling dataframe export failed", extra={"error": str(exc)[:200]})
         try:
             grid = table.data.grid
             return [[str(getattr(cell, "text", "") or "") for cell in row] for row in grid]
-        except Exception:
+        except (AttributeError, TypeError):
+            return []
+        except Exception as exc:
+            log.warning("docling cell grid unreadable", extra={"error": str(exc)[:200]})
             return []
 
     @staticmethod
-    def _from_markdown(document: Any) -> dict[int, list[TableSegment]]:
+    def _from_markdown(document: Any) -> list[TableSegment]:
         """Last resort: the markdown export, parsed with the same parser used for
-        any other markdown-producing reader."""
+        any other markdown-producing reader. Markdown carries no page numbers, so
+        these are returned as unassigned rather than claimed to be on page 1."""
         try:
             markdown = document.export_to_markdown()
-        except Exception:
-            return {}
-        segments = parse_markdown_tables(markdown, page_number=1)
-        return {1: segments} if segments else {}
+        except Exception as exc:
+            log.warning("docling markdown export failed", extra={"error": str(exc)[:200]})
+            return []
+        return parse_markdown_tables(markdown, page_number=0)
 
     # -- verification -------------------------------------------------------
     def _verify(self, segment: TableSegment, page: PageView) -> TableSegment:
-        """Nothing a model returns is trusted: the code must look like a dental
-        code, and when the page has a text layer it must be on that page."""
+        """Nothing a model returns is trusted. The code must look like a dental
+        code and, when the page has a text layer, be on that page. Other cells
+        are checked against the page too and blanked when they are not there, so
+        a plausible-looking invented frequency or percentage cannot reach the
+        CSV. A page with no text layer has nothing to check against; those rows
+        are flagged downstream instead."""
+        page_text = collapse(page.text) if page.has_text else ""
         kept = []
         for row in segment.rows:
             code = row.code
             if not code or not CODE_RE.match(code):
                 continue
-            if page.has_text and code not in page.text:
+            if page_text and code not in page_text:
                 log.warning("docling row dropped: code not on the page", extra={
                     "page": page.number, "code": code})
                 continue
+            if page_text:
+                for i, cell in enumerate(row.cells):
+                    text = collapse(cell)
+                    if len(text) > 3 and not find_code(text) and text not in page_text:
+                        log.warning("docling cell dropped: text not on the page", extra={
+                            "page": page.number, "code": code, "cell": text[:40]})
+                        row.cells[i] = ""
             kept.append(row)
         return TableSegment(schema=segment.schema, rows=kept)

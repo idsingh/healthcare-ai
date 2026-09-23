@@ -73,7 +73,6 @@ class DentalGuidePipeline:
         self._s = settings
         self._llm = llm
         self._cascade = cascade or TableCascade()
-        self._column_cache: dict[tuple, dict[Col, int]] = {}
 
     # -- public -------------------------------------------------------------
     async def run(self, path: str | Path, *, run_id: str | None = None) -> DentalGuideResult:
@@ -82,7 +81,6 @@ class DentalGuidePipeline:
             raise InputRejected(f"file not found: {path}", stage="pdf_ingest")
         started, t0 = utcnow(), time.perf_counter()
 
-        self._column_cache.clear()
         rows, document = await self._read_pages(path)
         rows = self._dedupe(rows)
         flags = await self._assign_groups(rows)
@@ -105,21 +103,33 @@ class DentalGuidePipeline:
 
     # -- read ---------------------------------------------------------------
     async def _read_pages(self, path: Path) -> tuple[list[BenefitRow], DentalGuideDocument]:
+        # Column mappings are cached per run, not on the instance: one pipeline
+        # object serves concurrent jobs, and a second document must not be able
+        # to clear or read the first one's mappings.
+        column_cache: dict[tuple, dict[Col, int]] = {}
         schema: TableSchema | None = None
         best_mapping: dict[Col, int] = {}
         best_labels: list[str] = []
         rows: list[BenefitRow] = []
         strategies: dict[str, int] = {}
-        pages = pages_with_rows = unverifiable = 0
+        pages = pages_with_rows = unverifiable = unreadable = 0
 
         self._cascade.start_document()
         for page in PdfPlumberSource(path, require_text=not self._cascade.has_fallbacks).pages():
             pages += 1
-            table = await self._cascade.extract_page(page, schema)
+            try:
+                table = await self._cascade.extract_page(page, schema)
+            except Exception as exc:                      # one page must not kill the document
+                log.warning("page could not be read", extra={
+                    "page": page.number, "error": str(exc)[:200]})
+                unreadable += 1
+                continue
             schema = table.schema or schema
             # A guide with no header row anywhere still yields rows: the columns
             # are then identified from their contents.
             if not table.rows:
+                if not page.has_text:
+                    unreadable += 1                       # a scan nothing could read
                 continue
             pages_with_rows += 1
             strategies[table.strategy] = strategies.get(table.strategy, 0) + 1
@@ -128,8 +138,9 @@ class DentalGuidePipeline:
             for segment in table.segments:
                 seg_schema = segment.schema or schema
                 labels = seg_schema.labels if seg_schema else []
-                mapping = self._columns_for(labels, segment.rows, best_mapping, best_labels)
-                if len(mapping) >= len(best_mapping):
+                mapping = self._columns_for(labels, segment.rows, best_mapping, best_labels,
+                                            column_cache, seg_schema)
+                if len(mapping) > len(best_mapping) or not best_labels:
                     best_mapping, best_labels = mapping, list(labels)
                 for raw in segment.rows:
                     row = self._to_row(raw, mapping, table.strategy, path.name)
@@ -146,30 +157,35 @@ class DentalGuidePipeline:
 
         document = DentalGuideDocument(
             file_name=path.name, pages=pages, pages_with_rows=pages_with_rows,
-            rows_without_text_layer=unverifiable,
+            rows_without_text_layer=unverifiable, pages_unreadable=unreadable,
             column_labels=best_labels or (schema.labels if schema else []),
             mapped_fields=[f.value for f in best_mapping],
             unmapped_columns=unmapped(best_labels), strategies=strategies)
         return rows, document
 
     def _columns_for(self, labels: list[str], rows: list[RawRow],
-                     best_mapping: dict[Col, int], best_labels: list[str]) -> dict[Col, int]:
+                     best_mapping: dict[Col, int], best_labels: list[str],
+                     cache: dict[tuple, dict[Col, int]],
+                     schema: TableSchema | None = None) -> dict[Col, int]:
         """Three ways to identify a column, cheapest first:
 
         1. the header label, matched by vocabulary;
         2. the cell contents, when the header is missing or worded oddly;
         3. the carried mapping, for a continuation page that lost its header.
         """
-        key = tuple(labels)
-        if key in self._column_cache:
-            return self._column_cache[key]
+        # Keyed by more than the labels: every headerless table has the same
+        # empty label tuple, and two of them in one document can have different
+        # shapes and different inferred columns.
+        key = (tuple(labels), len(labels), schema.source if schema else "")
+        if key in cache:
+            return cache[key]
 
         mapping = map_labels(list(labels))
         if len(mapping) < 5:
             mapping = infer_roles([r.cells for r in rows], mapping)
         if Col.code not in mapping and len(best_labels) == len(labels):
             mapping = best_mapping                     # continuation page lost its header
-        self._column_cache[key] = mapping
+        cache[key] = mapping
         log.debug("columns identified", extra={"labels": list(labels),
                                                "mapping": {k.value: v for k, v in mapping.items()}})
         return mapping
@@ -297,6 +313,11 @@ class DentalGuidePipeline:
             flags.append(Flag(rule="dental_guide.descriptions_missing", severity=Severity.warn,
                               message=f"{missing_description} of {len(rows)} rows have no description",
                               path="/rows"))
+        if doc.pages_unreadable:
+            flags.append(Flag(rule="dental_guide.pages_unreadable", severity=Severity.warn,
+                              message=f"{doc.pages_unreadable} pages could not be read at all "
+                                      "(no text layer and no fallback result); rows from them are "
+                                      "missing from this output", path="/document"))
         if doc.rows_without_text_layer:
             flags.append(Flag(rule="dental_guide.rows_not_locally_verifiable", severity=Severity.warn,
                               message=f"{doc.rows_without_text_layer} rows come from pages with no "
@@ -310,14 +331,14 @@ class DentalGuidePipeline:
 
         filled = sum(1 for r in rows for v in (r.benefit_group, r.description, r.frequency,
                                                r.in_network, r.out_network) if v)
-        total = max(len(rows) * 5, 1)
+        total = len(rows) * 5
         return ValidationReport(
             passed=not any(f.severity == Severity.error for f in flags),
             needs_review=any(f.severity in (Severity.error, Severity.warn) for f in flags),
             flags=flags,
-            metrics=ValidationMetrics(fields_total=len(rows) * 5, fields_grounded=filled,
+            metrics=ValidationMetrics(fields_total=total, fields_grounded=filled,
                                       fields_null=total - filled,
-                                      groundedness_rate=round(filled / total, 4)))
+                                      groundedness_rate=round(filled / total, 4) if total else 0.0))
 
     @staticmethod
     def _sha(path: Path) -> str:

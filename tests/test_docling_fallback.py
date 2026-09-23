@@ -12,7 +12,8 @@ from pathlib import Path
 import pytest
 from reportlab.pdfgen import canvas
 
-from app.adapters.document_ai.docling import DoclingTableStrategy, DoclingUnavailable
+from app.adapters.document_ai.docling import (
+    DoclingBudgetExhausted, DoclingTableStrategy, DoclingUnavailable)
 from app.adapters.llm.stub import StubLLMClient
 from app.adapters.pdf.pdfplumber_source import PageView, Word
 from app.api.deps import build_document_ai
@@ -161,19 +162,54 @@ async def test_a_document_is_converted_once_no_matter_how_many_pages_ask(tmp_pat
     assert converter.calls == 1                                # conversion is the expensive part
 
 
-async def test_page_budget_caps_what_one_document_can_cost(tmp_path):
-    reader = strategy(FakeConverter([FakeTable(HEADER, BODY)]), document_ai_max_pages=2)
+async def test_page_budget_stops_reading_and_says_so(tmp_path):
+    """Every page has tables, so only the budget can stop the third one — and it
+    must say it stopped rather than return an empty page."""
+    tables = [FakeTable(HEADER, BODY, page_no=n) for n in (1, 2, 3, 4)]
+    reader = strategy(FakeConverter(tables), document_ai_max_pages=2)
     path = scanned_pdf(tmp_path / "scan.pdf", pages=4)
-    results = [await reader.extract(page_of(path, number=n)) for n in (1, 2, 3, 4)]
 
-    assert sum(1 for r in results if r.rows) == 1              # page 1 has the rows
-    reader.reset_budget()
-    assert (await reader.extract(page_of(path, number=1))).rows                # next document
+    assert (await reader.extract(page_of(path, number=1))).rows
+    assert (await reader.extract(page_of(path, number=2))).rows
+    with pytest.raises(DoclingBudgetExhausted):
+        await reader.extract(page_of(path, number=3))
+
+
+async def test_markdown_fallback_does_not_claim_everything_is_on_page_one(tmp_path):
+    """Markdown carries no page numbers. Those tables go to the page that asks,
+    once, instead of being attributed to page 1 and then dropped by the
+    verification of a page they were never on."""
+    markdown = ("| Code | Description |\n| --- | --- |\n"
+                "| D0120 | Periodic oral evaluation |\n")
+    reader = strategy(FakeConverter(tables=[], markdown=markdown))
+    path = scanned_pdf(tmp_path / "scan.pdf", pages=3)
+
+    first = await reader.extract(page_of(path, number=2))
+    assert [r.code for r in first.rows] == ["D0120"]
+    assert first.rows[0].page == 2                             # not 1
+
+    second = await reader.extract(page_of(path, number=3))
+    assert second.rows == []                                   # served once, not duplicated
 
 async def test_conversion_failure_is_reported_not_swallowed(tmp_path):
     reader = strategy(FakeConverter(fail=RuntimeError("model weights missing")))
     with pytest.raises(DoclingUnavailable):
         await reader.extract(page_of(scanned_pdf(tmp_path / "s.pdf")))
+
+
+async def test_a_hung_conversion_is_bounded_by_the_timeout(tmp_path):
+    import time
+
+    class Hanging(FakeConverter):
+        def convert(self, source):
+            self.calls += 1
+            time.sleep(5)
+            return super().convert(source)
+
+    reader = strategy(Hanging([FakeTable(HEADER, BODY)]), document_ai_timeout_seconds=0.2)
+    with pytest.raises(DoclingUnavailable) as exc:
+        await reader.extract(page_of(scanned_pdf(tmp_path / "s.pdf")))
+    assert "exceeded" in exc.value.message
 
 
 async def test_a_page_with_no_source_file_is_skipped():
@@ -227,11 +263,25 @@ def test_fallback_is_off_unless_configured():
     assert build_document_ai(Settings(document_ai_provider="something-else")) is None
 
 
-def test_missing_docling_install_degrades_instead_of_failing(monkeypatch):
-    def explode() -> None:
-        raise DoclingUnavailable("docling is not installed", stage="config")
+@pytest.mark.parametrize("failure", [ImportError("no module named docling"),
+                                     OSError("incompatible native wheel"),
+                                     RuntimeError("version clash")])
+def test_a_broken_docling_install_degrades_instead_of_failing_the_service(monkeypatch, failure):
+    """Any import failure, not just ImportError: otherwise it escapes through the
+    cached service singleton and every request 500s."""
+    import builtins
 
-    monkeypatch.setattr(DoclingTableStrategy, "_check_available", staticmethod(explode))
+    real_import = builtins.__import__
+
+    def fake_import(name, *args, **kwargs):
+        if name.startswith("docling"):
+            raise failure
+        return real_import(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+    monkeypatch.delitem(__import__("sys").modules, "docling", raising=False)
+    monkeypatch.delitem(__import__("sys").modules,
+                        "app.adapters.document_ai.docling", raising=False)
     assert build_document_ai(Settings(document_ai_provider="docling")) is None
 
 
@@ -247,17 +297,37 @@ async def test_real_docling_reads_a_scanned_guide(tmp_path, settings):
     assert result.strategy == "docling"          # no rows expected from a blank scan
 
 
-async def test_the_conversion_cache_does_not_grow_across_documents(tmp_path):
-    """A long-running service reads many documents; the cache holds one."""
+async def test_two_documents_in_flight_do_not_disturb_each_other(tmp_path):
+    """One strategy object serves every job in the process. Interleaving two
+    documents must not clear one's cache or spend the other's budget."""
     converter = FakeConverter([FakeTable(HEADER, BODY)])
+    reader = strategy(converter, document_ai_max_pages=2)
+    one = scanned_pdf(tmp_path / "one.pdf", pages=2)
+    two = scanned_pdf(tmp_path / "two.pdf", pages=2)
+
+    assert (await reader.extract(page_of(one, number=1))).rows
+    reader.reset_budget()                                     # the other job starts its document
+    assert (await reader.extract(page_of(two, number=1))).rows
+    assert (await reader.extract(page_of(one, number=1))).rows   # still within its own budget
+    assert converter.calls == 2                                 # one conversion per document
+
+
+async def test_cached_conversions_are_bounded(tmp_path):
+    from app.adapters.document_ai.docling import MAX_CACHED_DOCUMENTS
+
+    reader = strategy(FakeConverter([FakeTable(HEADER, BODY)]))
+    for i in range(MAX_CACHED_DOCUMENTS + 3):
+        await reader.extract(page_of(scanned_pdf(tmp_path / f"doc{i}.pdf")))
+
+    assert len(reader._documents) == MAX_CACHED_DOCUMENTS
+
+
+async def test_a_failed_conversion_is_not_retried_for_every_page(tmp_path):
+    converter = FakeConverter(fail=RuntimeError("model weights missing"))
     reader = strategy(converter)
+    path = scanned_pdf(tmp_path / "scan.pdf", pages=3)
 
-    first = scanned_pdf(tmp_path / "one.pdf")
-    await reader.extract(page_of(first))
-    assert len(reader._cache) == 1
-
-    reader.reset_budget()                                     # next document
-    second = scanned_pdf(tmp_path / "two.pdf")
-    await reader.extract(page_of(second))
-    assert len(reader._cache) == 1
-    assert converter.calls == 2
+    for number in (1, 2, 3):
+        with pytest.raises(DoclingUnavailable):
+            await reader.extract(page_of(path, number=number))
+    assert converter.calls == 1                                # the failure is remembered

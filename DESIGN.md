@@ -604,10 +604,14 @@ holds benefit codes or has no text layer at all.
 |---|---|
 | Cost | The document is converted **once** and cached per page — conversion is the expensive part, so per-page conversion would repeat it for every page; `document_ai_max_pages` bounds how many pages one document may claim |
 | Latency | Conversion runs in a worker thread (`asyncio.to_thread`), so the API event loop keeps serving |
-| Trust | Every returned row is re-verified locally: the code must match the CDT shape, and on a page that *does* have text it must appear on that page |
+| Trust | Every returned row is re-verified locally. The code must match the CDT shape and, on a page that has text, be on that page; every other cell is checked against the page text too and blanked when it is not there, so an invented frequency or percentage cannot reach the CSV |
 | Scans | Rows from a page with no text layer cannot be cross-checked, so the result carries `dental_guide.rows_not_locally_verifiable` |
 | Version drift | Docling's table export API has changed across versions, so the adapter accepts the dataframe export, the cell grid, or the markdown export, in that order |
-| Failure | A conversion error raises `DoclingUnavailable`, the cascade logs it, that page yields zero rows, and the document still completes |
+| Failure | A conversion error raises `DoclingUnavailable`, the cascade logs it, that page yields zero rows, and the document still completes. The failure is remembered per document, so a broken model is not re-run for every page |
+| Concurrency | One strategy object serves every job in the process, so conversions, budgets and column mappings are keyed per document — a second job cannot clear or spend the first one's. Cached conversions are LRU-bounded |
+| Hung conversion | `asyncio.wait_for` bounds it at `document_ai_timeout_seconds`; a timeout is reported as `DoclingUnavailable` rather than blocking the job |
+| Page provenance | Docling's markdown export carries no page numbers. Those tables are served to the page that asks, once, rather than being claimed to be on page 1 and then discarded by the verification of a page they were never on |
+| Unread pages | A page with no text layer that nothing could read increments `pages_unreadable` and raises `dental_guide.pages_unreadable`, so a mostly-unread scan cannot report success |
 
 Enable it with:
 

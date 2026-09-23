@@ -43,13 +43,16 @@ def build_document_ai(settings: Settings):
             log.warning("unknown document ai provider; deterministic readers only",
                         extra={"provider": settings.document_ai_provider})
         return None
-    from app.adapters.document_ai.docling import DoclingTableStrategy, DoclingUnavailable
-
     try:
+        from app.adapters.document_ai.docling import DoclingTableStrategy
+
         strategy = DoclingTableStrategy(settings)
-    except DoclingUnavailable as exc:
+    except Exception as exc:
+        # A broken install can raise anything on import (OSError from a bad
+        # native wheel, RuntimeError from a version clash). Any of them must
+        # degrade to deterministic-only rather than failing every request.
         log.warning("docling fallback unavailable; deterministic readers only",
-                    extra={"reason": exc.message})
+                    extra={"reason": str(exc)[:200]})
         return None
     log.info("docling fallback enabled", extra={"ocr": settings.docling_ocr,
                                                 "table_mode": settings.docling_table_mode})
